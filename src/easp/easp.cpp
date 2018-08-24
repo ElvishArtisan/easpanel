@@ -44,6 +44,43 @@ MainWidget::MainWidget(QWidget *parent)
   }
 
   //
+  // Fonts
+  //
+  QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
+
+  setWindowTitle(QString("EASPanel - v")+VERSION);
+
+  //
+  // Title
+  //
+  main_title_label=new QLabel(this);
+  main_title_label->setFont(bold_font);
+  main_title_label->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+
+  //
+  // Datetime
+  //
+  main_datetime_label=new QLabel(this);
+  main_datetime_label->setFont(bold_font);
+  main_datetime_label->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+
+  //
+  // Text Editor
+  //
+  main_text_text=new QTextEdit(this);
+
+  //
+  // Buttons
+  //
+  main_start_button=new QPushButton(tr("EAS")+"\n"+tr("Start"),this);
+  main_start_button->setFont(bold_font);
+  connect(main_start_button,SIGNAL(clicked()),this,SLOT(startData()));
+
+  main_end_button=new QPushButton(tr("EAS")+"\n"+tr("End"),this);
+  main_end_button->setFont(bold_font);
+  connect(main_end_button,SIGNAL(clicked()),this,SLOT(endData()));
+
+  //
   // Alerts
   //
   main_alert_scan_timer=new QTimer(this);
@@ -55,7 +92,7 @@ MainWidget::MainWidget(QWidget *parent)
 
 QSize MainWidget::sizeHint() const
 {
-  return QSize(400,300);
+  return QSize(1020,786);
 }
 
 
@@ -74,12 +111,48 @@ void MainWidget::alertScanData()
       Alert *alert=new Alert();
       if(alert->load(main_config->pathsEasMessages()+"/"+files.at(i))) {
 	main_alerts[files.at(i)]=alert;
-	printf("%s\n",(const char *)alert->dump().toUtf8());
+	ProcessNewAlert(alert);
       }
     }
   }
 
   main_alert_scan_timer->start(5000);
+}
+
+
+void MainWidget::startData()
+{
+}
+
+
+void MainWidget::endData()
+{
+}
+
+
+void MainWidget::resizeEvent(QResizeEvent *e)
+{
+  int w=size().width();
+  int h=size().height();
+
+  main_title_label->setGeometry(10,5,w-20,20);
+  main_datetime_label->setGeometry(10,32,w-20,20);
+  main_text_text->setGeometry(10,59,2*w/3,h-129);
+
+  main_start_button->setGeometry(40,h-60,80,50);
+  main_end_button->setGeometry(2*w/3-100,h-60,80,50);
+}
+
+
+void MainWidget::ProcessNewAlert(Alert *alert)
+{
+  main_title_label->setText(alert->title());
+  main_datetime_label->
+    setText(tr("Issued:")+" "+
+	    alert->issuedDateTime().toString("MMMM d @ h:mm ap")+"  "+
+	    tr("Expires:")+" "+
+	    alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
+  main_text_text->setText(alert->text());
 }
 
 
