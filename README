@@ -1,0 +1,8 @@
+This is the README file for the easpanel package.
+
+This software comes with ABSOLUTELY NO WARRANTY.  See the file 'COPYING' for
+details.
+
+See the file 'INSTALL' for instructions on building easpanel from source.
+
+Easpanel is an application for integrating a DasDAQ EAS system to Rivendell.
