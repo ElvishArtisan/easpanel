@@ -18,19 +18,68 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#include <QApplication>
+#include <stdio.h>
 
+#include <QApplication>
+#include <QDir>
+#include <QMessageBox>
+#include <QStringList>
+
+#include "cmdswitch.h"
 #include "easp.h"
 
 MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent)
 {
+  new CmdSwitch("easp","\n");
+
+  //
+  // Main Configuration
+  //
+  main_config=new Config();
+  if(!main_config->load()) {
+    QMessageBox::critical(this,"EAS Panel",
+			  tr("Unable to open configuration file!"));
+    exit(1);
+  }
+
+  //
+  // Alerts
+  //
+  main_alert_scan_timer=new QTimer(this);
+  main_alert_scan_timer->setSingleShot(true);
+  connect(main_alert_scan_timer,SIGNAL(timeout()),this,SLOT(alertScanData()));
+  alertScanData();
 }
 
 
 QSize MainWidget::sizeHint() const
 {
   return QSize(400,300);
+}
+
+
+void MainWidget::alertScanData()
+{
+  QDir dir(main_config->pathsEasMessages());
+  if(!dir.exists()) {
+    QMessageBox::critical(this,"EasPanel",
+			  tr("Unable to read EAS messages directory!"));
+    exit(1);
+  }
+
+  QStringList files=dir.entryList(QDir::Files|QDir::Readable);
+  for(int i=0;i<files.size();i++) {
+    if(!main_alerts.contains(files.at(i))) {
+      Alert *alert=new Alert();
+      if(alert->load(main_config->pathsEasMessages()+"/"+files.at(i))) {
+	main_alerts[files.at(i)]=alert;
+	printf("%s\n",(const char *)alert->dump().toUtf8());
+      }
+    }
+  }
+
+  main_alert_scan_timer->start(5000);
 }
 
 

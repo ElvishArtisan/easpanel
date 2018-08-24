@@ -351,6 +351,29 @@ QHostAddress Profile::addressValue(const QString &section,const QString &tag,
 }
 
 
+QDateTime Profile::dateTimeValue(const QString &section,const QString &tag,
+				 const QDateTime &default_value,bool *ok)
+{
+  bool local_ok=false;
+  QDateTime ret=default_value;
+  QString str=stringValue(section,tag,"",&local_ok);
+  if(local_ok) {
+    QDateTime dt=QDateTime::fromString(str,"yyyy-MM-dd hh:mm:ss");
+    if(dt.isValid()) {
+      ret=dt;
+    }
+    if(ok!=NULL) {
+      *ok=dt.isValid();
+    }
+  }
+  if(ok!=NULL) {
+    *ok=false;
+  }
+
+  return ret;
+}
+
+
 void Profile::clear()
 {
   profile_source="";

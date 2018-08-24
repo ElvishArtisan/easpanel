@@ -99,6 +99,32 @@ unsigned Config::cartsAlertMessageLast() const
 }
 
 
+QString Config::dump() const
+{
+  QString ret="";
+
+  ret+="[RDAirPlay]\n";
+  ret+="Hostname="+rdairplayHostname()+"\n";
+  ret+="\n";
+  ret+="[Paths]\n";
+  ret+="EasMessages="+pathsEasMessages()+"\n";
+  ret+="EasAudio="+pathsEasAudio()+"\n";
+  ret+="RivendellAudio="+pathsRivendellAudio()+"\n";
+  ret+="\n";
+  ret+="[Carts]\n";
+  ret+=QString().sprintf("AlertTone=%u\n",cartsAlertTone());
+  ret+=QString().sprintf("Eom=%u\n",cartsEom());
+  ret+=QString().sprintf("FriendlyIntro=%u\n",cartsFriendlyIntro());
+  ret+=QString().sprintf("FriendlyOutro=%u\n",cartsFriendlyOutro());
+  ret+=QString().sprintf("AlertHeaderFirst=%u\n",cartsAlertHeaderFirst());
+  ret+=QString().sprintf("AlertHeaderLast=%u\n",cartsAlertHeaderLast());
+  ret+=QString().sprintf("AlertMessageFirst=%u\n",cartsAlertMessageFirst());
+  ret+=QString().sprintf("AlertMessageLast=%u\n",cartsAlertMessageLast());
+
+  return ret;
+}
+
+
 bool Config::load()
 {
   bool ret=false;

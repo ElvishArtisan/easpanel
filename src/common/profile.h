@@ -23,6 +23,7 @@
 
 #include <vector>
 
+#include <QDateTime>
 #include <QString>
 #include <QTime>
 #include <QHostAddress>
@@ -85,6 +86,9 @@ class Profile
 			    bool *ok=0);
   QHostAddress addressValue(const QString &section,const QString &tag,
 			    const QString &default_value="",bool *ok=0);
+  QDateTime dateTimeValue(const QString &section,const QString &tag,
+			  const QDateTime &default_value=QDateTime(),
+			  bool *ok=0);
   void clear();
 
  private:

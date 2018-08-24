@@ -2,3 +2,6 @@
 	* Initial package creation.
 2018-08-24 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'Config' class.
+2018-08-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added an 'Alert' class.
+	* Stubbed out easp(1).

@@ -22,6 +22,11 @@
 
 DESTDIR=$1
 
+rm -f src/$DESTDIR/alert.cpp
+ln -s ../../src/common/alert.cpp src/$DESTDIR/alert.cpp
+rm -f src/$DESTDIR/alert.h
+ln -s ../../src/common/alert.h src/$DESTDIR/alert.h
+
 rm -f src/$DESTDIR/cmdswitch.cpp
 ln -s ../../src/common/cmdswitch.cpp src/$DESTDIR/cmdswitch.cpp
 rm -f src/$DESTDIR/cmdswitch.h

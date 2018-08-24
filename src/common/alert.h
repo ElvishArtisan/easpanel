@@ -1,6 +1,6 @@
-// easp.h
+// alert.h
 //
-// Control panel applet for easpanel
+// Abstract an EAS alert
 //
 //   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -18,31 +18,38 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef EASP_H
-#define EASP_H
+#ifndef ALERT_H
+#define ALERT_H
 
-#include <QTimer>
-#include <QMap>
-#include <QWidget>
+#include <QDateTime>
+#include <QString>
 
-#include "alert.h"
-#include "config.h"
-
-class MainWidget : public QWidget
+class Alert
 {
-  Q_OBJECT;
  public:
-  MainWidget(QWidget *parnt=0);
-  QSize sizeHint() const;
-
- private slots:
-  void alertScanData();
+  Alert();
+  QString filename() const;
+  QString title() const;
+  QDateTime datestamp() const;
+  QDateTime issuedDateTime() const;
+  QDateTime expiresDateTime() const;
+  QString headerAudio() const;
+  QString messageAudio() const;
+  QString text() const;
+  QString dump() const;
+  bool load(const QString &pathname);
+  void clear();
 
  private:
-  QTimer *main_alert_scan_timer;
-  Config *main_config;
-  QMap<QString,Alert *> main_alerts;
+  QString alert_filename;
+  QString alert_title;
+  QDateTime alert_datestamp;
+  QDateTime alert_issued_datetime;
+  QDateTime alert_expires_datetime;
+  QString alert_header_audio;
+  QString alert_message_audio;
+  QString alert_text;
 };
 
 
-#endif  // EASP_H
+#endif  // ALERT_H

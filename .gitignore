@@ -12,6 +12,8 @@ Makefile
 Makefile.in
 missing
 moc_*
+src/easp/alert.cpp
+src/easp/alert.h
 src/easp/cmdswitch.cpp
 src/easp/cmdswitch.h
 src/easp/config.cpp

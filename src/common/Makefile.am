@@ -20,7 +20,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-EXTRA_DIST = cmdswitch.cpp cmdswitch.h\
+EXTRA_DIST = alert.cpp alert.h\
+             cmdswitch.cpp cmdswitch.h\
              profile.cpp profile.h
 
 CLEANFILES = *~\

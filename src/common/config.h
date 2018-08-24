@@ -41,6 +41,7 @@ class Config
   unsigned cartsAlertHeaderLast() const;
   unsigned cartsAlertMessageFirst() const;
   unsigned cartsAlertMessageLast() const;
+  QString dump() const;
   bool load();
   void clear();
 

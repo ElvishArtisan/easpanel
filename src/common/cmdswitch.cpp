@@ -2,7 +2,7 @@
 //
 // Process Command-Line Switches
 //
-//   (C) Copyright 2012-2015 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2012-2018 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -21,59 +21,43 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "cmdswitch.h"
-#include "logging.h"
+#include <QCoreApplication>
 
-CmdSwitch::CmdSwitch(int argc,char *argv[],const char *modname,
-			 const char *usage)
+#include "cmdswitch.h"
+
+CmdSwitch::CmdSwitch(const char *modname,const char *usage)
 {
   unsigned l=0;
   bool handled=false;
-  bool debug=false;
 
-  for(int i=1;i<argc;i++) {
+  for(int i=1;i<qApp->argc();i++) {
 #ifndef WIN32
-    if(!strcmp(argv[i],"--version")) {
+    if(!strcmp(qApp->argv()[i],"--version")) {
       printf("%s v%s\n",modname,VERSION);
       exit(0);
     }
 #endif  // WIN32
-    if(!strcmp(argv[i],"--help")) {
+    if(!strcmp(qApp->argv()[i],"--help")) {
       printf("\n%s %s\n",modname,usage);
       exit(0);
     }
-    if(!strcmp(argv[i],"-d")) {
-      debug=true;
-    }
-    l=strlen(argv[i]);
+    l=strlen(qApp->argv()[i]);
     handled=false;
     for(unsigned j=0;j<l;j++) {
-      if(argv[i][j]=='=') {
-	switch_keys.push_back(QString(argv[i]).left(j));
-	switch_values.push_back(QString(argv[i]).right(l-(j+1)));
+      if(qApp->argv()[i][j]=='=') {
+	switch_keys.push_back(QString(qApp->argv()[i]).left(j));
+	switch_values.push_back(QString(qApp->argv()[i]).right(l-(j+1)));
 	switch_processed.push_back(false);
 	j=l;
 	handled=true;
       }
     }
     if(!handled) {
-      switch_keys.push_back(QString(argv[i]));
+      switch_keys.push_back(QString(qApp->argv()[i]));
       switch_values.push_back(QString(""));
       switch_processed.push_back(false);
     }
   }
-
-  //
-  // Initialize Logging
-  //
-#ifndef WIN32
-  if(debug) {
-    openlog(modname,LOG_PERROR,LOG_USER);
-  }
-  else {
-    openlog(modname,0,LOG_USER);
-  }
-#endif  // WIN32
 }
 
 
