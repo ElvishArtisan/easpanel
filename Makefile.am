@@ -24,7 +24,8 @@
 #  DOCBOOK_AM_OPT = docs
 #endif
 
-SUBDIRS = src
+SUBDIRS = conf\
+          src
 #SUBDIRS = $(DOCBOOK_AM_OPT) conf\
 #          icons\
 #          src\

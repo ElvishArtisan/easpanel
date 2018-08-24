@@ -1,2 +1,4 @@
 2018-08-24 Fred Gleason <fredg@paravelsystems.com>
 	* Initial package creation.
+2018-08-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'Config' class.

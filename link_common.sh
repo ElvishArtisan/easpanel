@@ -27,6 +27,11 @@ ln -s ../../src/common/cmdswitch.cpp src/$DESTDIR/cmdswitch.cpp
 rm -f src/$DESTDIR/cmdswitch.h
 ln -s ../../src/common/cmdswitch.h src/$DESTDIR/cmdswitch.h
 
+rm -f src/$DESTDIR/config.cpp
+ln -s ../../src/common/config.cpp src/$DESTDIR/config.cpp
+rm -f src/$DESTDIR/config.h
+ln -s ../../src/common/config.h src/$DESTDIR/config.h
+
 rm -f src/$DESTDIR/profile.cpp
 ln -s ../../src/common/profile.cpp src/$DESTDIR/profile.cpp
 rm -f src/$DESTDIR/profile.h
