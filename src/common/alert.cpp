@@ -85,6 +85,30 @@ void Alert::setText(const QString &str)
 }
 
 
+unsigned Alert::headerCart() const
+{
+  return alert_header_cart;
+}
+
+
+void Alert::setHeaderCart(unsigned cartnum)
+{
+  alert_header_cart=cartnum;
+}
+
+
+unsigned Alert::messageCart() const
+{
+  return alert_message_cart;
+}
+
+
+void Alert::setMessageCart(unsigned cartnum)
+{
+  alert_message_cart=cartnum;
+}
+
+
 QString Alert::dump() const
 {
   QString ret="";
@@ -145,4 +169,6 @@ void Alert::clear()
   alert_header_audio="";
   alert_message_audio="";
   alert_text="";
+  alert_header_cart=0;
+  alert_message_cart=0;
 }

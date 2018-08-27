@@ -20,6 +20,7 @@
 //
 
 #include <stdio.h>
+#include <unistd.h>
 
 #include <QApplication>
 #include <QDir>
@@ -182,7 +183,22 @@ void MainWidget::alertSelectedData(int id)
 
 void MainWidget::alertClosedData(int id)
 {
-  printf("closed: %d\n",id);
+  QString err_msg;
+  Alert *alert=main_alert_buttons[id]->alert();
+
+  if(alert!=NULL) {
+    if(alert->headerCart()!=0) {
+      main_config->removeCart(alert->headerCart(),&err_msg);
+    }
+    if(alert->messageCart()!=0) {
+      main_config->removeCart(alert->messageCart(),&err_msg);
+    }
+    QString filename=alert->filename();
+    unlink((main_config->pathsEasMessages()+"/"+filename).toUtf8());
+    delete alert;
+    main_alerts.remove(filename);
+    main_alert_buttons[id]->setAlert(NULL);
+  }
 }
 
 
@@ -219,21 +235,25 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
 void MainWidget::ProcessNewAlert(Alert *alert)
 {
+  unsigned cartnum=0;
+  QString err_msg="";
+
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     if(main_alert_buttons[i]->alert()==NULL) {
       main_alert_buttons[i]->setAlert(alert);
+      if((cartnum=main_config->importCart(alert->title()+" - Header",
+					  alert->headerAudio(),&err_msg))==0) {
+	fprintf(stderr,"Import Error: %s\n",(const char *)err_msg.toUtf8());
+      }
+      alert->setHeaderCart(cartnum);
+      if((cartnum=main_config->importCart(alert->title()+" - Message",
+					  alert->messageAudio(),&err_msg))==0) {
+	fprintf(stderr,"Import Error: %s\n",(const char *)err_msg.toUtf8());
+      }
+      alert->setMessageCart(cartnum);
       return;
     }
   }
-  /*
-  main_title_label->setText(alert->title());
-  main_datetime_label->
-    setText(tr("Issued:")+" "+
-	    alert->issuedDateTime().toString("MMMM d @ h:mm ap")+"  "+
-	    tr("Expires:")+" "+
-	    alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
-  main_text_text->setText(alert->text());
-  */
 }
 
 

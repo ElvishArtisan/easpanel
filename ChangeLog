@@ -9,3 +9,5 @@
 	* Laid out basic UI in easp(1).
 2018-08-27 Fred Gleason <fredg@paravelsystems.com>
 	* Finished basic UI layout.
+2018-08-27 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'rivwebcapi' dependency.

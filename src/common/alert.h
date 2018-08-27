@@ -37,6 +37,10 @@ class Alert
   QString messageAudio() const;
   QString text() const;
   void setText(const QString &str);
+  unsigned headerCart() const;
+  void setHeaderCart(unsigned cartnum);
+  unsigned messageCart() const;
+  void setMessageCart(unsigned cartnum);
   QString dump() const;
   bool load(const QString &pathname);
   void clear();
@@ -50,6 +54,8 @@ class Alert
   QString alert_header_audio;
   QString alert_message_audio;
   QString alert_text;
+  unsigned alert_header_cart;
+  unsigned alert_message_cart;
 };
 
 

@@ -18,18 +18,69 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <unistd.h>
+
+#include <rivendell/rd_getuseragent.h>
+#include <rivendell/rd_getversion.h>
+#include <rivendell/rd_import.h>
+#include <rivendell/rd_removecart.h>
+
 #include "config.h"
 #include "profile.h"
 
 Config::Config()
 {
+  conf_user_agent=QString("Mozilla/5.0 (X11; Linux ")+ARCH+") "+
+    "easpanel/"+VERSION+" "+RD_GetUserAgent()+RD_GetVersion();
   clear();
 }
 
 
-QString Config::rdairplayHostname() const
+QString Config::rivendellHostname() const
 {
-  return conf_rdairplay_hostname;
+  return conf_rivendell_hostname;
+}
+
+
+QString Config::rivendellAlertAudioGroup() const
+{
+  return conf_rivendell_alert_audio_group;
+}
+
+
+QString Config::rivendellUser() const
+{
+  return conf_rivendell_user;
+}
+
+
+QString Config::rivendellPassword() const
+{
+  return conf_rivendell_password;
+}
+
+
+unsigned Config::rivendellAlertToneCart() const
+{
+  return conf_rivendell_alert_tone_cart;
+}
+
+
+unsigned Config::rivendellEomCart() const
+{
+  return conf_rivendell_eom_cart;
+}
+
+
+unsigned Config::rivendellFriendlyIntroCart() const
+{
+  return conf_rivendell_friendly_intro_cart;
+}
+
+
+unsigned Config::rivendellFriendlyOutroCart() const
+{
+  return conf_rivendell_friendly_outro_cart;
 }
 
 
@@ -51,75 +102,27 @@ QString Config::pathsRivendellAudio() const
 }
 
 
-unsigned Config::cartsAlertTone() const
-{
-  return conf_carts_alert_tone;
-}
-
-
-unsigned Config::cartsEom() const
-{
-  return conf_carts_eom;
-}
-
-
-unsigned Config::cartsFriendlyIntro() const
-{
-  return conf_carts_friendly_intro;
-}
-
-
-unsigned Config::cartsFriendlyOutro() const
-{
-  return conf_carts_friendly_outro;
-}
-
-
-unsigned Config::cartsAlertHeaderFirst() const
-{
-  return conf_carts_alert_header_first;
-}
-
-
-unsigned Config::cartsAlertHeaderLast() const
-{
-  return conf_carts_alert_header_last;
-}
-
-
-unsigned Config::cartsAlertMessageFirst() const
-{
-  return conf_carts_alert_message_first;
-}
-
-
-unsigned Config::cartsAlertMessageLast() const
-{
-  return conf_carts_alert_message_last;
-}
-
-
 QString Config::dump() const
 {
   QString ret="";
 
-  ret+="[RDAirPlay]\n";
-  ret+="Hostname="+rdairplayHostname()+"\n";
+  ret+="[Rivendell]\n";
+  ret+="Hostname="+rivendellHostname()+"\n";
+  ret+="AlertAudioGroup="+rivendellAlertAudioGroup()+"\n";
+  ret+="User="+rivendellUser()+"\n";
+  ret+="Password="+rivendellPassword()+"\n";
+  ret+="AlertToneCart="+QString().sprintf("%u",rivendellAlertToneCart())+"\n";
+  ret+="EomCart="+QString().sprintf("%u",rivendellEomCart())+"\n";
+  ret+="FriendlyIntroCart="+
+    QString().sprintf("%u",rivendellFriendlyIntroCart())+"\n";
+  ret+="FriendlyOutroCart="+
+    QString().sprintf("%u",rivendellFriendlyOutroCart())+"\n";
   ret+="\n";
   ret+="[Paths]\n";
   ret+="EasMessages="+pathsEasMessages()+"\n";
   ret+="EasAudio="+pathsEasAudio()+"\n";
   ret+="RivendellAudio="+pathsRivendellAudio()+"\n";
   ret+="\n";
-  ret+="[Carts]\n";
-  ret+=QString().sprintf("AlertTone=%u\n",cartsAlertTone());
-  ret+=QString().sprintf("Eom=%u\n",cartsEom());
-  ret+=QString().sprintf("FriendlyIntro=%u\n",cartsFriendlyIntro());
-  ret+=QString().sprintf("FriendlyOutro=%u\n",cartsFriendlyOutro());
-  ret+=QString().sprintf("AlertHeaderFirst=%u\n",cartsAlertHeaderFirst());
-  ret+=QString().sprintf("AlertHeaderLast=%u\n",cartsAlertHeaderLast());
-  ret+=QString().sprintf("AlertMessageFirst=%u\n",cartsAlertMessageFirst());
-  ret+=QString().sprintf("AlertMessageLast=%u\n",cartsAlertMessageLast());
 
   return ret;
 }
@@ -132,20 +135,23 @@ bool Config::load()
 
   ret=p->setSource(CONFIG_FILE_NAME);
 
-  conf_rdairplay_hostname=p->stringValue("RDAirPlay","Hostname","localhost");
+  conf_rivendell_hostname=p->stringValue("Rivendell","Hostname","localhost");
+  conf_rivendell_alert_audio_group=
+    p->stringValue("Rivendell","AlertAudioGroup","EAS");
+  conf_rivendell_user=p->stringValue("Rivendell","User","user");
+  conf_rivendell_password=p->stringValue("Rivendell","Password");
+  conf_rivendell_alert_tone_cart=p->intValue("Rivendell","AlertToneCart");
+  conf_rivendell_eom_cart=p->intValue("Rivendell","EomCart");
+  conf_rivendell_friendly_intro_cart=
+    p->intValue("Rivendell","FriendlyIntroCart");
+  conf_rivendell_friendly_outro_cart=
+    p->intValue("Rivendell","FriendlyOutroCart");
+
   conf_paths_eas_messages=
     p->stringValue("Paths","EasMessages","/var/eas/messages");
   conf_paths_eas_audio=p->stringValue("Paths","EasAudio","/var/eas/audio");
   conf_paths_rivendell_audio=
     p->stringValue("Paths","RivendellAudio","/var/snd");
-  conf_carts_alert_tone=p->intValue("Carts","AlertTone");
-  conf_carts_eom=p->intValue("Carts","Eom");
-  conf_carts_friendly_intro=p->intValue("Carts","FriendlyIntro");
-  conf_carts_friendly_outro=p->intValue("Carts","FriendlyOutro");
-  conf_carts_alert_header_first=p->intValue("Carts","AlertHeaderFirst");
-  conf_carts_alert_header_last=p->intValue("Carts","AlertHeaderLast");
-  conf_carts_alert_message_first=p->intValue("Carts","AlertMessageFirst");
-  conf_carts_alert_message_last=p->intValue("Carts","AlertMessageLast");
 
   delete p;
 
@@ -155,16 +161,54 @@ bool Config::load()
 
 void Config::clear()
 {
-  conf_rdairplay_hostname="";
+  conf_rivendell_hostname="";
+  conf_rivendell_alert_audio_group="";
+  conf_rivendell_user="";
+  conf_rivendell_password="";
+  conf_rivendell_alert_tone_cart=0;
+  conf_rivendell_eom_cart=0;
+  conf_rivendell_friendly_intro_cart=0;
+  conf_rivendell_friendly_outro_cart=0;
   conf_paths_eas_messages="";
   conf_paths_eas_audio="";
   conf_paths_rivendell_audio="";
-  conf_carts_alert_tone=0;
-  conf_carts_eom=0;
-  conf_carts_friendly_intro=0;
-  conf_carts_friendly_outro=0;
-  conf_carts_alert_header_first=0;
-  conf_carts_alert_header_last=0;
-  conf_carts_alert_message_first=0;
-  conf_carts_alert_message_last=0;
+}
+
+
+unsigned Config::importCart(const QString &title,const QString &filename,
+			    QString *err_msg)
+{
+  struct rd_cartimport *carts=NULL;
+  unsigned numrecs=0;
+  int ret=0;
+
+  if(RD_ImportCart(&carts,conf_rivendell_hostname.toUtf8(),
+		   conf_rivendell_user.toUtf8(),
+		   conf_rivendell_password.toUtf8(),"",0,0,1,0,0,0,1,
+		   conf_rivendell_alert_audio_group.toUtf8(),
+		   title.toUtf8(),
+		   (conf_paths_eas_audio+"/"+filename).toUtf8(),
+		   conf_user_agent.toUtf8(),&numrecs)!=0) {
+    *err_msg="unspecified error";
+    if(numrecs>0) {
+      *err_msg=carts[0].error_string;
+      delete carts;
+    }
+    return 0;
+  }
+  if(numrecs>=1) {
+    ret=carts[0].cart_number;
+  }
+  unlink((conf_paths_eas_audio+"/"+filename).toUtf8());
+  free(carts);
+  return ret;
+}
+
+
+bool Config::removeCart(unsigned cartnum,QString *err_msg)
+{
+  return RD_RemoveCart(conf_rivendell_hostname.toUtf8(),
+		       conf_rivendell_user.toUtf8(),
+		       conf_rivendell_password.toUtf8(),
+		       "",cartnum,conf_user_agent.toUtf8())==0;
 }

@@ -29,35 +29,37 @@ class Config
 {
  public:
   Config();
-  QString rdairplayHostname() const;
+  QString rivendellHostname() const;
+  QString rivendellAlertAudioGroup() const;
+  QString rivendellUser() const;
+  QString rivendellPassword() const;
+  unsigned rivendellAlertToneCart() const;
+  unsigned rivendellEomCart() const;
+  unsigned rivendellFriendlyIntroCart() const;
+  unsigned rivendellFriendlyOutroCart() const;
   QString pathsEasMessages() const;
   QString pathsEasAudio() const;
   QString pathsRivendellAudio() const;
-  unsigned cartsAlertTone() const;
-  unsigned cartsEom() const;
-  unsigned cartsFriendlyIntro() const;
-  unsigned cartsFriendlyOutro() const;
-  unsigned cartsAlertHeaderFirst() const;
-  unsigned cartsAlertHeaderLast() const;
-  unsigned cartsAlertMessageFirst() const;
-  unsigned cartsAlertMessageLast() const;
   QString dump() const;
   bool load();
   void clear();
+  unsigned importCart(const QString &title,const QString &filename,
+		      QString *err_msg);
+  bool removeCart(unsigned cartnum,QString *err_msg);
 
  private:
-  QString conf_rdairplay_hostname;
+  QString conf_rivendell_hostname;
+  QString conf_rivendell_alert_audio_group;
+  QString conf_rivendell_user;
+  QString conf_rivendell_password;
+  unsigned conf_rivendell_alert_tone_cart;
+  unsigned conf_rivendell_eom_cart;
+  unsigned conf_rivendell_friendly_intro_cart;
+  unsigned conf_rivendell_friendly_outro_cart;
   QString conf_paths_eas_messages;
   QString conf_paths_eas_audio;
   QString conf_paths_rivendell_audio;
-  unsigned conf_carts_alert_tone;
-  unsigned conf_carts_eom;
-  unsigned conf_carts_friendly_intro;
-  unsigned conf_carts_friendly_outro;
-  unsigned conf_carts_alert_header_first;
-  unsigned conf_carts_alert_header_last;
-  unsigned conf_carts_alert_message_first;
-  unsigned conf_carts_alert_message_last;
+  QString conf_user_agent;
 };
 
 

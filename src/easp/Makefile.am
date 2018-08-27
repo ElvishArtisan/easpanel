@@ -20,7 +20,7 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -Wno-strict-aliasing @QT4_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT4_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 MOC = @QT4_MOC@
 
 # The dependency for qt's Meta Object Compiler (moc)
@@ -40,7 +40,7 @@ nodist_easp_SOURCES = alert.cpp alert.h\
                       moc_easp.cpp\
                       profile.cpp profile.h
 
-easp_LDADD = @GUILIBS@
+easp_LDADD = @GUILIBS@ @RIVWEBCAPI_LIBS@
 easp_LDFLAGS = @GUIFLAGS@
 
 CLEANFILES = *~\
