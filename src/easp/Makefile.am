@@ -30,11 +30,13 @@ moc_%.cpp:	%.h
 
 bin_PROGRAMS = easp
 
-dist_easp_SOURCES = easp.cpp easp.h
+dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
+                    easp.cpp easp.h
 
 nodist_easp_SOURCES = alert.cpp alert.h\
                       cmdswitch.cpp cmdswitch.h\
                       config.cpp config.h\
+                      moc_alertbutton.cpp\
                       moc_easp.cpp\
                       profile.cpp profile.h
 

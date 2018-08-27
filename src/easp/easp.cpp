@@ -1,3 +1,4 @@
+
 // easp.cpp
 //
 // Control panel applet for easpanel
@@ -31,6 +32,8 @@
 MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent)
 {
+  main_selected_alert_id=-1;
+
   new CmdSwitch("easp","\n");
 
   //
@@ -70,15 +73,30 @@ MainWidget::MainWidget(QWidget *parent)
   main_text_text=new QTextEdit(this);
 
   //
+  // Alert Buttons
+  //
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    main_alert_buttons[i]=new AlertButton(i,this);
+    connect(main_alert_buttons[i],SIGNAL(clicked(int)),
+	    this,SLOT(alertSelectedData(int)));
+    connect(main_alert_buttons[i],SIGNAL(closeClicked(int)),
+	    this,SLOT(alertClosedData(int)));
+  }
+
+  //
   // Buttons
   //
   main_start_button=new QPushButton(tr("EAS")+"\n"+tr("Start"),this);
+  main_start_button->setStyleSheet("background-color: #008800");
   main_start_button->setFont(bold_font);
   connect(main_start_button,SIGNAL(clicked()),this,SLOT(startData()));
+  main_start_button->setDisabled(true);
 
   main_end_button=new QPushButton(tr("EAS")+"\n"+tr("End"),this);
+  main_end_button->setStyleSheet("background-color: #880000");
   main_end_button->setFont(bold_font);
   connect(main_end_button,SIGNAL(clicked()),this,SLOT(endData()));
+  main_end_button->setDisabled(true);
 
   //
   // Alerts
@@ -120,6 +138,54 @@ void MainWidget::alertScanData()
 }
 
 
+void MainWidget::alertSelectedData(int id)
+{
+  if(main_selected_alert_id!=id) {
+    //
+    // Save previous alert
+    //
+    if(main_selected_alert_id>=0) {
+      if(main_alert_buttons[main_selected_alert_id]->alert()!=NULL) {
+	main_alert_buttons[main_selected_alert_id]->alert()->
+	  setText(main_text_text->toPlainText());
+      }
+      main_alert_buttons[main_selected_alert_id]->setSelected(false);
+    }
+
+    //
+    // Load new alert
+    //
+    Alert *alert=main_alert_buttons[id]->alert();
+    if(alert==NULL) {
+      main_title_label->setText(tr("Alert")+QString().sprintf(" %d",id+1));
+      main_datetime_label->clear();
+      main_text_text->clear();
+    }
+    else {
+      main_title_label->setText(tr("Alert")+QString().sprintf(" %d - ",id+1)+
+				alert->title());
+      main_datetime_label->
+	setText(tr("Issued:")+" "+
+		alert->issuedDateTime().toString("MMMM d @ h:mm ap")+"  "+
+		tr("Expires:")+" "+
+		alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
+      main_text_text->setText(alert->text());
+    }
+    main_alert_buttons[id]->setSelected(true);
+    main_selected_alert_id=id;
+    main_start_button->setDisabled(alert==NULL);
+    main_end_button->setDisabled(alert==NULL);
+  }
+
+}
+
+
+void MainWidget::alertClosedData(int id)
+{
+  printf("closed: %d\n",id);
+}
+
+
 void MainWidget::startData()
 {
 }
@@ -141,11 +207,25 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
   main_start_button->setGeometry(40,h-60,80,50);
   main_end_button->setGeometry(2*w/3-100,h-60,80,50);
+
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    main_alert_buttons[i]->setGeometry(2*w/3+20,
+				       59+i*((h-129)/EASP_ALERT_QUAN+13),
+				       w/3-30,
+				       5+(h-129)/EASP_ALERT_QUAN);
+  }
 }
 
 
 void MainWidget::ProcessNewAlert(Alert *alert)
 {
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    if(main_alert_buttons[i]->alert()==NULL) {
+      main_alert_buttons[i]->setAlert(alert);
+      return;
+    }
+  }
+  /*
   main_title_label->setText(alert->title());
   main_datetime_label->
     setText(tr("Issued:")+" "+
@@ -153,11 +233,13 @@ void MainWidget::ProcessNewAlert(Alert *alert)
 	    tr("Expires:")+" "+
 	    alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
   main_text_text->setText(alert->text());
+  */
 }
 
 
 int main(int argc,char *argv[])
 {
+  QApplication::setStyle("Plastique");
   QApplication a(argc,argv);
 
   MainWidget *w=new MainWidget();

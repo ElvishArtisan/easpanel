@@ -1,6 +1,6 @@
-// easp.h
+// alertbutton.h
 //
-// Control panel applet for easpanel
+// Display summary details for an EAS alert
 //
 //   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
 //
@@ -18,51 +18,48 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef EASP_H
-#define EASP_H
+#ifndef ALERTBUTTON_H
+#define ALERTBUTTON_H
 
+#include <QFrame>
 #include <QLabel>
-#include <QTextEdit>
-#include <QTimer>
-#include <QMap>
 #include <QPushButton>
-#include <QWidget>
 
-#include "alertbutton.h"
-#include "config.h"
+#include "alert.h"
 
-#define EASP_ALERT_QUAN 5
-
-class MainWidget : public QWidget
+class AlertButton : public QFrame
 {
   Q_OBJECT;
  public:
-  MainWidget(QWidget *parnt=0);
-  QSize sizeHint() const;
+  AlertButton(int id,QWidget *parent=0);
+  Alert *alert() const;
+  void setAlert(Alert *alert);
+  bool selected() const;
+  void setSelected(bool state);
+
+ signals:
+  void clicked(int id);
+  void closeClicked(int id);
 
  private slots:
-  void alertScanData();
-  void alertSelectedData(int id);
-  void alertClosedData(int id);
-  void startData();
-  void endData();
+  void closeClickedData();
 
  protected:
+  void mouseMoveEvent(QMouseEvent *e);
+  void mousePressEvent(QMouseEvent *e);
+  void mouseReleaseEvent(QMouseEvent *e);
   void resizeEvent(QResizeEvent *e);
 
  private:
-  void ProcessNewAlert(Alert *alert);
-  QLabel *main_title_label;
-  QLabel *main_datetime_label;
-  QTextEdit *main_text_text;
-  AlertButton *main_alert_buttons[EASP_ALERT_QUAN];
-  QPushButton *main_start_button;
-  QPushButton *main_end_button;
-  QTimer *main_alert_scan_timer;
-  Config *main_config;
-  QMap<QString,Alert *> main_alerts;
-  int main_selected_alert_id;
+  QLabel *alert_id_label;
+  QPushButton *alert_close_button;
+  QLabel *alert_title_label;
+  QLabel *alert_datetime_label;
+  Alert *alert_alert;
+  bool alert_mouse_pressed;
+  bool alert_selected;
+  int alert_id;
 };
 
 
-#endif  // EASP_H
+#endif  // ALERTBUTTON_H

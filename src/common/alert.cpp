@@ -79,6 +79,12 @@ QString Alert::text() const
 }
 
 
+void Alert::setText(const QString &str)
+{
+  alert_text=str;
+}
+
+
 QString Alert::dump() const
 {
   QString ret="";

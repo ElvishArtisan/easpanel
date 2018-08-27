@@ -36,6 +36,7 @@ class Alert
   QString headerAudio() const;
   QString messageAudio() const;
   QString text() const;
+  void setText(const QString &str);
   QString dump() const;
   bool load(const QString &pathname);
   void clear();
