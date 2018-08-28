@@ -139,15 +139,15 @@ void MainWidget::liveSendData()
     //
     // Load from the bottom up
     //
-    SendRml(QString().sprintf("PX %d %d!",    // EOM
+    SendRml(QString().sprintf("PX %d %d STOP!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      main_config->rivendellEomCart()));
 
-    SendRml(QString().sprintf("PX %d %d!",    // Attention Signal
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
 			      main_config->rivendellAlertToneCart()));
 
-    SendRml(QString().sprintf("PX %d %d!",    // Header
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
   }
@@ -161,19 +161,19 @@ void MainWidget::cannedSendData()
     //
     // Load from the bottom up
     //
-    SendRml(QString().sprintf("PX %d %d!",    // EOM
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      main_config->rivendellEomCart()));
 
-    SendRml(QString().sprintf("PX %d %d!",    // Header
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
 			      main_config->rivendellLogMachine(),
 			      alert->messageCart()));
 
-    SendRml(QString().sprintf("PX %d %d!",    // Attention Signal
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
 			      main_config->rivendellAlertToneCart()));
 
-    SendRml(QString().sprintf("PX %d %d!",    // Header
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
   }
@@ -294,16 +294,18 @@ void MainWidget::ProcessNewAlert(Alert *alert)
     if(main_alert_buttons[i]->alert()==NULL) {
       AlertButton *button=main_alert_buttons[i];
       button->setAlert(alert);
-      if((cartnum=main_config->importCart(alert->title()+" - Header",
-					  alert->headerAudio(),&err_msg))==0) {
+      if((cartnum=main_config->
+	  importCart("*** EAS HEADER *** ["+alert->title()+"]",
+		     alert->headerAudio(),&err_msg))==0) {
 	button->setStatus(AlertButton::Error);
 	button->addStatusText("Missing header audio ["+err_msg+"]. ");
       }
       else {
 	alert->setHeaderCart(cartnum);
       }
-      if((cartnum=main_config->importCart(alert->title()+" - Message",
-					  alert->messageAudio(),&err_msg))==0) {
+      if((cartnum=main_config->
+	  importCart("*** EAS MESSAGE *** ["+alert->title()+"]",
+		     alert->messageAudio(),&err_msg))==0) {
 	button->setStatus(AlertButton::Error);
 	button->addStatusText("Missing message audio ["+err_msg+"]. ");
       }
