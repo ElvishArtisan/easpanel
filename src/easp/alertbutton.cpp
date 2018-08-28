@@ -67,6 +67,12 @@ AlertButton::AlertButton(int id,QWidget *parent)
 }
 
 
+int AlertButton::id() const
+{
+  return alert_id;
+}
+
+
 Alert *AlertButton::alert() const
 {
   return alert_alert;
@@ -88,6 +94,7 @@ void AlertButton::setAlert(Alert *alert)
 	      alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
   }
   alert_alert=alert;
+  setStatus(AlertButton::New);
 }
 
 
@@ -100,14 +107,36 @@ bool AlertButton::selected() const
 void AlertButton::setSelected(bool state)
 {
   if(alert_selected!=state) {
-    if(state) {
-      setStyleSheet("background-color: #FFFF00");
-    }
-    else {
-      setStyleSheet("");
-    }
     alert_selected=state;
+    UpdateColor();
   }
+}
+
+
+AlertButton::Status AlertButton::status() const
+{
+  return alert_status;
+}
+
+
+void AlertButton::setStatus(AlertButton::Status status)
+{
+  if(status!=alert_status) {
+    alert_status=status;
+    UpdateColor();
+  }
+}
+
+
+QString AlertButton::statusText() const
+{
+  return alert_status_text;
+}
+
+
+void AlertButton::addStatusText(const QString &str)
+{
+  alert_status_text+=" "+str;
 }
 
 
@@ -152,4 +181,25 @@ void AlertButton::resizeEvent(QResizeEvent *e)
     setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton,0,alert_close_button));
   alert_title_label->setGeometry(10,h/4,w-20,h/2);
   alert_datetime_label->setGeometry(10,5*h/8,w-20,3*h/8);
+}
+
+
+void AlertButton::UpdateColor()
+{
+  if(alert_selected) {
+    if(alert_status==AlertButton::Error) {
+      setStyleSheet("background-color: "+ALERTBUTTON_ERROR_COLOR);
+    }
+    else {
+      setStyleSheet("background-color: "+ALERTBUTTON_SELECTED_COLOR);
+    }
+  }
+  else {
+    if(alert_status==AlertButton::Error) {
+      setStyleSheet("background-color: "+ALERTBUTTON_ERROR_COLOR);
+    }
+    else {
+      setStyleSheet("");
+    }
+  }
 }

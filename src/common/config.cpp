@@ -36,9 +36,15 @@ Config::Config()
 }
 
 
-QString Config::rivendellHostname() const
+QHostAddress Config::rivendellHostAddress() const
 {
-  return conf_rivendell_hostname;
+  return conf_rivendell_host_address;
+}
+
+
+int Config::rivendellLogMachine() const
+{
+  return conf_rivendell_log_machine;
 }
 
 
@@ -107,7 +113,7 @@ QString Config::dump() const
   QString ret="";
 
   ret+="[Rivendell]\n";
-  ret+="Hostname="+rivendellHostname()+"\n";
+  ret+="HostAddress="+rivendellHostAddress().toString()+"\n";
   ret+="AlertAudioGroup="+rivendellAlertAudioGroup()+"\n";
   ret+="User="+rivendellUser()+"\n";
   ret+="Password="+rivendellPassword()+"\n";
@@ -135,7 +141,9 @@ bool Config::load()
 
   ret=p->setSource(CONFIG_FILE_NAME);
 
-  conf_rivendell_hostname=p->stringValue("Rivendell","Hostname","localhost");
+  conf_rivendell_host_address=
+    QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
+  conf_rivendell_log_machine=p->intValue("Rivendell","LogMachine",1);
   conf_rivendell_alert_audio_group=
     p->stringValue("Rivendell","AlertAudioGroup","EAS");
   conf_rivendell_user=p->stringValue("Rivendell","User","user");
@@ -161,7 +169,8 @@ bool Config::load()
 
 void Config::clear()
 {
-  conf_rivendell_hostname="";
+  conf_rivendell_host_address=QHostAddress();
+  conf_rivendell_log_machine=0;
   conf_rivendell_alert_audio_group="";
   conf_rivendell_user="";
   conf_rivendell_password="";
@@ -182,7 +191,7 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   unsigned numrecs=0;
   int ret=0;
 
-  if(RD_ImportCart(&carts,conf_rivendell_hostname.toUtf8(),
+  if(RD_ImportCart(&carts,conf_rivendell_host_address.toString().toUtf8(),
 		   conf_rivendell_user.toUtf8(),
 		   conf_rivendell_password.toUtf8(),"",0,0,1,0,0,0,1,
 		   conf_rivendell_alert_audio_group.toUtf8(),
@@ -207,7 +216,7 @@ unsigned Config::importCart(const QString &title,const QString &filename,
 
 bool Config::removeCart(unsigned cartnum,QString *err_msg)
 {
-  return RD_RemoveCart(conf_rivendell_hostname.toUtf8(),
+  return RD_RemoveCart(conf_rivendell_host_address.toString().toUtf8(),
 		       conf_rivendell_user.toUtf8(),
 		       conf_rivendell_password.toUtf8(),
 		       "",cartnum,conf_user_agent.toUtf8())==0;

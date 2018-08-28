@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QMap>
 #include <QPushButton>
+#include <QUdpSocket>
 #include <QWidget>
 
 #include "alertbutton.h"
@@ -41,6 +42,8 @@ class MainWidget : public QWidget
   QSize sizeHint() const;
 
  private slots:
+  void liveSendData();
+  void cannedSendData();
   void alertScanData();
   void alertSelectedData(int id);
   void alertClosedData(int id);
@@ -52,16 +55,21 @@ class MainWidget : public QWidget
 
  private:
   void ProcessNewAlert(Alert *alert);
+  void DisplayAlertButton(AlertButton *button);
+  void SendRml(const QString &rml);
   QLabel *main_title_label;
   QLabel *main_datetime_label;
   QTextEdit *main_text_text;
   AlertButton *main_alert_buttons[EASP_ALERT_QUAN];
-  QPushButton *main_start_button;
-  QPushButton *main_end_button;
+  QPushButton *main_livesend_button;
+  QPushButton *main_cannedsend_button;
+  //  QPushButton *main_start_button;
+  //  QPushButton *main_end_button;
   QTimer *main_alert_scan_timer;
   Config *main_config;
   QMap<QString,Alert *> main_alerts;
   int main_selected_alert_id;
+  QUdpSocket *main_rml_socket;
 };
 
 

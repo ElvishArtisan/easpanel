@@ -48,6 +48,11 @@ MainWidget::MainWidget(QWidget *parent)
   }
 
   //
+  // RML Socket
+  //
+  main_rml_socket=new QUdpSocket(this);
+
+  //
   // Fonts
   //
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
@@ -87,6 +92,18 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // Buttons
   //
+  main_livesend_button=
+    new QPushButton(tr("Send to Log")+"\n("+tr("LIVE")+")",this);
+  main_livesend_button->setFont(bold_font);
+  connect(main_livesend_button,SIGNAL(clicked()),this,SLOT(liveSendData()));
+  main_livesend_button->setDisabled(true);
+
+  main_cannedsend_button=
+    new QPushButton(tr("Send to Log")+"\n("+tr("CANNED")+")",this);
+  main_cannedsend_button->setFont(bold_font);
+  connect(main_cannedsend_button,SIGNAL(clicked()),this,SLOT(cannedSendData()));
+  main_cannedsend_button->setDisabled(true);
+  /*
   main_start_button=new QPushButton(tr("EAS")+"\n"+tr("Start"),this);
   main_start_button->setStyleSheet("background-color: #008800");
   main_start_button->setFont(bold_font);
@@ -98,7 +115,7 @@ MainWidget::MainWidget(QWidget *parent)
   main_end_button->setFont(bold_font);
   connect(main_end_button,SIGNAL(clicked()),this,SLOT(endData()));
   main_end_button->setDisabled(true);
-
+  */
   //
   // Alerts
   //
@@ -112,6 +129,54 @@ MainWidget::MainWidget(QWidget *parent)
 QSize MainWidget::sizeHint() const
 {
   return QSize(1020,786);
+}
+
+
+void MainWidget::liveSendData()
+{
+  Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
+  if(alert!=NULL) {
+    //
+    // Load from the bottom up
+    //
+    SendRml(QString().sprintf("PX %d %d!",    // EOM
+			      main_config->rivendellLogMachine(),
+			      main_config->rivendellEomCart()));
+
+    SendRml(QString().sprintf("PX %d %d!",    // Attention Signal
+			      main_config->rivendellLogMachine(),
+			      main_config->rivendellAlertToneCart()));
+
+    SendRml(QString().sprintf("PX %d %d!",    // Header
+			      main_config->rivendellLogMachine(),
+			      alert->headerCart()));
+  }
+}
+
+
+void MainWidget::cannedSendData()
+{
+  Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
+  if(alert!=NULL) {
+    //
+    // Load from the bottom up
+    //
+    SendRml(QString().sprintf("PX %d %d!",    // EOM
+			      main_config->rivendellLogMachine(),
+			      main_config->rivendellEomCart()));
+
+    SendRml(QString().sprintf("PX %d %d!",    // Header
+			      main_config->rivendellLogMachine(),
+			      alert->messageCart()));
+
+    SendRml(QString().sprintf("PX %d %d!",    // Attention Signal
+			      main_config->rivendellLogMachine(),
+			      main_config->rivendellAlertToneCart()));
+
+    SendRml(QString().sprintf("PX %d %d!",    // Header
+			      main_config->rivendellLogMachine(),
+			      alert->headerCart()));
+  }
 }
 
 
@@ -141,7 +206,7 @@ void MainWidget::alertScanData()
 
 void MainWidget::alertSelectedData(int id)
 {
-  if(main_selected_alert_id!=id) {
+  if(id!=main_selected_alert_id) {
     //
     // Save previous alert
     //
@@ -152,32 +217,12 @@ void MainWidget::alertSelectedData(int id)
       }
       main_alert_buttons[main_selected_alert_id]->setSelected(false);
     }
-
+  
     //
-    // Load new alert
+    // Display new alert
     //
-    Alert *alert=main_alert_buttons[id]->alert();
-    if(alert==NULL) {
-      main_title_label->setText(tr("Alert")+QString().sprintf(" %d",id+1));
-      main_datetime_label->clear();
-      main_text_text->clear();
-    }
-    else {
-      main_title_label->setText(tr("Alert")+QString().sprintf(" %d - ",id+1)+
-				alert->title());
-      main_datetime_label->
-	setText(tr("Issued:")+" "+
-		alert->issuedDateTime().toString("MMMM d @ h:mm ap")+"  "+
-		tr("Expires:")+" "+
-		alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
-      main_text_text->setText(alert->text());
-    }
-    main_alert_buttons[id]->setSelected(true);
-    main_selected_alert_id=id;
-    main_start_button->setDisabled(alert==NULL);
-    main_end_button->setDisabled(alert==NULL);
+    DisplayAlertButton(main_alert_buttons[id]);
   }
-
 }
 
 
@@ -198,6 +243,11 @@ void MainWidget::alertClosedData(int id)
     delete alert;
     main_alerts.remove(filename);
     main_alert_buttons[id]->setAlert(NULL);
+    if(id==main_selected_alert_id) {
+      main_title_label->setText(tr("Alert")+QString().sprintf(" %d",id+1));
+      main_datetime_label->clear();
+      main_text_text->clear();
+    }
   }
 }
 
@@ -221,8 +271,10 @@ void MainWidget::resizeEvent(QResizeEvent *e)
   main_datetime_label->setGeometry(10,32,w-20,20);
   main_text_text->setGeometry(10,59,2*w/3,h-129);
 
-  main_start_button->setGeometry(40,h-60,80,50);
-  main_end_button->setGeometry(2*w/3-100,h-60,80,50);
+  main_livesend_button->setGeometry(40,h-60,120,50);
+  main_cannedsend_button->setGeometry(180,h-60,120,50);
+  //  main_start_button->setGeometry(40,h-60,80,50);
+  //  main_end_button->setGeometry(2*w/3-100,h-60,80,50);
 
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     main_alert_buttons[i]->setGeometry(2*w/3+20,
@@ -240,20 +292,66 @@ void MainWidget::ProcessNewAlert(Alert *alert)
 
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     if(main_alert_buttons[i]->alert()==NULL) {
-      main_alert_buttons[i]->setAlert(alert);
+      AlertButton *button=main_alert_buttons[i];
+      button->setAlert(alert);
       if((cartnum=main_config->importCart(alert->title()+" - Header",
 					  alert->headerAudio(),&err_msg))==0) {
-	fprintf(stderr,"Import Error: %s\n",(const char *)err_msg.toUtf8());
+	button->setStatus(AlertButton::Error);
+	button->addStatusText("Missing header audio ["+err_msg+"]. ");
       }
-      alert->setHeaderCart(cartnum);
+      else {
+	alert->setHeaderCart(cartnum);
+      }
       if((cartnum=main_config->importCart(alert->title()+" - Message",
 					  alert->messageAudio(),&err_msg))==0) {
-	fprintf(stderr,"Import Error: %s\n",(const char *)err_msg.toUtf8());
+	button->setStatus(AlertButton::Error);
+	button->addStatusText("Missing message audio ["+err_msg+"]. ");
       }
-      alert->setMessageCart(cartnum);
+      else {
+	alert->setMessageCart(cartnum);
+      }
+      if(i==main_selected_alert_id) {
+	DisplayAlertButton(button);
+      }
       return;
     }
   }
+}
+
+
+void MainWidget::DisplayAlertButton(AlertButton *button)
+{
+  Alert *alert=button->alert();
+  if(alert==NULL) {
+    main_title_label->
+      setText(tr("Alert")+QString().sprintf(" %d",button->id()+1));
+    main_datetime_label->clear();
+    main_text_text->clear();
+  }
+  else {
+    main_title_label->
+      setText(tr("Alert")+QString().sprintf(" %d - ",button->id()+1)+
+	      alert->title());
+    main_datetime_label->
+      setText(tr("Issued:")+" "+
+	      alert->issuedDateTime().toString("MMMM d @ h:mm ap")+"  "+
+	      tr("Expires:")+" "+
+	      alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
+    main_text_text->setText(alert->text());
+  }
+  button->setSelected(true);
+  main_selected_alert_id=button->id();
+  main_livesend_button->setDisabled(alert==NULL);
+  main_cannedsend_button->setDisabled(alert==NULL);
+  //  main_start_button->setDisabled(alert==NULL);
+  //  main_end_button->setDisabled(alert==NULL);
+}
+
+
+void MainWidget::SendRml(const QString &rml)
+{
+  main_rml_socket->
+    writeDatagram(rml.toUtf8(),main_config->rivendellHostAddress(),5859);
 }
 
 

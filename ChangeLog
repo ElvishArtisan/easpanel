@@ -11,3 +11,5 @@
 	* Finished basic UI layout.
 2018-08-27 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'rivwebcapi' dependency.
+2018-08-28 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented a basic manual workflow.

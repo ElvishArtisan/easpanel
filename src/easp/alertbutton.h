@@ -27,15 +27,27 @@
 
 #include "alert.h"
 
+//
+// Colors
+//
+#define ALERTBUTTON_SELECTED_COLOR QString("#FFFF66")
+#define ALERTBUTTON_ERROR_COLOR QString("#FF0000")
+
 class AlertButton : public QFrame
 {
   Q_OBJECT;
  public:
+  enum Status {New=0,Ready=1,Error=2};
   AlertButton(int id,QWidget *parent=0);
+  int id() const;
   Alert *alert() const;
   void setAlert(Alert *alert);
   bool selected() const;
   void setSelected(bool state);
+  Status status() const;
+  void setStatus(Status status);
+  QString statusText() const;
+  void addStatusText(const QString &str);
 
  signals:
   void clicked(int id);
@@ -51,6 +63,9 @@ class AlertButton : public QFrame
   void resizeEvent(QResizeEvent *e);
 
  private:
+  void UpdateColor();
+  Status alert_status;
+  QString alert_status_text;
   QLabel *alert_id_label;
   QPushButton *alert_close_button;
   QLabel *alert_title_label;

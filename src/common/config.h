@@ -21,6 +21,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <QHostAddress>
 #include <QString>
 
 #define CONFIG_FILE_NAME QString("/etc/easpanel.conf")
@@ -29,7 +30,8 @@ class Config
 {
  public:
   Config();
-  QString rivendellHostname() const;
+  QHostAddress rivendellHostAddress() const;
+  int rivendellLogMachine() const;
   QString rivendellAlertAudioGroup() const;
   QString rivendellUser() const;
   QString rivendellPassword() const;
@@ -48,7 +50,8 @@ class Config
   bool removeCart(unsigned cartnum,QString *err_msg);
 
  private:
-  QString conf_rivendell_hostname;
+  QHostAddress conf_rivendell_host_address;
+  int conf_rivendell_log_machine;
   QString conf_rivendell_alert_audio_group;
   QString conf_rivendell_user;
   QString conf_rivendell_password;
