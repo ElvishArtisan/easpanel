@@ -13,5 +13,7 @@
 	* Added a 'rivwebcapi' dependency.
 2018-08-28 Fred Gleason <fredg@paravelsystems.com>
 	* Implemented a basic manual workflow.
-2018-08-28 Fred Gleason <fredg@paravelsystems.com>
+2018-08-29 Fred Gleason <fredg@paravelsystems.com>
+	* Updated the sample easpanel.conf(5) file.
+2018-08-30 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the cart labeling in Rivendell.
