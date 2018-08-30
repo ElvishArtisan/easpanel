@@ -17,3 +17,5 @@
 	* Updated the sample easpanel.conf(5) file.
 2018-08-30 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the cart labeling in Rivendell.
+2018-08-30 Fred Gleason <fredg@paravelsystems.com>
+	* Modified the format of alert messages to use raw DASDAQ format.

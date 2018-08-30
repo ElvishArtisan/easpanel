@@ -165,13 +165,15 @@ void MainWidget::cannedSendData()
 			      main_config->rivendellLogMachine(),
 			      main_config->rivendellEomCart()));
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
-			      main_config->rivendellLogMachine(),
-			      alert->messageCart()));
+    if(alert->messageCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
+				main_config->rivendellLogMachine(),
+				alert->messageCart()));
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
-			      main_config->rivendellLogMachine(),
-			      main_config->rivendellAlertToneCart()));
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
+				main_config->rivendellLogMachine(),
+				main_config->rivendellAlertToneCart()));
+    }
 
     SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
@@ -248,6 +250,8 @@ void MainWidget::alertClosedData(int id)
       main_datetime_label->clear();
       main_text_text->clear();
     }
+    main_livesend_button->setDisabled(true);
+    main_cannedsend_button->setDisabled(true);
   }
 }
 
@@ -303,14 +307,16 @@ void MainWidget::ProcessNewAlert(Alert *alert)
       else {
 	alert->setHeaderCart(cartnum);
       }
-      if((cartnum=main_config->
-	  importCart("*** EAS MESSAGE *** ["+alert->title()+"]",
-		     alert->messageAudio(),&err_msg))==0) {
-	button->setStatus(AlertButton::Error);
-	button->addStatusText("Missing message audio ["+err_msg+"]. ");
-      }
-      else {
-	alert->setMessageCart(cartnum);
+      if(!alert->messageAudio().isEmpty()) {
+	if((cartnum=main_config->
+	    importCart("*** EAS MESSAGE *** ["+alert->title()+"]",
+		       alert->messageAudio(),&err_msg))==0) {
+	  button->setStatus(AlertButton::Error);
+	  button->addStatusText("Missing message audio ["+err_msg+"]. ");
+	}
+	else {
+	  alert->setMessageCart(cartnum);
+	}
       }
       if(i==main_selected_alert_id) {
 	DisplayAlertButton(button);
@@ -343,7 +349,7 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   }
   button->setSelected(true);
   main_selected_alert_id=button->id();
-  main_livesend_button->setDisabled(alert==NULL);
+  main_livesend_button->setDisabled((alert==NULL)||(alert->messageCart()==0));
   main_cannedsend_button->setDisabled(alert==NULL);
   //  main_start_button->setDisabled(alert==NULL);
   //  main_end_button->setDisabled(alert==NULL);
