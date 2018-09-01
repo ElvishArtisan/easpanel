@@ -19,5 +19,5 @@
 	* Modified the cart labeling in Rivendell.
 2018-08-30 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the format of alert messages to use raw DASDAQ format.
-2018-08-30 Fred Gleason <fredg@paravelsystems.com>
+2018-09-01 Fred Gleason <fredg@paravelsystems.com>
 	* Modified logic to use per-alert EOM audio.
