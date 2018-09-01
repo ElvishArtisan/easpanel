@@ -72,12 +72,6 @@ unsigned Config::rivendellAlertToneCart() const
 }
 
 
-unsigned Config::rivendellEomCart() const
-{
-  return conf_rivendell_eom_cart;
-}
-
-
 unsigned Config::rivendellFriendlyIntroCart() const
 {
   return conf_rivendell_friendly_intro_cart;
@@ -118,7 +112,6 @@ QString Config::dump() const
   ret+="User="+rivendellUser()+"\n";
   ret+="Password="+rivendellPassword()+"\n";
   ret+="AlertToneCart="+QString().sprintf("%u",rivendellAlertToneCart())+"\n";
-  ret+="EomCart="+QString().sprintf("%u",rivendellEomCart())+"\n";
   ret+="FriendlyIntroCart="+
     QString().sprintf("%u",rivendellFriendlyIntroCart())+"\n";
   ret+="FriendlyOutroCart="+
@@ -149,7 +142,6 @@ bool Config::load()
   conf_rivendell_user=p->stringValue("Rivendell","User","user");
   conf_rivendell_password=p->stringValue("Rivendell","Password");
   conf_rivendell_alert_tone_cart=p->intValue("Rivendell","AlertToneCart");
-  conf_rivendell_eom_cart=p->intValue("Rivendell","EomCart");
   conf_rivendell_friendly_intro_cart=
     p->intValue("Rivendell","FriendlyIntroCart");
   conf_rivendell_friendly_outro_cart=
@@ -175,7 +167,6 @@ void Config::clear()
   conf_rivendell_user="";
   conf_rivendell_password="";
   conf_rivendell_alert_tone_cart=0;
-  conf_rivendell_eom_cart=0;
   conf_rivendell_friendly_intro_cart=0;
   conf_rivendell_friendly_outro_cart=0;
   conf_paths_eas_messages="";

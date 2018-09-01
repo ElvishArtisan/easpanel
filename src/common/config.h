@@ -36,7 +36,6 @@ class Config
   QString rivendellUser() const;
   QString rivendellPassword() const;
   unsigned rivendellAlertToneCart() const;
-  unsigned rivendellEomCart() const;
   unsigned rivendellFriendlyIntroCart() const;
   unsigned rivendellFriendlyOutroCart() const;
   QString pathsEasMessages() const;
@@ -56,7 +55,6 @@ class Config
   QString conf_rivendell_user;
   QString conf_rivendell_password;
   unsigned conf_rivendell_alert_tone_cart;
-  unsigned conf_rivendell_eom_cart;
   unsigned conf_rivendell_friendly_intro_cart;
   unsigned conf_rivendell_friendly_outro_cart;
   QString conf_paths_eas_messages;

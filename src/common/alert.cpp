@@ -69,6 +69,12 @@ QString Alert::headerAudio() const
 }
 
 
+QString Alert::eomAudio() const
+{
+  return alert_eom_audio;
+}
+
+
 QString Alert::messageAudio() const
 {
   return alert_message_audio;
@@ -99,6 +105,18 @@ void Alert::setHeaderCart(unsigned cartnum)
 }
 
 
+unsigned Alert::eomCart() const
+{
+  return alert_eom_cart;
+}
+
+
+void Alert::setEomCart(unsigned cartnum)
+{
+  alert_eom_cart=cartnum;
+}
+
+
 unsigned Alert::messageCart() const
 {
   return alert_message_cart;
@@ -120,6 +138,7 @@ QString Alert::dump() const
   ret+="Issued="+issuedDateTime().toString("yyyy-MM-dd mm:mm:ss")+"\n";
   ret+="Expires="+expiresDateTime().toString("yyyy-MM-dd mm:mm:ss")+"\n";
   ret+="HeaderAudio="+headerAudio()+"\n";
+  ret+="EomAudio="+eomAudio()+"\n";
   ret+="MessageAudio="+messageAudio()+"\n";
   ret+="\n";
   ret+="[Text]\n";
@@ -251,6 +270,9 @@ bool Alert::load(const QString &pathname)
   if(values.find("EAS.AUDIO.FILE.HEADER")!=values.constEnd()) {
     alert_header_audio=values.find("EAS.AUDIO.FILE.HEADER").value();
   }
+  if(values.find("EAS.AUDIO.FILE.EOM")!=values.constEnd()) {
+    alert_eom_audio=values.find("EAS.AUDIO.FILE.EOM").value();
+  }
   if(values.find("EAS.AUDIO.FILE.ALERT")!=values.constEnd()) {
     alert_message_audio=values.find("EAS.AUDIO.FILE.ALERT").value();
   }
@@ -274,8 +296,10 @@ void Alert::clear()
   alert_issued_datetime=QDateTime();
   alert_expires_datetime=QDateTime();
   alert_header_audio="";
+  alert_eom_audio="";
   alert_message_audio="";
   alert_text="";
   alert_header_cart=0;
+  alert_eom_cart=0;
   alert_message_cart=0;
 }

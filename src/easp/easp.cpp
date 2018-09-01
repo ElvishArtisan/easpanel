@@ -141,7 +141,7 @@ void MainWidget::liveSendData()
     //
     SendRml(QString().sprintf("PX %d %d STOP!",    // EOM
 			      main_config->rivendellLogMachine(),
-			      main_config->rivendellEomCart()));
+			      alert->eomCart()));
 
     SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
@@ -163,7 +163,7 @@ void MainWidget::cannedSendData()
     //
     SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
-			      main_config->rivendellEomCart()));
+			      alert->eomCart()));
 
     if(alert->messageCart()!=0) {
       SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
@@ -237,6 +237,9 @@ void MainWidget::alertClosedData(int id)
     if(alert->headerCart()!=0) {
       main_config->removeCart(alert->headerCart(),&err_msg);
     }
+    if(alert->eomCart()!=0) {
+      main_config->removeCart(alert->eomCart(),&err_msg);
+    }
     if(alert->messageCart()!=0) {
       main_config->removeCart(alert->messageCart(),&err_msg);
     }
@@ -306,6 +309,15 @@ void MainWidget::ProcessNewAlert(Alert *alert)
       }
       else {
 	alert->setHeaderCart(cartnum);
+      }
+      if((cartnum=main_config->
+	  importCart("*** EAS END OF MESSAGE *** ["+alert->title()+"]",
+		     alert->eomAudio(),&err_msg))==0) {
+	button->setStatus(AlertButton::Error);
+	button->addStatusText("Missing eom audio ["+err_msg+"]. ");
+      }
+      else {
+	alert->setEomCart(cartnum);
       }
       if(!alert->messageAudio().isEmpty()) {
 	if((cartnum=main_config->
