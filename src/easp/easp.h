@@ -53,10 +53,11 @@ class MainWidget : public QWidget
 
  protected:
   void resizeEvent(QResizeEvent *e);
+  void closeEvent(QCloseEvent *e);
 
  private:
   void ProcessNowNext(unsigned cartnum);
-  void ProcessNewAlert(Alert *alert);
+  bool ProcessNewAlert(Alert *alert);
   void DisplayAlertButton(AlertButton *button);
   void CompactButtons();
   void SendRml(const QString &rml);

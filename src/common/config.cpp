@@ -198,7 +198,6 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   if(numrecs>=1) {
     ret=carts[0].cart_number;
   }
-  unlink((conf_paths_eas_audio+"/"+filename).toUtf8());
   free(carts);
   return ret;
 }

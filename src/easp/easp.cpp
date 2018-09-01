@@ -253,6 +253,15 @@ void MainWidget::alertClosedData(int id)
     }
     QString filename=alert->filename();
     unlink((main_config->pathsEasMessages()+"/"+filename).toUtf8());
+    if(!alert->headerAudio().isEmpty()) {
+      unlink((main_config->pathsEasAudio()+"/"+alert->headerAudio()).toUtf8());
+    }
+    if(!alert->messageAudio().isEmpty()) {
+      unlink((main_config->pathsEasAudio()+"/"+alert->messageAudio()).toUtf8());
+    }
+    if(!alert->eomAudio().isEmpty()) {
+      unlink((main_config->pathsEasAudio()+"/"+alert->eomAudio()).toUtf8());
+    }
     delete alert;
     main_alerts.remove(filename);
     main_alert_buttons[id]->setAlert(NULL);
@@ -321,6 +330,32 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 }
 
 
+void MainWidget::closeEvent(QCloseEvent *e)
+{
+  QString err_msg;
+  Alert *alert=NULL;
+
+  //
+  // Clean up Rivendell carts
+  //
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    if((alert=main_alert_buttons[i]->alert())!=NULL) {
+      if(alert->headerCart()!=0) {
+	main_config->removeCart(alert->headerCart(),&err_msg);
+      }
+      if(alert->eomCart()!=0) {
+	main_config->removeCart(alert->eomCart(),&err_msg);
+      }
+      if(alert->messageCart()!=0) {
+	main_config->removeCart(alert->messageCart(),&err_msg);
+      }
+    }
+  }
+
+  exit(0);
+}
+
+
 void MainWidget::ProcessNowNext(unsigned cartnum)
 {
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
@@ -339,7 +374,7 @@ void MainWidget::ProcessNowNext(unsigned cartnum)
 }
 
 
-void MainWidget::ProcessNewAlert(Alert *alert)
+bool MainWidget::ProcessNewAlert(Alert *alert)
 {
   unsigned cartnum=0;
   QString err_msg="";
@@ -380,9 +415,10 @@ void MainWidget::ProcessNewAlert(Alert *alert)
       if(i==main_selected_alert_id) {
 	DisplayAlertButton(button);
       }
-      return;
+      return true;
     }
   }
+  return false;
 }
 
 

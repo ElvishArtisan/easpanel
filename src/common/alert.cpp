@@ -268,13 +268,13 @@ bool Alert::load(const QString &pathname)
       QDateTime::fromTime_t(values.find("EAS.END_TIME").value().toInt());
   }
   if(values.find("EAS.AUDIO.FILE.HEADER")!=values.constEnd()) {
-    alert_header_audio=values.find("EAS.AUDIO.FILE.HEADER").value();
+    alert_header_audio=values.find("EAS.AUDIO.FILE.HEADER").value().trimmed();
   }
   if(values.find("EAS.AUDIO.FILE.EOM")!=values.constEnd()) {
-    alert_eom_audio=values.find("EAS.AUDIO.FILE.EOM").value();
+    alert_eom_audio=values.find("EAS.AUDIO.FILE.EOM").value().trimmed();
   }
   if(values.find("EAS.AUDIO.FILE.ALERT")!=values.constEnd()) {
-    alert_message_audio=values.find("EAS.AUDIO.FILE.ALERT").value();
+    alert_message_audio=values.find("EAS.AUDIO.FILE.ALERT").value().trimmed();
   }
   if(values.find("EAS.TRANSLATION")!=values.constEnd()) {
     alert_text=values.find("EAS.TRANSLATION").value();

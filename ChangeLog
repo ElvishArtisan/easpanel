@@ -26,3 +26,6 @@
 	* Implemented automatic event dismissal.
 2018-09-01 Fred Gleason <fredg@paravelsystems.com>
 	* Added logic to advance alerts to fill empty button positions.
+2018-09-01 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug that was causing audio files not to be deleted when
+	an event was dismissed.
