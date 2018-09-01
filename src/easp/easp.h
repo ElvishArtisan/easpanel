@@ -49,11 +49,13 @@ class MainWidget : public QWidget
   void alertClosedData(int id);
   void startData();
   void endData();
+  void rlmReadyReadData();
 
  protected:
   void resizeEvent(QResizeEvent *e);
 
  private:
+  void ProcessNowNext(unsigned cartnum);
   void ProcessNewAlert(Alert *alert);
   void DisplayAlertButton(AlertButton *button);
   void SendRml(const QString &rml);

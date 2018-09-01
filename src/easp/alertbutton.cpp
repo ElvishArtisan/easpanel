@@ -30,6 +30,7 @@ AlertButton::AlertButton(int id,QWidget *parent)
   alert_alert=NULL;
   alert_mouse_pressed=false;
   alert_id=id;
+  alert_eom_played=false;
   alert_selected=false;
 
   //
@@ -93,6 +94,7 @@ void AlertButton::setAlert(Alert *alert)
 	      tr("Expires")+": "+
 	      alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
   }
+  alert_eom_played=false;
   alert_alert=alert;
   setStatus(AlertButton::New);
 }
@@ -137,6 +139,18 @@ QString AlertButton::statusText() const
 void AlertButton::addStatusText(const QString &str)
 {
   alert_status_text+=" "+str;
+}
+
+
+bool AlertButton::eomPlayed() const
+{
+  return alert_eom_played;
+}
+
+
+void AlertButton::setEomPlayed(bool state)
+{
+  alert_eom_played=state;
 }
 
 

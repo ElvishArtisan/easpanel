@@ -1,13 +1,10 @@
-## automake.am
-##
-## Automake.am for easpanel src/
+## Makefile.am
 ##
 ##   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
-##   it under the terms of the GNU General Public License as
-##   published by the Free Software Foundation; either version 2 of
-##   the License, or (at your option) any later version.
+##   it under the terms of the GNU General Public License version 2 as
+##   published by the Free Software Foundation.
 ##
 ##   This program is distributed in the hope that it will be useful,
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,9 +17,21 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-SUBDIRS = common\
-          easp\
-          rlm_easpanel
+AM_CFLAGS = -fPIC -Wall
+
+RLM_MODULES=rlm_easpanel.rlm
+
+all:	$(RLM_MODULES)
+
+%.rlm:	%.c
+	$(CC) $(AM_CFLAGS) -I$(top_srcdir) -shared $< -o $@
+
+install:	all
+	mkdir -p $(DESTDIR)$(libdir)/rivendell
+	cp $(RLM_MODULES) $(DESTDIR)$(libdir)/rivendell/
+
+
+EXTRA_DIST = rlm_easpanel.c
 
 CLEANFILES = *~\
              *.idb\
@@ -30,6 +39,7 @@ CLEANFILES = *~\
              *.obj\
              *.pdb\
              *.qm\
+             *.rlm\
              moc_*
 
 MAINTAINERCLEANFILES = *~\

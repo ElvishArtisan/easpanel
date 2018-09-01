@@ -40,7 +40,7 @@ class Config
   unsigned rivendellFriendlyOutroCart() const;
   QString pathsEasMessages() const;
   QString pathsEasAudio() const;
-  QString pathsRivendellAudio() const;
+  unsigned pathsRlmReceivePort() const;
   QString dump() const;
   bool load();
   void clear();
@@ -59,7 +59,7 @@ class Config
   unsigned conf_rivendell_friendly_outro_cart;
   QString conf_paths_eas_messages;
   QString conf_paths_eas_audio;
-  QString conf_paths_rivendell_audio;
+  unsigned conf_paths_rlm_receive_port;
   QString conf_user_agent;
 };
 

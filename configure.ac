@@ -38,6 +38,7 @@ fi
 #
 # Basic Compiler Checks
 #
+AC_PROG_CC
 AC_PROG_CXX
 AC_LANG(C++)
 
@@ -118,6 +119,7 @@ AC_CONFIG_FILES([ \
     src/Makefile \
     src/common/Makefile \
     src/easp/Makefile \
+    src/rlm_easpanel/Makefile \
     Makefile \
     ])
 AC_OUTPUT()

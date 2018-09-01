@@ -51,6 +51,14 @@ MainWidget::MainWidget(QWidget *parent)
   // RML Socket
   //
   main_rml_socket=new QUdpSocket(this);
+  if(!main_rml_socket->bind(main_config->pathsRlmReceivePort())) {
+    QMessageBox::critical(this,"EAS Panel",
+			  tr("Unable to bind UDP port")+
+			  QString().
+			  sprintf(" %u!",main_config->pathsRlmReceivePort()));
+    exit(1);
+  }
+  connect(main_rml_socket,SIGNAL(readyRead()),this,SLOT(rlmReadyReadData()));
 
   //
   // Fonts
@@ -269,6 +277,25 @@ void MainWidget::endData()
 }
 
 
+void MainWidget::rlmReadyReadData()
+{
+  char data[1501];
+  int n;
+  bool ok=false;
+
+  while((n=main_rml_socket->readDatagram(data,1500))>0) {
+    data[n]=0;
+    QStringList f0=QString(data).split("\t");
+    if(f0.size()==2) {
+      unsigned cartnum=f0.at(1).toUInt(&ok);
+      if(ok||(f0.at(0)==main_config->rivendellAlertAudioGroup())) {
+	ProcessNowNext(cartnum);
+      }
+    }
+  }
+}
+
+
 void MainWidget::resizeEvent(QResizeEvent *e)
 {
   int w=size().width();
@@ -288,6 +315,24 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 				       59+i*((h-129)/EASP_ALERT_QUAN+13),
 				       w/3-30,
 				       5+(h-129)/EASP_ALERT_QUAN);
+  }
+}
+
+
+void MainWidget::ProcessNowNext(unsigned cartnum)
+{
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    AlertButton *button=main_alert_buttons[i];
+    if(button->alert()!=NULL) {
+      if(button->eomPlayed()) {
+	alertClosedData(i);
+      }
+      else {
+	if(button->alert()->eomCart()==cartnum) {
+	  button->setEomPlayed(true);
+	}
+      }
+    }
   }
 }
 

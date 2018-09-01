@@ -96,9 +96,9 @@ QString Config::pathsEasAudio() const
 }
 
 
-QString Config::pathsRivendellAudio() const
+unsigned Config::pathsRlmReceivePort() const
 {
-  return conf_paths_rivendell_audio;
+  return conf_paths_rlm_receive_port;
 }
 
 
@@ -120,7 +120,7 @@ QString Config::dump() const
   ret+="[Paths]\n";
   ret+="EasMessages="+pathsEasMessages()+"\n";
   ret+="EasAudio="+pathsEasAudio()+"\n";
-  ret+="RivendellAudio="+pathsRivendellAudio()+"\n";
+  ret+="RlmReceivePort="+QString().sprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
 
   return ret;
@@ -150,8 +150,7 @@ bool Config::load()
   conf_paths_eas_messages=
     p->stringValue("Paths","EasMessages","/var/eas/messages");
   conf_paths_eas_audio=p->stringValue("Paths","EasAudio","/var/eas/audio");
-  conf_paths_rivendell_audio=
-    p->stringValue("Paths","RivendellAudio","/var/snd");
+  conf_paths_rlm_receive_port=p->intValue("Paths","RlmReceivePort",2634);
 
   delete p;
 
@@ -171,7 +170,7 @@ void Config::clear()
   conf_rivendell_friendly_outro_cart=0;
   conf_paths_eas_messages="";
   conf_paths_eas_audio="";
-  conf_paths_rivendell_audio="";
+  conf_paths_rlm_receive_port=0;
 }
 
 

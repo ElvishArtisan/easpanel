@@ -48,6 +48,8 @@ class AlertButton : public QFrame
   void setStatus(Status status);
   QString statusText() const;
   void addStatusText(const QString &str);
+  bool eomPlayed() const;
+  void setEomPlayed(bool state);
 
  signals:
   void clicked(int id);
@@ -73,6 +75,7 @@ class AlertButton : public QFrame
   Alert *alert_alert;
   bool alert_mouse_pressed;
   bool alert_selected;
+  bool alert_eom_played;
   int alert_id;
 };
 

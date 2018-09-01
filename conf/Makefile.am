@@ -20,8 +20,8 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-EXTRA_DIST = alert-sample.conf\
-             easpanel-sample.conf
+EXTRA_DIST = easpanel-sample.conf\
+             rlm_easpanel-sample.conf
 
 CLEANFILES = *~
 DISTCLEANFILES = moc_*
