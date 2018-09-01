@@ -154,6 +154,39 @@ void AlertButton::setEomPlayed(bool state)
 }
 
 
+void AlertButton::copyFrom(AlertButton *button)
+{
+  alert_alert=button->alert();
+  alert_eom_played=button->eomPlayed();
+  alert_selected=false;
+  alert_title_label->setText(button->alert()->title());
+  alert_datetime_label->
+    setText(tr("Issued")+": "+
+	    button->alert()->issuedDateTime().toString("MMMM d @ h:mm ap")+"\n"+
+	    tr("Expires")+": "+
+	    button->alert()->expiresDateTime().toString("MMMM d @ h:mm ap"));
+  alert_status_text=button->statusText();
+  //  setSelected(button->selected());
+  alert_mouse_pressed=false;
+
+  UpdateColor();
+}
+
+
+void AlertButton::clear()
+{
+  alert_alert=NULL;
+  alert_eom_played=false;
+  alert_selected=false;
+  alert_title_label->clear();
+  alert_datetime_label->clear();
+  alert_status_text="";
+  alert_mouse_pressed=false;
+
+  UpdateColor();
+}
+
+
 void AlertButton::closeClickedData()
 {
   emit closeClicked(alert_id);

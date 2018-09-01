@@ -263,6 +263,8 @@ void MainWidget::alertClosedData(int id)
     }
     main_livesend_button->setDisabled(true);
     main_cannedsend_button->setDisabled(true);
+
+    CompactButtons();
   }
 }
 
@@ -410,6 +412,32 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   main_cannedsend_button->setDisabled(alert==NULL);
   //  main_start_button->setDisabled(alert==NULL);
   //  main_end_button->setDisabled(alert==NULL);
+}
+
+
+void MainWidget::CompactButtons()
+{
+  int empty_slot=-1;
+
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    AlertButton *button=main_alert_buttons[i];
+    if((button->alert()==NULL)&&(empty_slot<0)) {
+      empty_slot=i;
+    }
+    else {
+      if(empty_slot>=0) {
+	if(button->alert()!=NULL) {
+	  main_alert_buttons[empty_slot]->copyFrom(button);
+	  main_selected_alert_id=-1;
+	  if(button->selected()) {
+	    alertSelectedData(empty_slot);
+	  }
+	}
+	button->clear();
+	return;
+      }
+    }
+  }
 }
 
 

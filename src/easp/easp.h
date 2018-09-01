@@ -58,6 +58,7 @@ class MainWidget : public QWidget
   void ProcessNowNext(unsigned cartnum);
   void ProcessNewAlert(Alert *alert);
   void DisplayAlertButton(AlertButton *button);
+  void CompactButtons();
   void SendRml(const QString &rml);
   QLabel *main_title_label;
   QLabel *main_datetime_label;

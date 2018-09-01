@@ -24,3 +24,5 @@
 2018-09-01 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'rlm_easpanel' RLM.
 	* Implemented automatic event dismissal.
+2018-09-01 Fred Gleason <fredg@paravelsystems.com>
+	* Added logic to advance alerts to fill empty button positions.

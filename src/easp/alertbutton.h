@@ -50,6 +50,8 @@ class AlertButton : public QFrame
   void addStatusText(const QString &str);
   bool eomPlayed() const;
   void setEomPlayed(bool state);
+  void copyFrom(AlertButton *button);
+  void clear();
 
  signals:
   void clicked(int id);
