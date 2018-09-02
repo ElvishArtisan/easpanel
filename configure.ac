@@ -69,7 +69,7 @@ AC_SUBST(MOC,$MOC_NAME)
 #
 # Check for Rivendell C API (Mandatory)
 #
-PKG_CHECK_MODULES(RIVWEBCAPI,rivendell,[],[AC_MSG_ERROR([*** Rivendell C API not found ***])])
+PKG_CHECK_MODULES(RIVWEBCAPI,rivwebcapi,[],[AC_MSG_ERROR([*** Rivendell C API not found ***])])
 
 #
 # Build DocBook Items?
