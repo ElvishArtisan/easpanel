@@ -34,3 +34,6 @@
 2018-09-02 Fred Gleason <fredg@paravelsystems.com>
 	* Changed the header file path for rivcapi components from 'rivendell/'
 	to 'rivwebcapi/'.
+2018-09-02 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a regression in easp(1) that broke automatic dismissal of
+	alerts in LiveAssist mode.

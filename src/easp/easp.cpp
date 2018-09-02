@@ -174,6 +174,7 @@ void MainWidget::liveSendData()
     SendRml(QString().sprintf("PX %d %d STOP!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart()));
+    main_last_cart=alert->eomCart();
 
     SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
@@ -197,6 +198,7 @@ void MainWidget::cannedSendData()
     SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart()));
+    main_last_cart=alert->eomCart();
 
     if(alert->messageCart()!=0) {
       SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
@@ -455,20 +457,20 @@ void MainWidget::SendNextAlert()
 
 void MainWidget::ProcessNowPlaying(unsigned cartnum)
 {
-  if(cartnum!=0) {
-    for(int i=0;i<EASP_ALERT_QUAN;i++) {
-      AlertButton *button=main_alert_buttons[i];
-      if(button->alert()!=NULL) {
-	if(button->eomPlayed()) {
-	  alertClosedData(i);  // Dismiss Completed Alert
-	}
-	else {
-	  if(button->alert()->eomCart()==cartnum) {
-	    button->setEomPlayed(true);
-	  }
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    AlertButton *button=main_alert_buttons[i];
+    if(button->alert()!=NULL) {
+      if(button->eomPlayed()) {
+	alertClosedData(i);  // Dismiss Completed Alert
+      }
+      else {
+	if(button->alert()->eomCart()==cartnum) {
+	  button->setEomPlayed(true);
 	}
       }
     }
+  }
+  if(cartnum!=0) {
     if(main_last_cart==cartnum) {
       main_last_cart=0;
       if(main_auto) {
