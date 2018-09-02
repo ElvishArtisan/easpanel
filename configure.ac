@@ -116,10 +116,12 @@ fi
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    icons/Makefile \
     src/Makefile \
     src/common/Makefile \
     src/easp/Makefile \
     src/rlm_easpanel/Makefile \
+    xdg/Makefile \
     Makefile \
     ])
 AC_OUTPUT()

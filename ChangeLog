@@ -37,3 +37,6 @@
 2018-09-02 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a regression in easp(1) that broke automatic dismissal of
 	alerts in LiveAssist mode.
+2018-09-02 Fred Gleason <fredg@paravelsystems.com>
+	* Added an 'easpanel' icon.
+	* Added a desktop entry for 'EASPanel'.

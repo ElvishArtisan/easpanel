@@ -30,6 +30,11 @@
 #include "cmdswitch.h"
 #include "easp.h"
 
+//
+// Icons
+//
+#include "../../icons/easpanel-22x22.xpm"
+
 MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent)
 {
@@ -69,7 +74,11 @@ MainWidget::MainWidget(QWidget *parent)
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
   QFont mode_font(font().family(),2*font().pointSize(),QFont::Normal);
 
+  //
+  // Set Window Titlebar
+  //
   setWindowTitle(QString("EASPanel - v")+VERSION);
+  setWindowIcon(QPixmap(easpanel_22x22_xpm));
 
   //
   // Title

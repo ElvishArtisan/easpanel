@@ -2,8 +2,6 @@
 ##
 ## Top level automake.am
 ##
-## Use automake to process this into a Makefile.in
-##
 ##   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
@@ -19,13 +17,16 @@
 ##   License along with this program; if not, write to the Free Software
 ##   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ##
+## Use automake to process this into a Makefile.in
 
 #if DOCBOOK_AM
 #  DOCBOOK_AM_OPT = docs
 #endif
 
 SUBDIRS = conf\
-          src
+          icons\
+          src\
+          xdg
 #SUBDIRS = $(DOCBOOK_AM_OPT) conf\
 #          icons\
 #          src\

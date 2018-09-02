@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Terminal=false
+Categories=GNOME;GTK;Utility;Calculator;
+Name=EASPanel
+GenericName=Emergency Alert System
+Exec=easp
+Icon=easpanel
+Type=Application
+Path=/usr/bin
+StartupNotify=false
