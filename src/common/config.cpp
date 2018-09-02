@@ -54,6 +54,12 @@ QString Config::rivendellAlertAudioGroup() const
 }
 
 
+QStringList Config::rivendellVoicetrackGroups() const
+{
+  return conf_rivendell_voicetrack_groups;
+}
+
+
 QString Config::rivendellUser() const
 {
   return conf_rivendell_user;
@@ -109,6 +115,13 @@ QString Config::dump() const
   ret+="[Rivendell]\n";
   ret+="HostAddress="+rivendellHostAddress().toString()+"\n";
   ret+="AlertAudioGroup="+rivendellAlertAudioGroup()+"\n";
+  ret+="VoicetrackGroups=";
+  QStringList groups=rivendellVoicetrackGroups();
+  for(int i=0;i<groups.size();i++) {
+    ret+=groups.at(i)+",";
+  }
+  ret=ret.left(ret.size()-1);
+  ret+="\n";
   ret+="User="+rivendellUser()+"\n";
   ret+="Password="+rivendellPassword()+"\n";
   ret+="AlertToneCart="+QString().sprintf("%u",rivendellAlertToneCart())+"\n";
@@ -139,6 +152,13 @@ bool Config::load()
   conf_rivendell_log_machine=p->intValue("Rivendell","LogMachine",1);
   conf_rivendell_alert_audio_group=
     p->stringValue("Rivendell","AlertAudioGroup","EAS");
+  conf_rivendell_voicetrack_groups=
+    p->stringValue("Rivendell","VoicetrackGroups").
+    split(",",QString::SkipEmptyParts);
+  for(int i=0;i<conf_rivendell_voicetrack_groups.size();i++) {
+    conf_rivendell_voicetrack_groups[i]=
+      conf_rivendell_voicetrack_groups.at(i).trimmed();
+  }
   conf_rivendell_user=p->stringValue("Rivendell","User","user");
   conf_rivendell_password=p->stringValue("Rivendell","Password");
   conf_rivendell_alert_tone_cart=p->intValue("Rivendell","AlertToneCart");
@@ -163,6 +183,7 @@ void Config::clear()
   conf_rivendell_host_address=QHostAddress();
   conf_rivendell_log_machine=0;
   conf_rivendell_alert_audio_group="";
+  conf_rivendell_voicetrack_groups.clear();
   conf_rivendell_user="";
   conf_rivendell_password="";
   conf_rivendell_alert_tone_cart=0;

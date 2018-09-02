@@ -165,8 +165,8 @@ void AlertButton::copyFrom(AlertButton *button)
 	    button->alert()->issuedDateTime().toString("MMMM d @ h:mm ap")+"\n"+
 	    tr("Expires")+": "+
 	    button->alert()->expiresDateTime().toString("MMMM d @ h:mm ap"));
+  alert_status=button->status();
   alert_status_text=button->statusText();
-  //  setSelected(button->selected());
   alert_mouse_pressed=false;
 
   UpdateColor();
@@ -180,6 +180,7 @@ void AlertButton::clear()
   alert_selected=false;
   alert_title_label->clear();
   alert_datetime_label->clear();
+  alert_status=AlertButton::New;
   alert_status_text="";
   alert_mouse_pressed=false;
 

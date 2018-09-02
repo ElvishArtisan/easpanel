@@ -37,7 +37,7 @@ class AlertButton : public QFrame
 {
   Q_OBJECT;
  public:
-  enum Status {New=0,Ready=1,Error=2};
+  enum Status {New=0,Ready=1,Sent=2,Error=3};
   AlertButton(int id,QWidget *parent=0);
   int id() const;
   Alert *alert() const;

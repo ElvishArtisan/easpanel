@@ -38,12 +38,14 @@ class MainWidget : public QWidget
 {
   Q_OBJECT;
  public:
-  MainWidget(QWidget *parnt=0);
+  MainWidget(QWidget *parent=0);
   QSize sizeHint() const;
 
  private slots:
+  void autoData();
   void liveSendData();
   void cannedSendData();
+  void autoSendData(int id);
   void alertScanData();
   void alertSelectedData(int id);
   void alertClosedData(int id);
@@ -56,7 +58,8 @@ class MainWidget : public QWidget
   void closeEvent(QCloseEvent *e);
 
  private:
-  void ProcessNowNext(unsigned cartnum);
+  void SendNextAlert();
+  void ProcessNowPlaying(unsigned cartnum);
   bool ProcessNewAlert(Alert *alert);
   void DisplayAlertButton(AlertButton *button);
   void CompactButtons();
@@ -65,6 +68,8 @@ class MainWidget : public QWidget
   QLabel *main_datetime_label;
   QTextEdit *main_text_text;
   AlertButton *main_alert_buttons[EASP_ALERT_QUAN];
+  QPushButton *main_auto_button;
+  bool main_auto;
   QPushButton *main_livesend_button;
   QPushButton *main_cannedsend_button;
   //  QPushButton *main_start_button;
@@ -74,6 +79,8 @@ class MainWidget : public QWidget
   QMap<QString,Alert *> main_alerts;
   int main_selected_alert_id;
   QUdpSocket *main_rml_socket;
+  unsigned main_last_cart;
+  bool main_next_is_voicetrack;
 };
 
 

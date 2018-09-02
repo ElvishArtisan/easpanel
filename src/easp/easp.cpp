@@ -33,7 +33,10 @@
 MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent)
 {
+  main_auto=false;
   main_selected_alert_id=-1;
+  main_last_cart=0;
+  main_next_is_voicetrack=false;
 
   new CmdSwitch("easp","\n");
 
@@ -64,6 +67,7 @@ MainWidget::MainWidget(QWidget *parent)
   // Fonts
   //
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
+  QFont mode_font(font().family(),2*font().pointSize(),QFont::Normal);
 
   setWindowTitle(QString("EASPanel - v")+VERSION);
 
@@ -100,6 +104,12 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // Buttons
   //
+  main_auto_button=
+    new QPushButton(tr("LiveAssist"),this);
+  main_auto_button->setFont(mode_font);
+  main_auto_button->setStyleSheet("background-color: #FFFF00");
+  connect(main_auto_button,SIGNAL(clicked()),this,SLOT(autoData()));
+
   main_livesend_button=
     new QPushButton(tr("Send to Log")+"\n("+tr("LIVE")+")",this);
   main_livesend_button->setFont(bold_font);
@@ -140,6 +150,20 @@ QSize MainWidget::sizeHint() const
 }
 
 
+void MainWidget::autoData()
+{
+  if(main_auto) {
+    main_auto_button->setText(tr("LiveAssist"));
+    main_auto_button->setStyleSheet("background-color: #FFFF00");
+  }
+  else {
+    main_auto_button->setText(tr("Automatic"));
+    main_auto_button->setStyleSheet("background-color: #00FF00");
+  }
+  main_auto=!main_auto;
+}
+
+
 void MainWidget::liveSendData()
 {
   Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
@@ -158,6 +182,7 @@ void MainWidget::liveSendData()
     SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
+    main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
   }
 }
 
@@ -186,6 +211,52 @@ void MainWidget::cannedSendData()
     SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
+    main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
+  }
+}
+
+
+void MainWidget::autoSendData(int id)
+{
+  Alert *alert=main_alert_buttons[id]->alert();
+  if(alert!=NULL) {
+    //
+    // Load from the bottom up
+    //
+    if(main_config->rivendellFriendlyOutroCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Outro Cart
+				main_config->rivendellLogMachine(),
+				main_config->rivendellFriendlyOutroCart()));
+      main_last_cart=main_config->rivendellFriendlyOutroCart();
+    }
+    else {
+      main_last_cart=alert->eomCart();
+    }
+
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
+			      main_config->rivendellLogMachine(),
+			      alert->eomCart()));
+
+    if(alert->messageCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
+				main_config->rivendellLogMachine(),
+				alert->messageCart()));
+
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
+				main_config->rivendellLogMachine(),
+				main_config->rivendellAlertToneCart()));
+    }
+
+    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
+			      main_config->rivendellLogMachine(),
+			      alert->headerCart()));
+
+    if(main_config->rivendellFriendlyIntroCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d PLAY!",    // Intro Cart
+				main_config->rivendellLogMachine(),
+				main_config->rivendellFriendlyIntroCart()));
+    }
+    main_alert_buttons[id]->setStatus(AlertButton::Sent);
   }
 }
 
@@ -205,7 +276,11 @@ void MainWidget::alertScanData()
       Alert *alert=new Alert();
       if(alert->load(main_config->pathsEasMessages()+"/"+files.at(i))) {
 	main_alerts[files.at(i)]=alert;
-	ProcessNewAlert(alert);
+	if(ProcessNewAlert(alert)) {
+	  if(main_auto) {
+	    SendNextAlert();
+	  }
+	}
       }
     }
   }
@@ -297,11 +372,13 @@ void MainWidget::rlmReadyReadData()
   while((n=main_rml_socket->readDatagram(data,1500))>0) {
     data[n]=0;
     QStringList f0=QString(data).split("\t");
-    if(f0.size()==2) {
+    if(f0.size()==4) {
       unsigned cartnum=f0.at(1).toUInt(&ok);
-      if(ok||(f0.at(0)==main_config->rivendellAlertAudioGroup())) {
-	ProcessNowNext(cartnum);
+      if(ok) {
+	ProcessNowPlaying(cartnum);
       }
+      main_next_is_voicetrack=
+	main_config->rivendellVoicetrackGroups().contains(f0.at(2));
     }
   }
 }
@@ -314,6 +391,9 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
   main_title_label->setGeometry(10,5,w-20,20);
   main_datetime_label->setGeometry(10,32,w-20,20);
+
+  main_auto_button->setGeometry(w-210,5,200,50);
+
   main_text_text->setGeometry(10,59,2*w/3,h-129);
 
   main_livesend_button->setGeometry(40,h-60,120,50);
@@ -356,18 +436,43 @@ void MainWidget::closeEvent(QCloseEvent *e)
 }
 
 
-void MainWidget::ProcessNowNext(unsigned cartnum)
+void MainWidget::SendNextAlert()
 {
-  for(int i=0;i<EASP_ALERT_QUAN;i++) {
-    AlertButton *button=main_alert_buttons[i];
-    if(button->alert()!=NULL) {
-      if(button->eomPlayed()) {
-	alertClosedData(i);
-      }
-      else {
-	if(button->alert()->eomCart()==cartnum) {
-	  button->setEomPlayed(true);
+  Alert *alert=NULL;
+
+  if(main_last_cart==0) {
+    for(int i=0;i<EASP_ALERT_QUAN;i++) {
+      if(main_alert_buttons[i]->status()==AlertButton::Ready) {
+	if((alert=main_alert_buttons[i]->alert())!=NULL) {
+	  autoSendData(i);
+	  return;
 	}
+      }
+    }
+  }
+}
+
+
+void MainWidget::ProcessNowPlaying(unsigned cartnum)
+{
+  if(cartnum!=0) {
+    for(int i=0;i<EASP_ALERT_QUAN;i++) {
+      AlertButton *button=main_alert_buttons[i];
+      if(button->alert()!=NULL) {
+	if(button->eomPlayed()) {
+	  alertClosedData(i);  // Dismiss Completed Alert
+	}
+	else {
+	  if(button->alert()->eomCart()==cartnum) {
+	    button->setEomPlayed(true);
+	  }
+	}
+      }
+    }
+    if(main_last_cart==cartnum) {
+      main_last_cart=0;
+      if(main_auto) {
+	SendNextAlert();  // Send Next Alert
       }
     }
   }
@@ -383,6 +488,7 @@ bool MainWidget::ProcessNewAlert(Alert *alert)
     if(main_alert_buttons[i]->alert()==NULL) {
       AlertButton *button=main_alert_buttons[i];
       button->setAlert(alert);
+      button->setStatus(AlertButton::Ready);
       if((cartnum=main_config->
 	  importCart("*** EAS HEADER *** ["+alert->title()+"]",
 		     alert->headerAudio(),&err_msg))==0) {

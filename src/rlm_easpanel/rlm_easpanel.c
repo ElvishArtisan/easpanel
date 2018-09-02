@@ -81,7 +81,8 @@ void rlm_easpanel_RLMPadDataSent(void *ptr,const struct rlm_svc *svc,
   char msg[1500];
 
   for(i=0;i<rlm_easpanel_devs;i++) {
-    snprintf(str,1500,"%s\t%u",now->rlm_group,now->rlm_cartnum);
+    snprintf(str,1500,"%s\t%u\t%s\t%u",now->rlm_group,now->rlm_cartnum,
+	     next->rlm_group,next->rlm_cartnum);
     RLMSendUdp(ptr,rlm_easpanel_addresses+i*16,rlm_easpanel_ports[i],str,strlen(str));
     snprintf(msg,1500,"rlm_easpanel: sending pad update: \"%s\"",str);
     RLMLog(ptr,LOG_INFO,msg);

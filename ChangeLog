@@ -29,3 +29,5 @@
 2018-09-01 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug that was causing audio files not to be deleted when
 	an event was dismissed.
+2018-09-01 Fred Gleason <fredg@paravelsystems.com>
+	* Implemented 'Automatic' mode.
