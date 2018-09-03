@@ -58,3 +58,6 @@
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Added EAS incoming messages and audio directories to the
 	RPM spec file.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Corrected the permissions of the EAS incoming messages and audio
+	directories in the RPM spec file.
