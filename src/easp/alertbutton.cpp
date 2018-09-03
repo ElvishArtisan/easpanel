@@ -38,6 +38,7 @@ AlertButton::AlertButton(int id,QWidget *parent)
   //
   QFont title_font(font().family(),font().pointSize()+2,QFont::Bold);
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
+  QFont status_font(font().family(),font().pointSize(),QFont::Normal,true);
 
   //
   // ID Label
@@ -59,12 +60,24 @@ AlertButton::AlertButton(int id,QWidget *parent)
   alert_title_label->setFont(bold_font);
   alert_title_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
   alert_title_label->setWordWrap(true);
+  //  alert_title_label->setStyleSheet("background-color: #00FF00");
+
+  //
+  // Status Label
+  //
+  alert_status_label=new QLabel(this);
+  alert_status_label->setFont(status_font);
+  alert_status_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+  alert_status_label->setWordWrap(true);
+  alert_status_label->hide();
+  //  alert_status_label->setStyleSheet("background-color: #FFFF00");
 
   //
   // Datetime Label
   //
   alert_datetime_label=new QLabel(this);
-  alert_datetime_label->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+  alert_datetime_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+  //  alert_datetime_label->setStyleSheet("background-color: #0000FF");
 }
 
 
@@ -132,13 +145,18 @@ void AlertButton::setStatus(AlertButton::Status status)
 
 QString AlertButton::statusText() const
 {
-  return alert_status_text;
+  return alert_status_label->text();
 }
 
 
 void AlertButton::addStatusText(const QString &str)
 {
-  alert_status_text+=" "+str;
+  if(alert_status_label->text().isEmpty()) {
+    alert_status_label->setText(str);
+  }
+  else {
+    alert_status_label->setText(alert_status_label->text()+" "+str);
+  }
 }
 
 
@@ -166,7 +184,7 @@ void AlertButton::copyFrom(AlertButton *button)
 	    tr("Expires")+": "+
 	    button->alert()->expiresDateTime().toString("MMMM d @ h:mm ap"));
   alert_status=button->status();
-  alert_status_text=button->statusText();
+  alert_status_label->setText(button->statusText());
   alert_mouse_pressed=false;
 
   UpdateColor();
@@ -181,7 +199,7 @@ void AlertButton::clear()
   alert_title_label->clear();
   alert_datetime_label->clear();
   alert_status=AlertButton::New;
-  alert_status_text="";
+  alert_status_label->clear();
   alert_mouse_pressed=false;
 
   UpdateColor();
@@ -227,8 +245,10 @@ void AlertButton::resizeEvent(QResizeEvent *e)
   alert_close_button->setIconSize(QSize(20,20));
   alert_close_button->
     setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton,0,alert_close_button));
-  alert_title_label->setGeometry(10,h/4,w-20,h/2);
-  alert_datetime_label->setGeometry(10,5*h/8,w-20,3*h/8);
+  alert_title_label->setGeometry(10,h/4,w-20,16);
+  alert_status_label->setGeometry(10,h/4+20,w-20,h-(h/4+20+32));
+  alert_datetime_label->setGeometry(10,h-40,w-20,32);
+  //  alert_datetime_label->setGeometry(10,5*h/8,w-20,3*h/8);
 }
 
 
@@ -250,4 +270,5 @@ void AlertButton::UpdateColor()
       setStyleSheet("");
     }
   }
+  alert_status_label->setVisible(alert_status==AlertButton::Error);
 }

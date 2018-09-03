@@ -69,7 +69,7 @@ class AlertButton : public QFrame
  private:
   void UpdateColor();
   Status alert_status;
-  QString alert_status_text;
+  QLabel *alert_status_label;
   QLabel *alert_id_label;
   QPushButton *alert_close_button;
   QLabel *alert_title_label;

@@ -50,3 +50,5 @@
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug that caused new events to fail to be sent to the
 	log if the previous event was never played.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Enabled display of error text in alert buttons.

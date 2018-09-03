@@ -567,8 +567,11 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   }
   button->setSelected(true);
   main_selected_alert_id=button->id();
-  main_livesend_button->setDisabled((alert==NULL)||(alert->messageCart()==0));
-  main_cannedsend_button->setDisabled(alert==NULL);
+  main_livesend_button->setDisabled(main_auto||(alert==NULL)||
+				    (alert->messageCart()==0)||
+				    (button->status()==AlertButton::Error));
+  main_cannedsend_button->setDisabled(main_auto||(alert==NULL)||
+				      (button->status()==AlertButton::Error));
 }
 
 
