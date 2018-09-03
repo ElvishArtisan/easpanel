@@ -55,3 +55,6 @@
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Added logic to send pending alerts when first placed into
 	'Automatic' mode.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Added EAS incoming messages and audio directories to the
+	RPM spec file.
