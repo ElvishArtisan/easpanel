@@ -72,8 +72,6 @@ class MainWidget : public QWidget
   bool main_auto;
   QPushButton *main_livesend_button;
   QPushButton *main_cannedsend_button;
-  //  QPushButton *main_start_button;
-  //  QPushButton *main_end_button;
   QTimer *main_alert_scan_timer;
   Config *main_config;
   QMap<QString,Alert *> main_alerts;
