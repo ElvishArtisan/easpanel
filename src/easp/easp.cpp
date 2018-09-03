@@ -175,23 +175,28 @@ void MainWidget::autoData()
 
 void MainWidget::liveSendData()
 {
+  int offset=0;
   Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
   if(alert!=NULL) {
+    if(main_next_is_voicetrack) {
+      offset=1;
+    }
+
     //
     // Load from the bottom up
     //
-    SendRml(QString().sprintf("PX %d %d STOP!",    // EOM
+    SendRml(QString().sprintf("PX %d %d %d STOP!",    // EOM
 			      main_config->rivendellLogMachine(),
-			      alert->eomCart()));
+			      alert->eomCart(),offset));
     main_last_cart=alert->eomCart();
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
+    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
-			      main_config->rivendellAlertToneCart()));
+			      main_config->rivendellAlertToneCart(),offset));
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
+    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
-			      alert->headerCart()));
+			      alert->headerCart(),offset));
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
   }
 }
@@ -204,22 +209,22 @@ void MainWidget::cannedSendData()
     //
     // Load from the bottom up
     //
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
+    SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart()));
     main_last_cart=alert->eomCart();
 
     if(alert->messageCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Message
 				main_config->rivendellLogMachine(),
 				alert->messageCart()));
 
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Attention Signal
 				main_config->rivendellLogMachine(),
 				main_config->rivendellAlertToneCart()));
     }
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
+    SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
@@ -235,7 +240,7 @@ void MainWidget::autoSendData(int id)
     // Load from the bottom up
     //
     if(main_config->rivendellFriendlyOutroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Outro Cart
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Outro Cart
 				main_config->rivendellLogMachine(),
 				main_config->rivendellFriendlyOutroCart()));
       main_last_cart=main_config->rivendellFriendlyOutroCart();
@@ -244,26 +249,26 @@ void MainWidget::autoSendData(int id)
       main_last_cart=alert->eomCart();
     }
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // EOM
+    SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart()));
 
     if(alert->messageCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Message
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Message
 				main_config->rivendellLogMachine(),
 				alert->messageCart()));
 
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Attention Signal
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Attention Signal
 				main_config->rivendellLogMachine(),
 				main_config->rivendellAlertToneCart()));
     }
 
-    SendRml(QString().sprintf("PX %d %d PLAY!",    // Header
+    SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Header
 			      main_config->rivendellLogMachine(),
 			      alert->headerCart()));
 
     if(main_config->rivendellFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d PLAY!",    // Intro Cart
+      SendRml(QString().sprintf("PX %d %d 0 PLAY!",    // Intro Cart
 				main_config->rivendellLogMachine(),
 				main_config->rivendellFriendlyIntroCart()));
     }

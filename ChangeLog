@@ -42,3 +42,5 @@
 	* Added a desktop entry for 'EASPanel'.
 2018-09-02 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make rpm' target.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Added logic to avoid placing alerts immediately before voicetracks.
