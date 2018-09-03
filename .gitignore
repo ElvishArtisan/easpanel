@@ -1,6 +1,7 @@
 *~
 *.o
 *.rlm
+*.spec
 .deps
 aclocal.m4
 autom4te.cache
