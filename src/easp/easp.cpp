@@ -627,15 +627,9 @@ void MainWidget::SendRml(const QString &rml)
 
 void MainWidget::BringToTop()
 {
-  setWindowState(Qt::WindowActive);
+  setWindowState(Qt::WindowActive|Qt::WindowMaximized);
   raise();
   activateWindow();
-  /*
-  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
-  show();
-  setWindowFlags(windowFlags() & ~(Qt::WindowStaysOnTopHint));
-  show();
-  */
 }
 
 
