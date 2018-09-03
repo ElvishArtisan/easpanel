@@ -90,6 +90,18 @@ unsigned Config::rivendellFriendlyOutroCart() const
 }
 
 
+int Config::rivendellNormalizationLevel() const
+{
+  return conf_rivendell_normalization_level;
+}
+
+
+int Config::rivendellAutotrimLevel() const
+{
+  return conf_rivendell_autotrim_level;
+}
+
+
 QString Config::pathsEasMessages() const
 {
   return conf_paths_eas_messages;
@@ -129,6 +141,10 @@ QString Config::dump() const
     QString().sprintf("%u",rivendellFriendlyIntroCart())+"\n";
   ret+="FriendlyOutroCart="+
     QString().sprintf("%u",rivendellFriendlyOutroCart())+"\n";
+  ret+="NormalizationLevel="+
+    QString().sprintf("%d",rivendellNormalizationLevel())+"\n";
+  ret+="AutotrimLevel="+
+    QString().sprintf("%d",rivendellAutotrimLevel())+"\n";
   ret+="\n";
   ret+="[Paths]\n";
   ret+="EasMessages="+pathsEasMessages()+"\n";
@@ -166,6 +182,9 @@ bool Config::load()
     p->intValue("Rivendell","FriendlyIntroCart");
   conf_rivendell_friendly_outro_cart=
     p->intValue("Rivendell","FriendlyOutroCart");
+  conf_rivendell_normalization_level=
+    p->intValue("Rivendell","NormalizationLevel",-11);
+  conf_rivendell_autotrim_level=p->intValue("Rivendell","AutotrimLevel");
 
   conf_paths_eas_messages=
     p->stringValue("Paths","EasMessages","/var/eas/messages");
@@ -189,6 +208,8 @@ void Config::clear()
   conf_rivendell_alert_tone_cart=0;
   conf_rivendell_friendly_intro_cart=0;
   conf_rivendell_friendly_outro_cart=0;
+  conf_rivendell_normalization_level=0;
+  conf_rivendell_autotrim_level=0;
   conf_paths_eas_messages="";
   conf_paths_eas_audio="";
   conf_paths_rlm_receive_port=0;
@@ -202,13 +223,23 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   unsigned numrecs=0;
   int ret=0;
 
-  if(RD_ImportCart(&carts,conf_rivendell_host_address.toString().toUtf8(),
-		   conf_rivendell_user.toUtf8(),
-		   conf_rivendell_password.toUtf8(),"",0,0,1,0,0,0,1,
-		   conf_rivendell_alert_audio_group.toUtf8(),
-		   title.toUtf8(),
-		   (conf_paths_eas_audio+"/"+filename).toUtf8(),
-		   conf_user_agent.toUtf8(),&numrecs)!=0) {
+  if(RD_ImportCart(&carts,
+		   conf_rivendell_host_address.toString().toUtf8(),
+		   conf_rivendell_user.toUtf8(),        // Rivendell User
+		   conf_rivendell_password.toUtf8(),    // Rivendell Passowrd
+		   "",                                  // Rivendell Ticket
+		   0,                                   // Cart Number
+		   0,                                   // Cut Number
+		   1,                                   // Channels
+		   conf_rivendell_normalization_level,  
+		   conf_rivendell_autotrim_level,
+		   0,                                   // Don't Use Metadata
+		   1,                                   // Create new cart/cut
+		   conf_rivendell_alert_audio_group.toUtf8(), // Rivendell Group
+		   title.toUtf8(),                      // Cart Title
+		   (conf_paths_eas_audio+"/"+filename).toUtf8(), // Source File
+		   conf_user_agent.toUtf8(),            // User Agent String
+		   &numrecs)!=0) {
     *err_msg="unspecified error";
     if(numrecs>0) {
       *err_msg=carts[0].error_string;

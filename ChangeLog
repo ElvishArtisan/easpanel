@@ -44,3 +44,6 @@
 	* Added a 'make rpm' target.
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Added logic to avoid placing alerts immediately before voicetracks.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'NormalizationLevel=' and 'AutotrimLevel=' parameters to
+	the '[Rivendell]' section of easpanel.conf(5).

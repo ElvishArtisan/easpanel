@@ -40,6 +40,8 @@ class Config
   unsigned rivendellAlertToneCart() const;
   unsigned rivendellFriendlyIntroCart() const;
   unsigned rivendellFriendlyOutroCart() const;
+  int rivendellNormalizationLevel() const;
+  int rivendellAutotrimLevel() const;
   QString pathsEasMessages() const;
   QString pathsEasAudio() const;
   unsigned pathsRlmReceivePort() const;
@@ -60,6 +62,8 @@ class Config
   unsigned conf_rivendell_alert_tone_cart;
   unsigned conf_rivendell_friendly_intro_cart;
   unsigned conf_rivendell_friendly_outro_cart;
+  int conf_rivendell_normalization_level;
+  int conf_rivendell_autotrim_level;
   QString conf_paths_eas_messages;
   QString conf_paths_eas_audio;
   unsigned conf_paths_rlm_receive_port;
