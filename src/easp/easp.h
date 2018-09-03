@@ -64,6 +64,7 @@ class MainWidget : public QWidget
   void DisplayAlertButton(AlertButton *button);
   void CompactButtons();
   void SendRml(const QString &rml);
+  void BringToTop();
   QLabel *main_title_label;
   QLabel *main_datetime_label;
   QTextEdit *main_text_text;

@@ -554,6 +554,7 @@ bool MainWidget::ProcessNewAlert(Alert *alert)
       if(i==main_selected_alert_id) {
 	DisplayAlertButton(button);
       }
+      BringToTop();
       return true;
     }
   }
@@ -621,6 +622,20 @@ void MainWidget::SendRml(const QString &rml)
 {
   main_rml_socket->
     writeDatagram(rml.toUtf8(),main_config->rivendellHostAddress(),5859);
+}
+
+
+void MainWidget::BringToTop()
+{
+  setWindowState(Qt::WindowActive);
+  raise();
+  activateWindow();
+  /*
+  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+  show();
+  setWindowFlags(windowFlags() & ~(Qt::WindowStaysOnTopHint));
+  show();
+  */
 }
 
 

@@ -61,3 +61,5 @@
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Corrected the permissions of the EAS incoming messages and audio
 	directories in the RPM spec file.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to bring main window to top when processing a new alert.
