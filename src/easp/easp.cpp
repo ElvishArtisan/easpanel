@@ -149,15 +149,31 @@ QSize MainWidget::sizeHint() const
 
 void MainWidget::autoData()
 {
+  int ready_id=-1;
+
   if(main_auto) {
     main_auto_button->setText(tr("LiveAssist"));
     main_auto_button->setStyleSheet("background-color: #FFFF00");
+    main_auto=false;
   }
   else {
     main_auto_button->setText(tr("Automatic"));
     main_auto_button->setStyleSheet("background-color: #00FF00");
+    main_auto=true;
+    for(int i=0;i<EASP_ALERT_QUAN;i++) {
+      AlertButton *button=main_alert_buttons[i];
+      if((button->status()==AlertButton::Ready)&&(ready_id<0)) {
+	ready_id=i;
+      }
+      if(button->status()==AlertButton::Sent) {
+	ready_id=-1;
+	break;
+      }
+    }
+    if(ready_id>=0) {
+      autoSendData(ready_id);
+    }
   }
-  main_auto=!main_auto;
 }
 
 

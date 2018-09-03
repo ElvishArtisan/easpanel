@@ -60,7 +60,6 @@ AlertButton::AlertButton(int id,QWidget *parent)
   alert_title_label->setFont(bold_font);
   alert_title_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
   alert_title_label->setWordWrap(true);
-  //  alert_title_label->setStyleSheet("background-color: #00FF00");
 
   //
   // Status Label
@@ -70,14 +69,12 @@ AlertButton::AlertButton(int id,QWidget *parent)
   alert_status_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
   alert_status_label->setWordWrap(true);
   alert_status_label->hide();
-  //  alert_status_label->setStyleSheet("background-color: #FFFF00");
 
   //
   // Datetime Label
   //
   alert_datetime_label=new QLabel(this);
   alert_datetime_label->setAlignment(Qt::AlignLeft|Qt::AlignTop);
-  //  alert_datetime_label->setStyleSheet("background-color: #0000FF");
 }
 
 
@@ -248,7 +245,6 @@ void AlertButton::resizeEvent(QResizeEvent *e)
   alert_title_label->setGeometry(10,h/4,w-20,16);
   alert_status_label->setGeometry(10,h/4+20,w-20,h-(h/4+20+32));
   alert_datetime_label->setGeometry(10,h-40,w-20,32);
-  //  alert_datetime_label->setGeometry(10,5*h/8,w-20,3*h/8);
 }
 
 
