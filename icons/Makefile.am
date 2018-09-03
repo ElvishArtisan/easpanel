@@ -25,21 +25,21 @@ install-exec-am:
 	cp easpanel-22x22.png $(DESTDIR)@prefix@/share/icons/hicolor/22x22/apps/easpanel.png
 	mkdir -p $(DESTDIR)@prefix@/share/icons/hicolor/32x32/apps
 	cp easpanel-32x32.png $(DESTDIR)@prefix@/share/icons/hicolor/32x32/apps/easpanel.png
-	mkdir -p $(DESTDIR)@prefix@/share/icons/hicolor/64x64/apps
-	cp easpanel-64x64.png $(DESTDIR)@prefix@/share/icons/hicolor/64x64/apps/easpanel.png
+	mkdir -p $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps
+	cp easpanel-48x48.png $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/easpanel.png
 
 uninstall-local:	
 	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/16x16/apps/easpanel.png
 	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/22x22/apps/easpanel.png
 	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/32x32/apps/easpanel.png
-	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/64x64/apps/easpanel.png
+	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/easpanel.png
 
 
 EXTRA_DIST = easpanel-16x16.png\
              easpanel-22x22.png\
              easpanel-22x22.xpm\
              easpanel-32x32.png\
-             easpanel-64x64.png
+             easpanel-48x48.png
 
 CLEANFILES = *~
 

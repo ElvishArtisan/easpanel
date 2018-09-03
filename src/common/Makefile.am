@@ -22,6 +22,7 @@
 
 EXTRA_DIST = alert.cpp alert.h\
              cmdswitch.cpp cmdswitch.h\
+             config.cpp config.h\
              profile.cpp profile.h
 
 CLEANFILES = *~\

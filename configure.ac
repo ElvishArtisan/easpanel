@@ -122,6 +122,7 @@ AC_CONFIG_FILES([ \
     src/easp/Makefile \
     src/rlm_easpanel/Makefile \
     xdg/Makefile \
+    easpanel.spec \
     Makefile \
     ])
 AC_OUTPUT()

@@ -40,3 +40,5 @@
 2018-09-02 Fred Gleason <fredg@paravelsystems.com>
 	* Added an 'easpanel' icon.
 	* Added a desktop entry for 'EASPanel'.
+2018-09-02 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'make rpm' target.
