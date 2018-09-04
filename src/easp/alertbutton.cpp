@@ -30,7 +30,8 @@ AlertButton::AlertButton(int id,QWidget *parent)
   alert_alert=NULL;
   alert_mouse_pressed=false;
   alert_id=id;
-  alert_eom_played=false;
+  alert_last_cart=0;
+  alert_last_cart_played=false;
   alert_selected=false;
 
   //
@@ -104,7 +105,8 @@ void AlertButton::setAlert(Alert *alert)
 	      tr("Expires")+": "+
 	      alert->expiresDateTime().toString("MMMM d @ h:mm ap"));
   }
-  alert_eom_played=false;
+  alert_last_cart=0;
+  alert_last_cart_played=false;
   alert_alert=alert;
   setStatus(AlertButton::New);
 }
@@ -157,22 +159,35 @@ void AlertButton::addStatusText(const QString &str)
 }
 
 
-bool AlertButton::eomPlayed() const
+unsigned AlertButton::lastCart() const
 {
-  return alert_eom_played;
+  return alert_last_cart;
 }
 
 
-void AlertButton::setEomPlayed(bool state)
+void AlertButton::setLastCart(unsigned cartnum)
 {
-  alert_eom_played=state;
+  alert_last_cart=cartnum;
+}
+
+
+bool AlertButton::lastCartPlayed() const
+{
+  return alert_last_cart_played;
+}
+
+
+void AlertButton::setLastCartPlayed(bool state)
+{
+  alert_last_cart_played=state;
 }
 
 
 void AlertButton::copyFrom(AlertButton *button)
 {
   alert_alert=button->alert();
-  alert_eom_played=button->eomPlayed();
+  alert_last_cart=button->lastCart();
+  alert_last_cart_played=button->lastCartPlayed();
   alert_selected=false;
   alert_title_label->setText(button->alert()->title());
   alert_datetime_label->
@@ -191,7 +206,8 @@ void AlertButton::copyFrom(AlertButton *button)
 void AlertButton::clear()
 {
   alert_alert=NULL;
-  alert_eom_played=false;
+  alert_last_cart=0;
+  alert_last_cart_played=false;
   alert_selected=false;
   alert_title_label->clear();
   alert_datetime_label->clear();

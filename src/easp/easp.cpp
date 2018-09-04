@@ -40,7 +40,6 @@ MainWidget::MainWidget(QWidget *parent)
 {
   main_auto=false;
   main_selected_alert_id=-1;
-  main_last_cart=0;
   main_next_is_voicetrack=false;
 
   new CmdSwitch("easp","\n");
@@ -180,7 +179,8 @@ void MainWidget::autoData()
 void MainWidget::liveSendData()
 {
   int offset=0;
-  Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
+  AlertButton *button=main_alert_buttons[main_selected_alert_id];
+  Alert *alert=button->alert();
   if(alert!=NULL) {
     if(main_next_is_voicetrack) {
       offset=1;
@@ -192,7 +192,7 @@ void MainWidget::liveSendData()
     SendRml(QString().sprintf("PX %d %d %d STOP!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart(),offset));
-    main_last_cart=alert->eomCart();
+    button->setLastCart(alert->eomCart());
 
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 			      main_config->rivendellLogMachine(),
@@ -209,7 +209,8 @@ void MainWidget::liveSendData()
 void MainWidget::cannedSendData()
 {
   int offset=0;
-  Alert *alert=main_alert_buttons[main_selected_alert_id]->alert();
+  AlertButton *button=main_alert_buttons[main_selected_alert_id];
+  Alert *alert=button->alert();
   if(alert!=NULL) {
     if(main_next_is_voicetrack) {
       offset=1;
@@ -221,7 +222,7 @@ void MainWidget::cannedSendData()
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // EOM
 			      main_config->rivendellLogMachine(),
 			      alert->eomCart(),offset));
-    main_last_cart=alert->eomCart();
+    button->setLastCart(alert->eomCart());
 
     if(alert->messageCart()!=0) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
@@ -244,7 +245,8 @@ void MainWidget::cannedSendData()
 void MainWidget::autoSendData(int id)
 {
   int offset=0;
-  Alert *alert=main_alert_buttons[id]->alert();
+  AlertButton *button=main_alert_buttons[id];
+  Alert *alert=button->alert();
   if(alert!=NULL) {
     if(main_next_is_voicetrack) {
       offset=1;
@@ -258,10 +260,10 @@ void MainWidget::autoSendData(int id)
 				main_config->rivendellLogMachine(),
 				main_config->rivendellFriendlyOutroCart(),
 				offset));
-      main_last_cart=main_config->rivendellFriendlyOutroCart();
+      button->setLastCart(main_config->rivendellFriendlyOutroCart());
     }
     else {
-      main_last_cart=alert->eomCart();
+      button->setLastCart(alert->eomCart());
     }
 
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // EOM
@@ -348,9 +350,6 @@ void MainWidget::alertClosedData(int id)
   QString err_msg;
   Alert *alert=main_alert_buttons[id]->alert();
 
-  if(main_alert_buttons[id]->status()==AlertButton::Sent) {
-    main_last_cart=0;
-  }
   if(alert!=NULL) {
     if(alert->headerCart()!=0) {
       main_config->removeCart(alert->headerCart(),&err_msg);
@@ -385,16 +384,6 @@ void MainWidget::alertClosedData(int id)
 
     CompactButtons();
   }
-}
-
-
-void MainWidget::startData()
-{
-}
-
-
-void MainWidget::endData()
-{
 }
 
 
@@ -473,7 +462,7 @@ void MainWidget::SendNextAlert()
 {
   Alert *alert=NULL;
 
-  if(main_last_cart==0) {
+  if(!AlertLoaded()) {
     for(int i=0;i<EASP_ALERT_QUAN;i++) {
       if(main_alert_buttons[i]->status()==AlertButton::Ready) {
 	if((alert=main_alert_buttons[i]->alert())!=NULL) {
@@ -491,21 +480,17 @@ void MainWidget::ProcessNowPlaying(unsigned cartnum)
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     AlertButton *button=main_alert_buttons[i];
     if(button->alert()!=NULL) {
-      if(button->eomPlayed()) {
+      if(button->lastCartPlayed()) {
 	alertClosedData(i);  // Dismiss Completed Alert
-      }
-      else {
-	if(button->alert()->eomCart()==cartnum) {
-	  button->setEomPlayed(true);
+	if(main_auto) {
+	  SendNextAlert();  // Send Next Alert
 	}
       }
-    }
-  }
-  if(cartnum!=0) {
-    if(main_last_cart==cartnum) {
-      main_last_cart=0;
-      if(main_auto) {
-	SendNextAlert();  // Send Next Alert
+      else {
+	if((cartnum!=0)&&(button->lastCart()==cartnum)) {
+	  button->setLastCart(0);
+	  button->setLastCartPlayed(true);
+	}
       }
     }
   }
@@ -630,6 +615,20 @@ void MainWidget::BringToTop()
   setWindowState(Qt::WindowActive|Qt::WindowMaximized);
   raise();
   activateWindow();
+}
+
+
+bool MainWidget::AlertLoaded() const
+{
+  bool ret=false;
+
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    //    ret=ret||(main_alert_buttons[i]->lastCart()!=0);
+    ret=(ret||(main_alert_buttons[i]->lastCart()!=0))&&
+      (!main_alert_buttons[i]->lastCartPlayed());
+  }
+
+  return ret;
 }
 
 

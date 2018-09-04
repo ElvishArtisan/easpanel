@@ -48,8 +48,10 @@ class AlertButton : public QFrame
   void setStatus(Status status);
   QString statusText() const;
   void addStatusText(const QString &str);
-  bool eomPlayed() const;
-  void setEomPlayed(bool state);
+  unsigned lastCart() const;
+  void setLastCart(unsigned cartnum);
+  bool lastCartPlayed() const;
+  void setLastCartPlayed(bool state);
   void copyFrom(AlertButton *button);
   void clear();
 
@@ -77,7 +79,8 @@ class AlertButton : public QFrame
   Alert *alert_alert;
   bool alert_mouse_pressed;
   bool alert_selected;
-  bool alert_eom_played;
+  unsigned alert_last_cart;
+  bool alert_last_cart_played;
   int alert_id;
 };
 

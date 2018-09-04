@@ -49,8 +49,6 @@ class MainWidget : public QWidget
   void alertScanData();
   void alertSelectedData(int id);
   void alertClosedData(int id);
-  void startData();
-  void endData();
   void rlmReadyReadData();
 
  protected:
@@ -65,6 +63,7 @@ class MainWidget : public QWidget
   void CompactButtons();
   void SendRml(const QString &rml);
   void BringToTop();
+  bool AlertLoaded() const;
   QLabel *main_title_label;
   QLabel *main_datetime_label;
   QTextEdit *main_text_text;
@@ -78,7 +77,6 @@ class MainWidget : public QWidget
   QMap<QString,Alert *> main_alerts;
   int main_selected_alert_id;
   QUdpSocket *main_rml_socket;
-  unsigned main_last_cart;
   bool main_next_is_voicetrack;
 };
 

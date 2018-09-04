@@ -65,3 +65,6 @@
 	* Added code to bring main window to top when processing a new alert.
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Modfied code to make main window to top to work with GNOME 2.
+2018-09-03 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed bug that was causing second and subsequent alerts to
+	fail to be sent to log when in 'Automatic' mode.
