@@ -42,8 +42,9 @@ class Config
   unsigned rivendellFriendlyOutroCart() const;
   int rivendellNormalizationLevel() const;
   int rivendellAutotrimLevel() const;
-  QString pathsEasMessages() const;
-  QString pathsEasAudio() const;
+  QString pathsEasDataDirectory() const;
+  QString pathsEasMessageExtension() const;
+  QStringList pathsEasMessageExtensionFilter();
   unsigned pathsRlmReceivePort() const;
   QString dump() const;
   bool load();
@@ -64,8 +65,9 @@ class Config
   unsigned conf_rivendell_friendly_outro_cart;
   int conf_rivendell_normalization_level;
   int conf_rivendell_autotrim_level;
-  QString conf_paths_eas_messages;
-  QString conf_paths_eas_audio;
+  QString conf_paths_eas_data_directory;
+  QString conf_paths_eas_message_extension;
+  QStringList conf_paths_eas_message_extension_filter;
   unsigned conf_paths_rlm_receive_port;
   QString conf_user_agent;
 };

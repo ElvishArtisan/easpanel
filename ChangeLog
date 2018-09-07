@@ -70,3 +70,12 @@
 	fail to be sent to log when in 'Automatic' mode.
 2018-09-07 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.5.0.
+2018-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'EasMessages=' directive from the '[Paths] section
+	of easpanel.conf(5).
+	* Removed the 'EasAudio=' directive from the '[Paths] section
+	of easpanel.conf(5).
+	* Added a 'EasDataDirectory=' directive to the '[Paths]' section
+	of easpanel.conf(5).
+	* Added a 'EasMessageExtension=' directive to the '[Paths]' section
+	of easpanel.conf(5).

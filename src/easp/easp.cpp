@@ -297,18 +297,18 @@ void MainWidget::autoSendData(int id)
 
 void MainWidget::alertScanData()
 {
-  QDir dir(main_config->pathsEasMessages());
+  QDir dir(main_config->pathsEasDataDirectory());
   if(!dir.exists()) {
     QMessageBox::critical(this,"EasPanel",
 			  tr("Unable to read EAS messages directory!"));
     exit(1);
   }
-
+  dir.setNameFilters(main_config->pathsEasMessageExtensionFilter());
   QStringList files=dir.entryList(QDir::Files|QDir::Readable);
   for(int i=0;i<files.size();i++) {
     if(!main_alerts.contains(files.at(i))) {
       Alert *alert=new Alert();
-      if(alert->load(main_config->pathsEasMessages()+"/"+files.at(i))) {
+      if(alert->load(main_config->pathsEasDataDirectory()+"/"+files.at(i))) {
 	main_alerts[files.at(i)]=alert;
 	if(ProcessNewAlert(alert)) {
 	  if(main_auto) {
@@ -361,15 +361,15 @@ void MainWidget::alertClosedData(int id)
       main_config->removeCart(alert->messageCart(),&err_msg);
     }
     QString filename=alert->filename();
-    unlink((main_config->pathsEasMessages()+"/"+filename).toUtf8());
+    unlink((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8());
     if(!alert->headerAudio().isEmpty()) {
-      unlink((main_config->pathsEasAudio()+"/"+alert->headerAudio()).toUtf8());
+      unlink((main_config->pathsEasDataDirectory()+"/"+alert->headerAudio()).toUtf8());
     }
     if(!alert->messageAudio().isEmpty()) {
-      unlink((main_config->pathsEasAudio()+"/"+alert->messageAudio()).toUtf8());
+      unlink((main_config->pathsEasDataDirectory()+"/"+alert->messageAudio()).toUtf8());
     }
     if(!alert->eomAudio().isEmpty()) {
-      unlink((main_config->pathsEasAudio()+"/"+alert->eomAudio()).toUtf8());
+      unlink((main_config->pathsEasDataDirectory()+"/"+alert->eomAudio()).toUtf8());
     }
     delete alert;
     main_alerts.remove(filename);

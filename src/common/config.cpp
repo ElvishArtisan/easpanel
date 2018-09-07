@@ -102,15 +102,21 @@ int Config::rivendellAutotrimLevel() const
 }
 
 
-QString Config::pathsEasMessages() const
+QString Config::pathsEasDataDirectory() const
 {
-  return conf_paths_eas_messages;
+  return conf_paths_eas_data_directory;
 }
 
 
-QString Config::pathsEasAudio() const
+QString Config::pathsEasMessageExtension() const
 {
-  return conf_paths_eas_audio;
+  return conf_paths_eas_message_extension;
+}
+
+
+QStringList Config::pathsEasMessageExtensionFilter()
+{
+  return conf_paths_eas_message_extension_filter;
 }
 
 
@@ -147,8 +153,8 @@ QString Config::dump() const
     QString().sprintf("%d",rivendellAutotrimLevel())+"\n";
   ret+="\n";
   ret+="[Paths]\n";
-  ret+="EasMessages="+pathsEasMessages()+"\n";
-  ret+="EasAudio="+pathsEasAudio()+"\n";
+  ret+="EasDataDirectory="+pathsEasDataDirectory()+"\n";
+  ret+="EasMessageExtension="+pathsEasMessageExtension()+"\n";
   ret+="RlmReceivePort="+QString().sprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
 
@@ -186,9 +192,13 @@ bool Config::load()
     p->intValue("Rivendell","NormalizationLevel",-11);
   conf_rivendell_autotrim_level=p->intValue("Rivendell","AutotrimLevel");
 
-  conf_paths_eas_messages=
-    p->stringValue("Paths","EasMessages","/var/eas/messages");
-  conf_paths_eas_audio=p->stringValue("Paths","EasAudio","/var/eas/audio");
+  conf_paths_eas_data_directory=
+    p->stringValue("Paths","EasDataDirectory","/var/eas");
+  conf_paths_eas_message_extension=
+    p->stringValue("Paths","EasMessageExtension","txt");
+  conf_paths_eas_message_extension_filter.clear();
+  conf_paths_eas_message_extension_filter.
+    push_back("*."+conf_paths_eas_message_extension);
   conf_paths_rlm_receive_port=p->intValue("Paths","RlmReceivePort",2634);
 
   delete p;
@@ -210,8 +220,8 @@ void Config::clear()
   conf_rivendell_friendly_outro_cart=0;
   conf_rivendell_normalization_level=0;
   conf_rivendell_autotrim_level=0;
-  conf_paths_eas_messages="";
-  conf_paths_eas_audio="";
+  conf_paths_eas_data_directory="";
+  conf_paths_eas_message_extension="";
   conf_paths_rlm_receive_port=0;
 }
 
@@ -237,7 +247,7 @@ unsigned Config::importCart(const QString &title,const QString &filename,
 		   1,                                   // Create new cart/cut
 		   conf_rivendell_alert_audio_group.toUtf8(), // Rivendell Group
 		   title.toUtf8(),                      // Cart Title
-		   (conf_paths_eas_audio+"/"+filename).toUtf8(), // Source File
+		   (conf_paths_eas_data_directory+"/"+filename).toUtf8(), // Source File
 		   conf_user_agent.toUtf8(),            // User Agent String
 		   &numrecs)!=0) {
     *err_msg="unspecified error";
