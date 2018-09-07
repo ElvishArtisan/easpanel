@@ -68,3 +68,5 @@
 2018-09-03 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed bug that was causing second and subsequent alerts to
 	fail to be sent to log when in 'Automatic' mode.
+2018-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.5.0.
