@@ -82,3 +82,5 @@
 2018-09-07 Fred Gleason <fredg@paravelsystems.com>
 	* Consolidated the '/var/eas/messages' and '/var/eas/audio'
 	directories.
+2018-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.5.1.
