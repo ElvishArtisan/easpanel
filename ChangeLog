@@ -79,3 +79,6 @@
 	of easpanel.conf(5).
 	* Added a 'EasMessageExtension=' directive to the '[Paths]' section
 	of easpanel.conf(5).
+2018-09-07 Fred Gleason <fredg@paravelsystems.com>
+	* Consolidated the '/var/eas/messages' and '/var/eas/audio'
+	directories.
