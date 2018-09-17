@@ -24,6 +24,7 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QKeyEvent>
 #include <QMessageBox>
 #include <QStringList>
 
@@ -36,7 +37,7 @@
 #include "../../icons/easpanel-22x22.xpm"
 
 MainWidget::MainWidget(QWidget *parent)
-  : QWidget(parent)
+  : QWidget(parent,Qt::CustomizeWindowHint|Qt::WindowMinimizeButtonHint|Qt::WindowMaximizeButtonHint)
 {
   main_auto=false;
   main_selected_alert_id=-1;
@@ -96,7 +97,8 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // Text Editor
   //
-  main_text_text=new QTextEdit(this);
+  main_text_text=new AlertTextEdit(this);
+  connect(main_text_text,SIGNAL(quitRequested()),this,SLOT(quit()));
 
   //
   // Alert Buttons
@@ -112,11 +114,11 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // Buttons
   //
-  main_auto_button=
-    new QPushButton(tr("LiveAssist"),this);
+  main_auto_button=new ModeButton(tr("LiveAssist"),this);
   main_auto_button->setFont(mode_font);
   main_auto_button->setStyleSheet("background-color: #FFFF00");
   connect(main_auto_button,SIGNAL(clicked()),this,SLOT(autoData()));
+  connect(main_auto_button,SIGNAL(quitRequested()),this,SLOT(quit()));
 
   main_livesend_button=
     new QPushButton(tr("Send to Log")+"\n("+tr("LIVE")+")",this);
@@ -408,6 +410,32 @@ void MainWidget::rlmReadyReadData()
 }
 
 
+void MainWidget::quit()
+{
+  QString err_msg;
+  Alert *alert=NULL;
+
+  //
+  // Clean up Rivendell carts
+  //
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    if((alert=main_alert_buttons[i]->alert())!=NULL) {
+      if(alert->headerCart()!=0) {
+	main_config->removeCart(alert->headerCart(),&err_msg);
+      }
+      if(alert->eomCart()!=0) {
+	main_config->removeCart(alert->eomCart(),&err_msg);
+      }
+      if(alert->messageCart()!=0) {
+	main_config->removeCart(alert->messageCart(),&err_msg);
+      }
+    }
+  }
+
+  exit(0);
+}
+
+
 void MainWidget::resizeEvent(QResizeEvent *e)
 {
   int w=size().width();
@@ -434,27 +462,7 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
 void MainWidget::closeEvent(QCloseEvent *e)
 {
-  QString err_msg;
-  Alert *alert=NULL;
-
-  //
-  // Clean up Rivendell carts
-  //
-  for(int i=0;i<EASP_ALERT_QUAN;i++) {
-    if((alert=main_alert_buttons[i]->alert())!=NULL) {
-      if(alert->headerCart()!=0) {
-	main_config->removeCart(alert->headerCart(),&err_msg);
-      }
-      if(alert->eomCart()!=0) {
-	main_config->removeCart(alert->eomCart(),&err_msg);
-      }
-      if(alert->messageCart()!=0) {
-	main_config->removeCart(alert->messageCart(),&err_msg);
-      }
-    }
-  }
-
-  exit(0);
+  quit();
 }
 
 

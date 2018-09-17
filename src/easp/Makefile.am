@@ -31,13 +31,17 @@ moc_%.cpp:	%.h
 bin_PROGRAMS = easp
 
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
-                    easp.cpp easp.h
+                    alerttextedit.cpp alerttextedit.h\
+                    easp.cpp easp.h\
+                    modebutton.cpp modebutton.h
 
 nodist_easp_SOURCES = alert.cpp alert.h\
                       cmdswitch.cpp cmdswitch.h\
                       config.cpp config.h\
                       moc_alertbutton.cpp\
+                      moc_alerttextedit.cpp\
                       moc_easp.cpp\
+                      moc_modebutton.cpp\
                       profile.cpp profile.h
 
 easp_LDADD = @GUILIBS@ @RIVWEBCAPI_LIBS@

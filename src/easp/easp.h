@@ -30,7 +30,9 @@
 #include <QWidget>
 
 #include "alertbutton.h"
+#include "alerttextedit.h"
 #include "config.h"
+#include "modebutton.h"
 
 #define EASP_ALERT_QUAN 5
 
@@ -50,6 +52,7 @@ class MainWidget : public QWidget
   void alertSelectedData(int id);
   void alertClosedData(int id);
   void rlmReadyReadData();
+  void quit();
 
  protected:
   void resizeEvent(QResizeEvent *e);
@@ -66,9 +69,9 @@ class MainWidget : public QWidget
   bool AlertLoaded() const;
   QLabel *main_title_label;
   QLabel *main_datetime_label;
-  QTextEdit *main_text_text;
+  AlertTextEdit *main_text_text;
   AlertButton *main_alert_buttons[EASP_ALERT_QUAN];
-  QPushButton *main_auto_button;
+  ModeButton *main_auto_button;
   bool main_auto;
   QPushButton *main_livesend_button;
   QPushButton *main_cannedsend_button;
