@@ -41,6 +41,7 @@ MainWidget::MainWidget(QWidget *parent)
   main_auto=false;
   main_selected_alert_id=-1;
   main_next_is_voicetrack=false;
+  setFocusPolicy(Qt::StrongFocus);
 
   new CmdSwitch("easp","\n");
 
@@ -462,6 +463,15 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 				       w/3-30,
 				       5+(h-129)/EASP_ALERT_QUAN);
   }
+}
+
+
+void MainWidget::keyPressEvent(QKeyEvent *e)
+{
+  if((e->key()==Qt::Key_X)&&((e->modifiers()&Qt::AltModifier)!=0)) {
+    quit();
+  }
+  QWidget::keyPressEvent(e);
 }
 
 

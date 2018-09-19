@@ -38,4 +38,7 @@ void ModeButton::keyPressEvent(QKeyEvent *e)
     emit quitRequested();
     e->accept();
   }
+  else {
+    QPushButton::keyPressEvent(e);
+  }
 }

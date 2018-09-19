@@ -91,3 +91,6 @@
 2018-09-19 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a race where an alert would show 'Error' if the raw alert
 	data was read before all audio files were available.
+2018-09-19 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug that caused the 'Alt-X' key to fail to work after
+	easp(1) processed a new alert.

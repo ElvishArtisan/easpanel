@@ -56,6 +56,7 @@ class MainWidget : public QWidget
 
  protected:
   void resizeEvent(QResizeEvent *e);
+  void keyPressEvent(QKeyEvent *e);
   void closeEvent(QCloseEvent *e);
 
  private:
