@@ -117,6 +117,7 @@ fi
 AC_CONFIG_FILES([ \
     conf/Makefile \
     icons/Makefile \
+    snd/Makefile \
     src/Makefile \
     src/common/Makefile \
     src/easp/Makefile \

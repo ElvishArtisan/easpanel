@@ -37,7 +37,8 @@ class Config
   QStringList rivendellVoicetrackGroups() const;
   QString rivendellUser() const;
   QString rivendellPassword() const;
-  unsigned rivendellAlertToneCart() const;
+  unsigned rivendellLiveassistFriendlyIntroCart() const;
+  unsigned rivendellLiveassistFriendlyOutroCart() const;
   unsigned rivendellFriendlyIntroCart() const;
   unsigned rivendellFriendlyOutroCart() const;
   int rivendellNormalizationLevel() const;
@@ -60,7 +61,8 @@ class Config
   QStringList conf_rivendell_voicetrack_groups;
   QString conf_rivendell_user;
   QString conf_rivendell_password;
-  unsigned conf_rivendell_alert_tone_cart;
+  unsigned conf_rivendell_liveassist_friendly_intro_cart;
+  unsigned conf_rivendell_liveassist_friendly_outro_cart;
   unsigned conf_rivendell_friendly_intro_cart;
   unsigned conf_rivendell_friendly_outro_cart;
   int conf_rivendell_normalization_level;

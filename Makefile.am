@@ -25,6 +25,7 @@
 
 SUBDIRS = conf\
           icons\
+          snd\
           src\
           xdg
 #SUBDIRS = $(DOCBOOK_AM_OPT) conf\

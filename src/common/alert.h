@@ -37,6 +37,7 @@ class Alert
   QDateTime expiresDateTime() const;
   QString headerAudio() const;
   QString eomAudio() const;
+  QString attentionAudio() const;
   QString messageAudio() const;
   QString text() const;
   void setText(const QString &str);
@@ -44,6 +45,10 @@ class Alert
   void setHeaderCart(unsigned cartnum);
   unsigned eomCart() const;
   void setEomCart(unsigned cartnum);
+  unsigned silenceCart() const;
+  void setSilenceCart(int cartnum);
+  unsigned attentionCart() const;
+  void setAttentionCart(unsigned cartnum);
   unsigned messageCart() const;
   void setMessageCart(unsigned cartnum);
   QString dump() const;
@@ -59,9 +64,12 @@ class Alert
   QDateTime alert_expires_datetime;
   QString alert_header_audio;
   QString alert_eom_audio;
+  QString alert_attention_audio;
   QString alert_message_audio;
   QString alert_text;
   unsigned alert_header_cart;
+  unsigned alert_silence_cart;
+  unsigned alert_attention_cart;
   unsigned alert_eom_cart;
   unsigned alert_message_cart;
 };

@@ -72,9 +72,15 @@ QString Config::rivendellPassword() const
 }
 
 
-unsigned Config::rivendellAlertToneCart() const
+unsigned Config::rivendellLiveassistFriendlyIntroCart() const
 {
-  return conf_rivendell_alert_tone_cart;
+  return conf_rivendell_liveassist_friendly_intro_cart;
+}
+
+
+unsigned Config::rivendellLiveassistFriendlyOutroCart() const
+{
+  return conf_rivendell_liveassist_friendly_outro_cart;
 }
 
 
@@ -142,7 +148,10 @@ QString Config::dump() const
   ret+="\n";
   ret+="User="+rivendellUser()+"\n";
   ret+="Password="+rivendellPassword()+"\n";
-  ret+="AlertToneCart="+QString().sprintf("%u",rivendellAlertToneCart())+"\n";
+  ret+="FriendlyLiveassistIntroCart="+
+    QString().sprintf("%u",rivendellLiveassistFriendlyIntroCart())+"\n";
+  ret+="FriendlyLiveassistOutroCart="+
+    QString().sprintf("%u",rivendellLiveassistFriendlyOutroCart())+"\n";
   ret+="FriendlyIntroCart="+
     QString().sprintf("%u",rivendellFriendlyIntroCart())+"\n";
   ret+="FriendlyOutroCart="+
@@ -183,7 +192,10 @@ bool Config::load()
   }
   conf_rivendell_user=p->stringValue("Rivendell","User","user");
   conf_rivendell_password=p->stringValue("Rivendell","Password");
-  conf_rivendell_alert_tone_cart=p->intValue("Rivendell","AlertToneCart");
+  conf_rivendell_liveassist_friendly_intro_cart=
+    p->intValue("Rivendell","LiveassistFriendlyIntroCart");
+  conf_rivendell_liveassist_friendly_outro_cart=
+    p->intValue("Rivendell","LiveassistFriendlyOutroCart");
   conf_rivendell_friendly_intro_cart=
     p->intValue("Rivendell","FriendlyIntroCart");
   conf_rivendell_friendly_outro_cart=
@@ -215,7 +227,8 @@ void Config::clear()
   conf_rivendell_voicetrack_groups.clear();
   conf_rivendell_user="";
   conf_rivendell_password="";
-  conf_rivendell_alert_tone_cart=0;
+  conf_rivendell_liveassist_friendly_intro_cart=0;
+  conf_rivendell_liveassist_friendly_outro_cart=0;
   conf_rivendell_friendly_intro_cart=0;
   conf_rivendell_friendly_outro_cart=0;
   conf_rivendell_normalization_level=0;
@@ -232,6 +245,12 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   struct rd_cartimport *carts=NULL;
   unsigned numrecs=0;
   int ret=0;
+  QString pathname=filename;
+  int normalization_level=0;
+  if(pathname.left(1)!="/") {
+    pathname=conf_paths_eas_data_directory+"/"+filename;
+    normalization_level=conf_rivendell_normalization_level;
+  }
 
   if(RD_ImportCart(&carts,
 		   conf_rivendell_host_address.toString().toUtf8(),
@@ -241,13 +260,13 @@ unsigned Config::importCart(const QString &title,const QString &filename,
 		   0,                                   // Cart Number
 		   0,                                   // Cut Number
 		   1,                                   // Channels
-		   conf_rivendell_normalization_level,  
+		   normalization_level,
 		   conf_rivendell_autotrim_level,
 		   0,                                   // Don't Use Metadata
 		   1,                                   // Create new cart/cut
 		   conf_rivendell_alert_audio_group.toUtf8(), // Rivendell Group
 		   title.toUtf8(),                      // Cart Title
-		   (conf_paths_eas_data_directory+"/"+filename).toUtf8(), // Source File
+		   pathname.toUtf8(), // Source File
 		   conf_user_agent.toUtf8(),            // User Agent String
 		   &numrecs)!=0) {
     *err_msg="unspecified error";

@@ -94,3 +94,8 @@
 2018-09-19 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug that caused the 'Alt-X' key to fail to work after
 	easp(1) processed a new alert.
+2018-09-19 Fred Gleason <fredg@paravelsystems.com>
+	* Refactored easp(1) so as to utilize attention signals from DASDEC
+	with one second of silence before and after.
+	* Added 'LiveassistFriendIntroCart=' and 'LiveassistFriendlyOutroCart='
+	directives to easpanel.conf(5).
