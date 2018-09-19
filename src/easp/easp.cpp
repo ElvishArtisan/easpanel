@@ -1,4 +1,3 @@
-
 // easp.cpp
 //
 // Control panel applet for easpanel
@@ -310,9 +309,15 @@ void MainWidget::alertScanData()
   for(int i=0;i<files.size();i++) {
     if(!main_alerts.contains(files.at(i))) {
       Alert *alert=new Alert();
-      if(alert->load(main_config->pathsEasDataDirectory()+"/"+files.at(i))) {
-	main_alerts[files.at(i)]=alert;
-	if(ProcessNewAlert(alert)) {
+      main_alerts[files.at(i)]=alert;
+    }
+  }
+  for(QMap<QString,Alert *>::const_iterator it=main_alerts.begin();
+      it!=main_alerts.end();it++) {
+    it.value()->touch();
+    if(it.value()->touches()==4) {
+      if(it.value()->load(main_config->pathsEasDataDirectory()+"/"+it.key())) {
+	if(ProcessNewAlert(it.value())) {
 	  if(main_auto) {
 	    SendNextAlert();
 	  }
@@ -321,7 +326,7 @@ void MainWidget::alertScanData()
     }
   }
 
-  main_alert_scan_timer->start(5000);
+  main_alert_scan_timer->start(1000);
 }
 
 

@@ -39,6 +39,18 @@ QString Alert::filename() const
 }
 
 
+int Alert::touches() const
+{
+  return alert_touches;
+}
+
+
+void Alert::touch()
+{
+  alert_touches++;
+}
+
+
 QString Alert::title() const
 {
   return alert_title;
@@ -154,8 +166,6 @@ bool Alert::load(const QString &pathname)
   QString key;
   QMap<QString,QString> values;
   bool escaped=false;
-
-  clear();
 
   QMap<QString,QString> event_codes;
   event_codes["EAN"]=QObject::tr("Emergency Action Notification");
@@ -293,6 +303,7 @@ bool Alert::load(const QString &pathname)
 void Alert::clear()
 {
   alert_title="";
+  alert_touches=0;
   alert_issued_datetime=QDateTime();
   alert_expires_datetime=QDateTime();
   alert_header_audio="";

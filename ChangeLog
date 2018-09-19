@@ -88,3 +88,6 @@
 	* Added an 'Alt-X' keyboard shortcut to quit easp(1).
 	* Removed the 'Close' button frpm the titlebar of easp(1).
 	* Disabled the 'Close' item on the system menu of easp(1).
+2018-09-19 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a race where an alert would show 'Error' if the raw alert
+	data was read before all audio files were available.
