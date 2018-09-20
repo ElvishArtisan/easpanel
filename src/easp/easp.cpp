@@ -274,7 +274,6 @@ void MainWidget::autoSendData(int id)
   AlertButton *button=main_alert_buttons[id];
   Alert *alert=button->alert();
   if(alert!=NULL) {
-    printf("main_next_is_voicetrack: %d\n",main_next_is_voicetrack);
     if(main_next_is_voicetrack) {
       offset=1;
     }
@@ -282,12 +281,12 @@ void MainWidget::autoSendData(int id)
     //
     // Load from the bottom up
     //
-    if(main_config->rivendellFriendlyOutroCart()!=0) {
+    if(main_config->outroCart(alert->easType())!=0) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
 				1,
-				main_config->rivendellFriendlyOutroCart(),
+				main_config->outroCart(alert->easType()),
 				offset));
-      button->setLastCart(main_config->rivendellFriendlyOutroCart());
+      button->setLastCart(main_config->outroCart(alert->easType()));
     }
     else {
       button->setLastCart(alert->eomCart());
@@ -322,7 +321,7 @@ void MainWidget::autoSendData(int id)
     if(main_config->rivendellFriendlyIntroCart()!=0) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Intro Cart
 				1,
-				main_config->rivendellFriendlyIntroCart(),
+				main_config->introCart(alert->easType()),
 				offset));
     }
     if(offset==0) {    // Start Immediately

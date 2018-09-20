@@ -107,3 +107,6 @@
 2018-09-20 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in easp(1) that failed to clean up attentional signal
 	and silence carts when exiting.
+2018-09-20 Fred Gleason <fredg@paravelsystems.com>
+	* Added '[IntroCarts]' and '[OutroCarts]' sections to
+	easpanel.conf(5).

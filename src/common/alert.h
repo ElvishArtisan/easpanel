@@ -31,6 +31,7 @@ class Alert
   QString filename() const;
   int touches() const;
   void touch();
+  QString easType() const;
   QString title() const;
   QDateTime datestamp() const;
   QDateTime issuedDateTime() const;
@@ -58,6 +59,7 @@ class Alert
  private:
   QString alert_filename;
   int alert_touches;
+  QString alert_eas_type;
   QString alert_title;
   QDateTime alert_datestamp;
   QDateTime alert_issued_datetime;

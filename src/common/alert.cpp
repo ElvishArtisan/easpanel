@@ -51,6 +51,12 @@ void Alert::touch()
 }
 
 
+QString Alert::easType() const
+{
+  return alert_eas_type;
+}
+
+
 QString Alert::title() const
 {
   return alert_title;
@@ -245,8 +251,8 @@ bool Alert::load(const QString &pathname)
   event_codes["SPS"]=QObject::tr("Special Weather Statement");
   event_codes["SSA"]=QObject::tr("Storm Surge Watch");
   event_codes["SSW"]=QObject::tr("Storm Surge Warning");
-  event_codes["TOR"]=QObject::tr("Tornade Warning");
-  event_codes["TOA"]=QObject::tr("Tornade Watch");
+  event_codes["TOR"]=QObject::tr("Tornado Warning");
+  event_codes["TOA"]=QObject::tr("Tornado Watch");
   event_codes["TRW"]=QObject::tr("Tropical Storm Warning");
   event_codes["TRA"]=QObject::tr("Tropical Storm Watch");
   event_codes["TSW"]=QObject::tr("Tsunami Warning");
@@ -295,6 +301,7 @@ bool Alert::load(const QString &pathname)
        event_codes.constEnd()) {
       alert_title=
 	event_codes.find(values.find("EAS.TYPE").value().trimmed()).value();
+      alert_eas_type=values.find("EAS.TYPE").value().trimmed();
     }
     else {
       alert_title=values.find("EAS.TYPE").value().trimmed();
@@ -336,6 +343,7 @@ bool Alert::load(const QString &pathname)
 
 void Alert::clear()
 {
+  alert_eas_type="";
   alert_title="";
   alert_touches=0;
   alert_issued_datetime=QDateTime();

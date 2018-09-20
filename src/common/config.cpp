@@ -126,6 +126,28 @@ unsigned Config::pathsRlmReceivePort() const
 }
 
 
+int Config::introCart(const QString &code) const
+{
+  int ret=conf_intro_carts.value(code,-1);
+
+  if(ret<0) {
+    ret=rivendellFriendlyIntroCart();
+  }
+  return ret;
+}
+
+
+int Config::outroCart(const QString &code) const
+{
+  int ret=conf_outro_carts.value(code,-1);
+
+  if(ret<0) {
+    ret=rivendellFriendlyOutroCart();
+  }
+  return ret;
+}
+
+
 QString Config::dump() const
 {
   QString ret="";
@@ -206,6 +228,71 @@ bool Config::load()
     push_back("*."+conf_paths_eas_message_extension);
   conf_paths_rlm_receive_port=p->intValue("Paths","RlmReceivePort",2634);
 
+  //
+  // EAS Codes
+  //
+  QStringList eas_codes;
+  eas_codes.push_back("EAN");
+  eas_codes.push_back("NPT");
+  eas_codes.push_back("NIC");
+  eas_codes.push_back("RMT");
+  eas_codes.push_back("RWT");
+  eas_codes.push_back("ADR");
+  eas_codes.push_back("AVW");
+  eas_codes.push_back("AVA");
+  eas_codes.push_back("BZW");
+  eas_codes.push_back("CAE");
+  eas_codes.push_back("CDW");
+  eas_codes.push_back("CEM");
+  eas_codes.push_back("CFW");
+  eas_codes.push_back("CFA");
+  eas_codes.push_back("DMO");
+  eas_codes.push_back("DSW");
+  eas_codes.push_back("EQW");
+  eas_codes.push_back("EWW");
+  eas_codes.push_back("EVI");
+  eas_codes.push_back("FRW");
+  eas_codes.push_back("FFW");
+  eas_codes.push_back("FFA");
+  eas_codes.push_back("FFS");
+  eas_codes.push_back("FLW");
+  eas_codes.push_back("FLA");
+  eas_codes.push_back("FLS");
+  eas_codes.push_back("HMW");
+  eas_codes.push_back("HWW");
+  eas_codes.push_back("HWA");
+  eas_codes.push_back("HUW");
+  eas_codes.push_back("HUA");
+  eas_codes.push_back("HLS");
+  eas_codes.push_back("LEW");
+  eas_codes.push_back("LAE");
+  eas_codes.push_back("NMN");
+  eas_codes.push_back("TOE");
+  eas_codes.push_back("NUW");
+  eas_codes.push_back("RHW");
+  eas_codes.push_back("SVR");
+  eas_codes.push_back("SVA");
+  eas_codes.push_back("SVS");
+  eas_codes.push_back("SPW");
+  eas_codes.push_back("SMW");
+  eas_codes.push_back("SPS");
+  eas_codes.push_back("SSA");
+  eas_codes.push_back("SSW");
+  eas_codes.push_back("TOR");
+  eas_codes.push_back("TOA");
+  eas_codes.push_back("TRW");
+  eas_codes.push_back("TRA");
+  eas_codes.push_back("TSW");
+  eas_codes.push_back("TSA");
+  eas_codes.push_back("VOW");
+  eas_codes.push_back("WSA");
+  eas_codes.push_back("WSW");
+
+  for(int i=0;i<eas_codes.size();i++) {
+    conf_intro_carts[eas_codes[i]]=p->intValue("IntroCarts",eas_codes[i],-1);
+    conf_outro_carts[eas_codes[i]]=p->intValue("OutroCarts",eas_codes[i],-1);
+  }
+
   delete p;
 
   return ret;
@@ -228,6 +315,8 @@ void Config::clear()
   conf_paths_eas_data_directory="";
   conf_paths_eas_message_extension="";
   conf_paths_rlm_receive_port=0;
+  conf_intro_carts.clear();
+  conf_outro_carts.clear();
 }
 
 

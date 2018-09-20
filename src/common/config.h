@@ -22,6 +22,7 @@
 #define CONFIG_H
 
 #include <QHostAddress>
+#include <QMap>
 #include <QString>
 #include <QStringList>
 
@@ -46,6 +47,8 @@ class Config
   QString pathsEasMessageExtension() const;
   QStringList pathsEasMessageExtensionFilter();
   unsigned pathsRlmReceivePort() const;
+  int introCart(const QString &code) const;
+  int outroCart(const QString &code) const;
   QString dump() const;
   bool load();
   void clear();
@@ -69,6 +72,8 @@ class Config
   QString conf_paths_eas_message_extension;
   QStringList conf_paths_eas_message_extension_filter;
   unsigned conf_paths_rlm_receive_port;
+  QMap<QString,int> conf_intro_carts;
+  QMap<QString,int> conf_outro_carts;
   QString conf_user_agent;
 };
 
