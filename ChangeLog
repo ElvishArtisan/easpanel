@@ -99,4 +99,8 @@
 	with one second of silence before and after.
 	* Added 'LiveassistFriendlyIntroCart=' and
 	'LiveassistFriendlyOutroCart=' directives to easpanel.conf(5).
-
+2018-09-20 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'LogMachine=' directive from the '[Rivendell]' section
+	of easpanel.conf(5).
+	* Modified easp(1) so that voicetracks are skipped over when
+	executing an alert in 'Automatic' mode.

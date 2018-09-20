@@ -32,7 +32,6 @@ class Config
  public:
   Config();
   QHostAddress rivendellHostAddress() const;
-  int rivendellLogMachine() const;
   QString rivendellAlertAudioGroup() const;
   QStringList rivendellVoicetrackGroups() const;
   QString rivendellUser() const;
@@ -56,7 +55,6 @@ class Config
 
  private:
   QHostAddress conf_rivendell_host_address;
-  int conf_rivendell_log_machine;
   QString conf_rivendell_alert_audio_group;
   QStringList conf_rivendell_voicetrack_groups;
   QString conf_rivendell_user;

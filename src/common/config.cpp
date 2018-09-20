@@ -42,12 +42,6 @@ QHostAddress Config::rivendellHostAddress() const
 }
 
 
-int Config::rivendellLogMachine() const
-{
-  return conf_rivendell_log_machine;
-}
-
-
 QString Config::rivendellAlertAudioGroup() const
 {
   return conf_rivendell_alert_audio_group;
@@ -180,7 +174,6 @@ bool Config::load()
 
   conf_rivendell_host_address=
     QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
-  conf_rivendell_log_machine=p->intValue("Rivendell","LogMachine",1);
   conf_rivendell_alert_audio_group=
     p->stringValue("Rivendell","AlertAudioGroup","EAS");
   conf_rivendell_voicetrack_groups=
@@ -222,7 +215,6 @@ bool Config::load()
 void Config::clear()
 {
   conf_rivendell_host_address=QHostAddress();
-  conf_rivendell_log_machine=0;
   conf_rivendell_alert_audio_group="";
   conf_rivendell_voicetrack_groups.clear();
   conf_rivendell_user="";
