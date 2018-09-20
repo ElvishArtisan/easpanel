@@ -478,6 +478,12 @@ void MainWidget::quit()
       if(alert->messageCart()!=0) {
 	main_config->removeCart(alert->messageCart(),&err_msg);
       }
+      if(alert->attentionCart()!=0) {
+	main_config->removeCart(alert->attentionCart(),&err_msg);
+      }
+      if(alert->silenceCart()!=0) {
+	main_config->removeCart(alert->silenceCart(),&err_msg);
+      }
     }
   }
 
