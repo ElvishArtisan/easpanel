@@ -97,5 +97,6 @@
 2018-09-19 Fred Gleason <fredg@paravelsystems.com>
 	* Refactored easp(1) so as to utilize attention signals from DASDEC
 	with one second of silence before and after.
-	* Added 'LiveassistFriendIntroCart=' and 'LiveassistFriendlyOutroCart='
-	directives to easpanel.conf(5).
+	* Added 'LiveassistFriendlyIntroCart=' and
+	'LiveassistFriendlyOutroCart=' directives to easpanel.conf(5).
+
