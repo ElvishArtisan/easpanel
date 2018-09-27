@@ -411,15 +411,18 @@ void MainWidget::alertClosedData(int id)
       main_config->removeCart(alert->silenceCart(),&err_msg);
     }
     QString filename=alert->filename();
-    unlink((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8());
+    RetireAlertFile(filename);
     if(!alert->headerAudio().isEmpty()) {
-      unlink((main_config->pathsEasDataDirectory()+"/"+alert->headerAudio()).toUtf8());
+      RetireAlertFile(alert->headerAudio());
+    }
+    if(!alert->attentionAudio().isEmpty()) {
+      RetireAlertFile(alert->attentionAudio());
     }
     if(!alert->messageAudio().isEmpty()) {
-      unlink((main_config->pathsEasDataDirectory()+"/"+alert->messageAudio()).toUtf8());
+      RetireAlertFile(alert->messageAudio());
     }
     if(!alert->eomAudio().isEmpty()) {
-      unlink((main_config->pathsEasDataDirectory()+"/"+alert->eomAudio()).toUtf8());
+      RetireAlertFile(alert->eomAudio());
     }
     delete alert;
     main_alerts.remove(filename);
@@ -720,6 +723,18 @@ bool MainWidget::AlertLoaded() const
   }
 
   return ret;
+}
+
+
+void MainWidget::RetireAlertFile(const QString &filename) const
+{
+  if(main_config->pathsEasBackupDirectory().isEmpty()) {
+    unlink((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8());
+  }
+  else {
+    rename((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8(),
+	   (main_config->pathsEasBackupDirectory()+"/"+filename).toUtf8());
+  }
 }
 
 

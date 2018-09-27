@@ -44,6 +44,7 @@ class Config
   int rivendellNormalizationLevel() const;
   int rivendellAutotrimLevel() const;
   QString pathsEasDataDirectory() const;
+  QString pathsEasBackupDirectory() const;
   QString pathsEasMessageExtension() const;
   QStringList pathsEasMessageExtensionFilter();
   unsigned pathsRlmReceivePort() const;
@@ -69,6 +70,7 @@ class Config
   int conf_rivendell_normalization_level;
   int conf_rivendell_autotrim_level;
   QString conf_paths_eas_data_directory;
+  QString conf_paths_eas_backup_directory;
   QString conf_paths_eas_message_extension;
   QStringList conf_paths_eas_message_extension_filter;
   unsigned conf_paths_rlm_receive_port;

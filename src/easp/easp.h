@@ -68,6 +68,7 @@ class MainWidget : public QWidget
   void SendRml(const QString &rml);
   void BringToTop();
   bool AlertLoaded() const;
+  void RetireAlertFile(const QString &filename) const;
   QLabel *main_title_label;
   QLabel *main_datetime_label;
   AlertTextEdit *main_text_text;

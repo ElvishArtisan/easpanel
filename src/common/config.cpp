@@ -108,6 +108,12 @@ QString Config::pathsEasDataDirectory() const
 }
 
 
+QString Config::pathsEasBackupDirectory() const
+{
+  return conf_paths_eas_backup_directory;
+}
+
+
 QString Config::pathsEasMessageExtension() const
 {
   return conf_paths_eas_message_extension;
@@ -179,6 +185,7 @@ QString Config::dump() const
   ret+="\n";
   ret+="[Paths]\n";
   ret+="EasDataDirectory="+pathsEasDataDirectory()+"\n";
+  ret+="EasBackupDirectory="+pathsEasBackupDirectory()+"\n";
   ret+="EasMessageExtension="+pathsEasMessageExtension()+"\n";
   ret+="RlmReceivePort="+QString().sprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
@@ -221,6 +228,7 @@ bool Config::load()
 
   conf_paths_eas_data_directory=
     p->stringValue("Paths","EasDataDirectory","/var/eas");
+  conf_paths_eas_backup_directory=p->stringValue("Paths","EasBackupDirectory");
   conf_paths_eas_message_extension=
     p->stringValue("Paths","EasMessageExtension","txt");
   conf_paths_eas_message_extension_filter.clear();
@@ -313,6 +321,7 @@ void Config::clear()
   conf_rivendell_normalization_level=0;
   conf_rivendell_autotrim_level=0;
   conf_paths_eas_data_directory="";
+  conf_paths_eas_backup_directory="";
   conf_paths_eas_message_extension="";
   conf_paths_rlm_receive_port=0;
   conf_intro_carts.clear();
