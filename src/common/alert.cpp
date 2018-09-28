@@ -297,11 +297,13 @@ bool Alert::load(const QString &pathname)
   }
   if(values.find("EAS.START_TIME")!=values.constEnd()) {
     alert_issued_datetime=
-      QDateTime::fromTime_t(values.find("EAS.START_TIME").value().toInt());
+      QDateTime::fromTime_t(values.find("EAS.START_TIME").value().toInt()).
+      addSecs(UtcOffset());
   }
   if(values.find("EAS.END_TIME")!=values.constEnd()) {
     alert_expires_datetime=
-      QDateTime::fromTime_t(values.find("EAS.END_TIME").value().toInt());
+      QDateTime::fromTime_t(values.find("EAS.END_TIME").value().toInt()).
+      addSecs(UtcOffset());
   }
   if(values.find("EAS.AUDIO.FILE.HEADER")!=values.constEnd()) {
     alert_header_audio=values.find("EAS.AUDIO.FILE.HEADER").value().trimmed();
@@ -345,4 +347,11 @@ void Alert::clear()
   alert_eom_cart=0;
   alert_attention_cart=0;
   alert_message_cart=0;
+}
+
+
+int Alert::UtcOffset() const
+{
+  QDateTime now=QDateTime::currentDateTime();
+  return now.toLocalTime().secsTo(now.toUTC());
 }

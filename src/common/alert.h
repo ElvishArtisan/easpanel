@@ -55,6 +55,7 @@ class Alert
   void clear();
 
  private:
+  int UtcOffset() const;
   QString alert_filename;
   int alert_touches;
   QString alert_eas_type;
