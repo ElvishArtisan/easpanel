@@ -120,8 +120,7 @@ MainWidget::MainWidget(QWidget *parent)
   connect(main_auto_button,SIGNAL(clicked()),this,SLOT(autoData()));
   connect(main_auto_button,SIGNAL(quitRequested()),this,SLOT(quit()));
 
-  main_livesend_button=
-    new QPushButton(tr("Send to Log")+"\n("+tr("LIVE")+")",this);
+  main_livesend_button=new QPushButton(tr("Send to Log"),this);
   main_livesend_button->setFont(bold_font);
   connect(main_livesend_button,SIGNAL(clicked()),this,SLOT(liveSendData()));
   main_livesend_button->setDisabled(true);
@@ -131,6 +130,7 @@ MainWidget::MainWidget(QWidget *parent)
   main_cannedsend_button->setFont(bold_font);
   connect(main_cannedsend_button,SIGNAL(clicked()),this,SLOT(cannedSendData()));
   main_cannedsend_button->setDisabled(true);
+  main_cannedsend_button->hide();
 
   //
   // Alerts
@@ -203,11 +203,6 @@ void MainWidget::liveSendData()
       button->setLastCart(alert->eomCart());
     }
 
-    /*
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
-			      1,
-			      main_config->rivendellLiveassistFriendlyOutroCart(),offset));
-    */
     SendRml(QString().sprintf("PX %d %d %d STOP!",    // EOM
 			      1,
 			      alert->eomCart(),offset));
@@ -230,11 +225,6 @@ void MainWidget::liveSendData()
 				liveassistIntroCart(alert->easType()),
 				offset));
     }
-    /*
-    SendRml(QString().sprintf("PX %d %d %d STOP!",    // Intro
-			      1,
-			      main_config->rivendellLiveassistFriendlyIntroCart(),offset));
-    */
 
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
   }
@@ -500,8 +490,8 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
   main_text_text->setGeometry(10,59,2*w/3,h-129);
 
-  main_livesend_button->setGeometry(40,h-60,120,50);
-  main_cannedsend_button->setGeometry(180,h-60,120,50);
+  main_livesend_button->setGeometry(40,h-60,200,50);
+  //  main_cannedsend_button->setGeometry(180,h-60,120,50);
 
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     main_alert_buttons[i]->setGeometry(2*w/3+20,
@@ -648,10 +638,14 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   button->setSelected(true);
   main_selected_alert_id=button->id();
   main_livesend_button->setDisabled(main_auto||(alert==NULL)||
+				    (button->status()==AlertButton::Error));
+  /*
+  main_livesend_button->setDisabled(main_auto||(alert==NULL)||
 				    (alert->messageCart()==0)||
 				    (button->status()==AlertButton::Error));
   main_cannedsend_button->setDisabled(main_auto||(alert==NULL)||
 				      (button->status()==AlertButton::Error));
+  */
 }
 
 

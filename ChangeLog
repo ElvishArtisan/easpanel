@@ -126,3 +126,6 @@
 2018-09-28 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in easp(1) that caused date-times to be displayed
 	in UTC regardless of the local timezone configured.
+2018-09-28 Fred Gleason <fredg@paravelsystems.com>
+	* Removed the 'Send to Log (CANNED)' button from easp(1).
+	* Renamed the 'Send to Log (LIVE)' button to 'Send to Log'.
