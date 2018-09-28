@@ -141,18 +141,6 @@ void Alert::setEomCart(unsigned cartnum)
 }
 
 
-unsigned Alert::silenceCart() const
-{
-  return alert_silence_cart;
-}
-
-
-void Alert::setSilenceCart(int cartnum)
-{
-  alert_silence_cart=cartnum;
-}
-
-
 unsigned Alert::attentionCart() const
 {
   return alert_attention_cart;
@@ -355,7 +343,6 @@ void Alert::clear()
   alert_text="";
   alert_header_cart=0;
   alert_eom_cart=0;
-  alert_silence_cart=0;
   alert_attention_cart=0;
   alert_message_cart=0;
 }

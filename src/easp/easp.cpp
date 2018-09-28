@@ -200,16 +200,10 @@ void MainWidget::liveSendData()
 			      alert->eomCart(),offset));
     button->setLastCart(alert->eomCart());
 
-    if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
+    if(alert->messageCart()!=0) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
     }
 
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
@@ -246,18 +240,9 @@ void MainWidget::cannedSendData()
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->messageCart(),offset));
-    }
-
-    if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
     }
 
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
@@ -300,18 +285,9 @@ void MainWidget::autoSendData(int id)
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->messageCart(),offset));
-    }
-
-    if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->attentionCart(),offset));
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Silence
-				1,
-				alert->silenceCart(),offset));
     }
 
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
@@ -408,7 +384,6 @@ void MainWidget::alertClosedData(int id)
     }
     if(alert->attentionCart()!=0) {
       main_config->removeCart(alert->attentionCart(),&err_msg);
-      main_config->removeCart(alert->silenceCart(),&err_msg);
     }
     QString filename=alert->filename();
     RetireAlertFile(filename);
@@ -482,9 +457,6 @@ void MainWidget::quit()
       }
       if(alert->attentionCart()!=0) {
 	main_config->removeCart(alert->attentionCart(),&err_msg);
-      }
-      if(alert->silenceCart()!=0) {
-	main_config->removeCart(alert->silenceCart(),&err_msg);
       }
     }
   }
@@ -599,26 +571,6 @@ bool MainWidget::ProcessNewAlert(Alert *alert)
       else {
 	alert->setEomCart(cartnum);
       }
-      if(!alert->attentionAudio().isEmpty()) {
-	if((cartnum=main_config->
-	    importCart("*** EAS ATTENTION SIGNAL *** ["+alert->title()+"]",
-		       alert->attentionAudio(),&err_msg))==0) {
-	  button->setStatus(AlertButton::Error);
-	  button->addStatusText("Missing attention signal audio ["+err_msg+"]. ");
-	}
-	else {
-	  alert->setAttentionCart(cartnum);
-	}
-	if((cartnum=main_config->
-	    importCart("*** EAS SILENCE *** ["+alert->title()+"]",
-		       "/usr/share/easpanel/silence.wav",&err_msg))==0) {
-	  button->setStatus(AlertButton::Error);
-	  button->addStatusText("Missing silence audio ["+err_msg+"]. ");
-	}
-	else {
-	  alert->setSilenceCart(cartnum);
-	}
-      }
       if(!alert->messageAudio().isEmpty()) {
 	if((cartnum=main_config->
 	    importCart("*** EAS MESSAGE *** ["+alert->title()+"]",
@@ -628,6 +580,15 @@ bool MainWidget::ProcessNewAlert(Alert *alert)
 	}
 	else {
 	  alert->setMessageCart(cartnum);
+	  if((cartnum=main_config->
+	      importCart("*** EAS ATTENTION SIGNAL *** ["+alert->title()+"]",
+			 "/usr/share/easpanel/attention.wav",&err_msg))==0) {
+	    button->setStatus(AlertButton::Error);
+	    button->addStatusText("Missing attention signal audio ["+err_msg+"]. ");
+	  }
+	  else {
+	    alert->setAttentionCart(cartnum);
+	  }
 	}
       }
       if(i==main_selected_alert_id) {

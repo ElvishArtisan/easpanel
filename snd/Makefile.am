@@ -19,12 +19,12 @@
 
 install-exec-am:	
 	mkdir -p ${DESTDIR}@prefix@/share/easpanel
-	cp silence.wav ${DESTDIR}@prefix@/share/easpanel/
+	cp attention.wav ${DESTDIR}@prefix@/share/easpanel/
 
 uninstall:	
-	rm -f ${DESTDIR}@prefix@/share/easpanel/silence.wav
+	rm -f ${DESTDIR}@prefix@/share/easpanel/attention.wav
 
-EXTRA_DIST = silence.wav
+EXTRA_DIST = attention.wav
 
 CLEANFILES = *~\
              *.idb\

@@ -336,10 +336,8 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   unsigned numrecs=0;
   int ret=0;
   QString pathname=filename;
-  int normalization_level=0;
   if(pathname.left(1)!="/") {
     pathname=conf_paths_eas_data_directory+"/"+filename;
-    normalization_level=conf_rivendell_normalization_level;
   }
 
   if(RD_ImportCart(&carts,
@@ -350,7 +348,7 @@ unsigned Config::importCart(const QString &title,const QString &filename,
 		   0,                                   // Cart Number
 		   0,                                   // Cut Number
 		   1,                                   // Channels
-		   normalization_level,
+		   conf_rivendell_normalization_level,
 		   conf_rivendell_autotrim_level,
 		   0,                                   // Don't Use Metadata
 		   1,                                   // Create new cart/cut
