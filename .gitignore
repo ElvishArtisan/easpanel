@@ -1,5 +1,6 @@
 *~
 *.o
+*.rlm
 *.rpm
 *.spec
 *.tar.gz
