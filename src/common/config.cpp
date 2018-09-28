@@ -154,6 +154,28 @@ int Config::outroCart(const QString &code) const
 }
 
 
+int Config::liveassistIntroCart(const QString &code) const
+{
+  int ret=conf_liveassist_intro_carts.value(code,-1);
+
+  if(ret<0) {
+    ret=rivendellLiveassistFriendlyIntroCart();
+  }
+  return ret;
+}
+
+
+int Config::liveassistOutroCart(const QString &code) const
+{
+  int ret=conf_liveassist_outro_carts.value(code,-1);
+
+  if(ret<0) {
+    ret=rivendellLiveassistFriendlyOutroCart();
+  }
+  return ret;
+}
+
+
 QString Config::dump() const
 {
   QString ret="";
@@ -299,6 +321,11 @@ bool Config::load()
   for(int i=0;i<eas_codes.size();i++) {
     conf_intro_carts[eas_codes[i]]=p->intValue("IntroCarts",eas_codes[i],-1);
     conf_outro_carts[eas_codes[i]]=p->intValue("OutroCarts",eas_codes[i],-1);
+
+    conf_liveassist_intro_carts[eas_codes[i]]=
+      p->intValue("LiveassistIntroCarts",eas_codes[i],-1);
+    conf_liveassist_outro_carts[eas_codes[i]]=
+      p->intValue("LiveassistOutroCarts",eas_codes[i],-1);
   }
 
   delete p;
@@ -326,6 +353,8 @@ void Config::clear()
   conf_paths_rlm_receive_port=0;
   conf_intro_carts.clear();
   conf_outro_carts.clear();
+  conf_liveassist_intro_carts.clear();
+  conf_liveassist_outro_carts.clear();
 }
 
 

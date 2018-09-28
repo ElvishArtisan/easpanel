@@ -120,3 +120,6 @@
 2018-09-27 Fred Gleason <fredg@paravelsystems.com>
 	* Modified event flow so as to include an attention signal only
 	when an alert includes message audio.
+2018-09-28 Fred Gleason <fredg@paravelsystems.com>
+	* Added '[LiveassistIntroCarts]' and '[LiveassistOutroCarts]'
+	sections to easpanel.conf(5).

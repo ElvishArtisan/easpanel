@@ -50,6 +50,8 @@ class Config
   unsigned pathsRlmReceivePort() const;
   int introCart(const QString &code) const;
   int outroCart(const QString &code) const;
+  int liveassistIntroCart(const QString &code) const;
+  int liveassistOutroCart(const QString &code) const;
   QString dump() const;
   bool load();
   void clear();
@@ -76,6 +78,8 @@ class Config
   unsigned conf_paths_rlm_receive_port;
   QMap<QString,int> conf_intro_carts;
   QMap<QString,int> conf_outro_carts;
+  QMap<QString,int> conf_liveassist_intro_carts;
+  QMap<QString,int> conf_liveassist_outro_carts;
   QString conf_user_agent;
 };
 

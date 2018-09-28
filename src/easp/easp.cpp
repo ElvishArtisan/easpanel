@@ -191,10 +191,23 @@ void MainWidget::liveSendData()
     //
     // Load from the bottom up
     //
+    if(main_config->liveassistOutroCart(alert->easType())!=0) {
+      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
+				1,
+				main_config->
+				liveassistOutroCart(alert->easType()),
+				offset));
+      button->setLastCart(main_config->liveassistOutroCart(alert->easType()));
+    }
+    else {
+      button->setLastCart(alert->eomCart());
+    }
+
+    /*
     SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
 			      1,
 			      main_config->rivendellLiveassistFriendlyOutroCart(),offset));
-
+    */
     SendRml(QString().sprintf("PX %d %d %d STOP!",    // EOM
 			      1,
 			      alert->eomCart(),offset));
@@ -210,9 +223,19 @@ void MainWidget::liveSendData()
 			      1,
 			      alert->headerCart(),offset));
 
+    if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d %d STOP!",    // Intro Cart
+				1,
+				main_config->
+				liveassistIntroCart(alert->easType()),
+				offset));
+    }
+    /*
     SendRml(QString().sprintf("PX %d %d %d STOP!",    // Intro
 			      1,
 			      main_config->rivendellLiveassistFriendlyIntroCart(),offset));
+    */
+
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
   }
 }
