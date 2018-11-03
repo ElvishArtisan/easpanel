@@ -137,3 +137,5 @@
 	* Modified Send to Log when in Live Assist mode to place a STOP
 	transition on the alert header when a Liveassist Friend Intro
 	cart is configured.
+2018-11-03 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to 0.9.1.
