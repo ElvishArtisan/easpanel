@@ -176,9 +176,14 @@ void MainWidget::liveSendData()
   int offset=0;
   AlertButton *button=main_alert_buttons[main_selected_alert_id];
   Alert *alert=button->alert();
+  QString header_transition="PLAY";
+
   if(alert!=NULL) {
     if(main_next_is_voicetrack) {
       offset=1;
+    }
+    if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
+      header_transition="STOP";
     }
 
     //
@@ -207,9 +212,10 @@ void MainWidget::liveSendData()
 				alert->attentionCart(),offset));
     }
 
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
+    SendRml(QString().sprintf("PX %d %d %d ",    // Header
 			      1,
-			      alert->headerCart(),offset));
+			      alert->headerCart(),offset)+
+	    header_transition+"!");
 
     if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
       SendRml(QString().sprintf("PX %d %d %d STOP!",    // Intro Cart
