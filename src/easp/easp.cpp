@@ -125,13 +125,6 @@ MainWidget::MainWidget(QWidget *parent)
   connect(main_livesend_button,SIGNAL(clicked()),this,SLOT(liveSendData()));
   main_livesend_button->setDisabled(true);
 
-  main_cannedsend_button=
-    new QPushButton(tr("Send to Log")+"\n("+tr("CANNED")+")",this);
-  main_cannedsend_button->setFont(bold_font);
-  connect(main_cannedsend_button,SIGNAL(clicked()),this,SLOT(cannedSendData()));
-  main_cannedsend_button->setDisabled(true);
-  main_cannedsend_button->hide();
-
   //
   // Alerts
   //
@@ -226,41 +219,6 @@ void MainWidget::liveSendData()
 				offset));
     }
 
-    main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
-  }
-}
-
-
-void MainWidget::cannedSendData()
-{
-  int offset=0;
-  AlertButton *button=main_alert_buttons[main_selected_alert_id];
-  Alert *alert=button->alert();
-  if(alert!=NULL) {
-    if(main_next_is_voicetrack) {
-      offset=1;
-    }
-
-    //
-    // Load from the bottom up
-    //
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // EOM
-			      1,
-			      alert->eomCart(),offset));
-    button->setLastCart(alert->eomCart());
-
-    if(alert->messageCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
-				1,
-				alert->messageCart(),offset));
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
-				1,
-				alert->attentionCart(),offset));
-    }
-
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
-			      1,
-			      alert->headerCart(),offset));
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
   }
 }
@@ -421,7 +379,6 @@ void MainWidget::alertClosedData(int id)
       main_text_text->clear();
     }
     main_livesend_button->setDisabled(true);
-    main_cannedsend_button->setDisabled(true);
 
     CompactButtons();
   }

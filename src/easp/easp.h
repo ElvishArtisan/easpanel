@@ -46,7 +46,6 @@ class MainWidget : public QWidget
  private slots:
   void autoData();
   void liveSendData();
-  void cannedSendData();
   void autoSendData(int id);
   void alertScanData();
   void alertSelectedData(int id);
@@ -76,7 +75,6 @@ class MainWidget : public QWidget
   ModeButton *main_auto_button;
   bool main_auto;
   QPushButton *main_livesend_button;
-  QPushButton *main_cannedsend_button;
   QTimer *main_alert_scan_timer;
   Config *main_config;
   QMap<QString,Alert *> main_alerts;

@@ -131,3 +131,5 @@
 	* Renamed the 'Send to Log (LIVE)' button to 'Send to Log'.
 2018-09-28 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.9.0.
+2018-11-03 Fred Gleason <fredg@paravelsystems.com>
+	* Removed dead code from easp(1).
