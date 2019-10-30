@@ -278,7 +278,7 @@ void MainWidget::autoSendData(int id)
 				offset));
     }
     if(offset==0) {    // Start Immediately
-      SendRml("PB 1!");
+      SendRml("PN 1!");
     }
     else {
       SendRml("PB 3!");

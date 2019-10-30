@@ -139,3 +139,6 @@
 	cart is configured.
 2018-11-03 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.9.1.
+2019-10-30 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a race in easp(1) that could cause a log stop down when
+	processing an alert in Automatic mode.
