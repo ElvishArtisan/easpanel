@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
-## Automake.am for easpanel src/
+## Makefile.am for EASPanel src/pypad_easpanel/
 ##
-##   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2020 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License as
@@ -20,10 +20,17 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-SUBDIRS = common\
-          easp\
-          pypad_easpanel\
-          rlm_easpanel
+install-exec-am:	
+	mkdir -p $(DESTDIR)$(libdir)/rivendell/pypad
+	cp pypad_easpanel.exemplar $(DESTDIR)$(libdir)/rivendell/pypad/pypad_easpanel.exemplar
+	../../helpers/install_python.sh pypad_easpanel.py $(DESTDIR)$(libdir)/rivendell/pypad/pypad_easpanel.py
+
+uninstall-local:	
+	rm -f $(DESTDIR)$(libdir)/rivendell/pypad/pypad_easpanel.exemplar
+	rm -f $(DESTDIR)$(libdir)/rivendell/pypad/pypad_easpanel.py
+
+EXTRA_DIST = pypad_easpanel.exemplar\
+             pypad_easpanel.py
 
 CLEANFILES = *~\
              *.idb\

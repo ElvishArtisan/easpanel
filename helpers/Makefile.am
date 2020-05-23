@@ -1,13 +1,14 @@
-## automake.am
+## Makefile.am
 ##
-## Automake.am for easpanel src/
+## helpers/ Automake.am for EASPanel
 ##
-##   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2020 Fred Gleason <fredg@paravelsystems.com>
+##
+## Use automake to process this into a Makefile.in
 ##
 ##   This program is free software; you can redistribute it and/or modify
-##   it under the terms of the GNU General Public License as
-##   published by the Free Software Foundation; either version 2 of
-##   the License, or (at your option) any later version.
+##   it under the terms of the GNU General Public License version 2 as
+##   published by the Free Software Foundation.
 ##
 ##   This program is distributed in the hope that it will be useful,
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,20 +19,17 @@
 ##   License along with this program; if not, write to the Free Software
 ##   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ##
-## Use automake to process this into a Makefile.in
 
-SUBDIRS = common\
-          easp\
-          pypad_easpanel\
-          rlm_easpanel
+
+AM_CFLAGS = -Wall
+
+EXTRA_DIST = install_python.sh.in
 
 CLEANFILES = *~\
-             *.idb\
-             *ilk\
-             *.obj\
-             *.pdb\
-             *.qm\
+             *.tar.gz\
              moc_*
+
+DISTCLEANFILES = install_python.sh
 
 MAINTAINERCLEANFILES = *~\
                        *.tar.gz\

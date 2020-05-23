@@ -2,7 +2,7 @@
 ##
 ## Top level automake.am
 ##
-##   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -23,15 +23,12 @@
 #  DOCBOOK_AM_OPT = docs
 #endif
 
-SUBDIRS = conf\
+SUBDIRS = helpers\
+          conf\
           icons\
           snd\
           src\
           xdg
-#SUBDIRS = $(DOCBOOK_AM_OPT) conf\
-#          icons\
-#          src\
-#          xdg
 
 rpm:	dist
 	cp easpanel-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/

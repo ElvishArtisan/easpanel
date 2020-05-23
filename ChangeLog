@@ -144,3 +144,5 @@
 	processing an alert in Automatic mode.
 2019-10-30 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to 0.9.2.
+2020-05-23 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'pypad_easpanel.py' script.

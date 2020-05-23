@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -72,6 +72,12 @@ AC_SUBST(MOC,$MOC_NAME)
 PKG_CHECK_MODULES(RIVWEBCAPI,rivwebcapi,[],[AC_MSG_ERROR([*** Rivendell C API not found ***])])
 
 #
+# Check for Python
+#
+AM_PATH_PYTHON([3])
+AC_SUBST(PYTHON_BASE_DEP,"python"`echo $PYTHON_VERSION | sed -e s/3./3/`)
+
+#
 # Build DocBook Items?
 #
 if test -z $DOCBOOK_DISABLED ; then
@@ -116,17 +122,22 @@ fi
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    helpers/Makefile \
+    helpers/install_python.sh \
     icons/Makefile \
     snd/Makefile \
     src/Makefile \
     src/common/Makefile \
     src/easp/Makefile \
+    src/pypad_easpanel/Makefile \
     src/rlm_easpanel/Makefile \
     xdg/Makefile \
     easpanel.spec \
     Makefile \
     ])
 AC_OUTPUT()
+
+chmod 755 helpers/install_python.sh
 
 #
 # Link Common Elements

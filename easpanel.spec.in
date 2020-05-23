@@ -19,6 +19,9 @@
 ##    Boston, MA  02111-1307  USA
 ##
 
+# So python bytecompilation works correctly
+%define __python @PYTHON@
+
 Summary: EAS Control Applet for DASDAQ/Rivendell
 Name: easpanel
 Version: @VERSION@
@@ -41,6 +44,14 @@ Summary: Rivendell Loadable Module for EASPanel
 
 %description rlm
 Provides a Rivendell Loadable Module (RLM) for EASPanel.
+
+
+%package pypad
+Summary: Rivendell PyPAD Script for EASPanel
+
+
+%description pypad
+Provides a Rivendell PyPAD Script for EASPanel
 
 
 %prep
@@ -102,6 +113,14 @@ fi
 %doc conf/rlm_easpanel-sample.conf
 
 
+%files pypad
+%{_libdir}/rivendell/pypad/pypad_easpanel.py
+%{_libdir}/rivendell/pypad/pypad_easpanel.exemplar
+%{_libdir}/rivendell/pypad/__pycache__/pypad_easpanel.*
+
+
 %changelog
+* Sat May 23 2020 Fred Gleason <fredg@paravelsystems.com>
+-- Added the 'pypad' subpackage.
 * Sun Sep  2 2018 Fred Gleason <fredg@paravelsystems.com>
 -- Initial RPM creation.

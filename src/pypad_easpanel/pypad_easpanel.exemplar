@@ -1,0 +1,27 @@
+; This is the sample configuration for the 'pypad_easpanel' script for 
+; Rivendell, which can be used to integrate the EASPanel system with
+; Rivendell.
+;
+; Section Header
+;
+; One section per EASPanel host is configured, starting with 'EasPanel1'
+; and working up consecutively
+[Easpanel1]
+
+; IP Address
+;
+; The IP address of the EASPanel host, in dotted-quad notation.
+IpAddress=127.0.0.1
+
+; UDP Port
+;
+; The UDP port number that easp(1) monitors on the EASPanel host
+; (set by the 'RlmReceivePort=' directive in '/etc/easpanel.conf'), in
+; the range 0 - 65,535.
+UdpPort=2634
+
+
+; Additional EASPanel destinations can be configured by adding new sections...
+;[Easpanel2]
+;IpAddress=192.168.10.22
+;UdpPort=2634
