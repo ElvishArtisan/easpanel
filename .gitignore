@@ -11,6 +11,7 @@ config.log
 config.status
 configure
 depcomp
+helpers/install_python.sh
 install-sh
 Makefile
 Makefile.in
