@@ -81,6 +81,7 @@ class MainWidget : public QWidget
   int main_selected_alert_id;
   QUdpSocket *main_rml_socket;
   bool main_next_is_voicetrack;
+  QString main_current_group;
 };
 
 

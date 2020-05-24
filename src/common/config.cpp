@@ -102,6 +102,18 @@ int Config::rivendellAutotrimLevel() const
 }
 
 
+QString Config::rivendellAlertOnRml() const
+{
+  return conf_rivendell_alert_on_rml;
+}
+
+
+QString Config::rivendellAlertOffRml() const
+{
+  return conf_rivendell_alert_off_rml;
+}
+
+
 QString Config::pathsEasDataDirectory() const
 {
   return conf_paths_eas_data_directory;
@@ -247,6 +259,8 @@ bool Config::load()
   conf_rivendell_normalization_level=
     p->intValue("Rivendell","NormalizationLevel",-11);
   conf_rivendell_autotrim_level=p->intValue("Rivendell","AutotrimLevel");
+  conf_rivendell_alert_on_rml=p->stringValue("Rivendell","AlertOnRml");
+  conf_rivendell_alert_off_rml=p->stringValue("Rivendell","AlertOffRml");
 
   conf_paths_eas_data_directory=
     p->stringValue("Paths","EasDataDirectory","/var/eas");
@@ -347,6 +361,8 @@ void Config::clear()
   conf_rivendell_friendly_outro_cart=0;
   conf_rivendell_normalization_level=0;
   conf_rivendell_autotrim_level=0;
+  conf_rivendell_alert_on_rml="";
+  conf_rivendell_alert_off_rml="";
   conf_paths_eas_data_directory="";
   conf_paths_eas_backup_directory="";
   conf_paths_eas_message_extension="";

@@ -41,6 +41,7 @@ MainWidget::MainWidget(QWidget *parent)
   main_auto=false;
   main_selected_alert_id=-1;
   main_next_is_voicetrack=false;
+  main_current_group="";
   setFocusPolicy(Qt::StrongFocus);
 
   new CmdSwitch("easp","\n");
@@ -396,8 +397,9 @@ void MainWidget::rlmReadyReadData()
   char data[1501];
   int n;
   bool ok=false;
+  QHostAddress orig_addr;
 
-  while((n=main_rml_socket->readDatagram(data,1500))>0) {
+  while((n=main_rml_socket->readDatagram(data,1500,&orig_addr))>0) {
     data[n]=0;
     QStringList f0=QString(data).split("\t");
     if(f0.size()==4) {
@@ -407,6 +409,21 @@ void MainWidget::rlmReadyReadData()
       }
       main_next_is_voicetrack=
 	main_config->rivendellVoicetrackGroups().contains(f0.at(2));
+      if(f0.at(0)!=main_current_group) {
+	if(!f0.at(0).isEmpty()) {
+	  if(f0.at(0)==main_config->rivendellAlertAudioGroup()) {
+	    main_rml_socket->
+	      writeDatagram(main_config->rivendellAlertOnRml().toUtf8(),
+			    orig_addr,CONFIG_RML_PORT);
+	  }
+	  if(main_current_group==main_config->rivendellAlertAudioGroup()) {
+	    main_rml_socket->
+	      writeDatagram(main_config->rivendellAlertOffRml().toUtf8(),
+			    orig_addr,CONFIG_RML_PORT);
+	  }
+	}
+	main_current_group=f0.at(0);
+      }
     }
   }
 }

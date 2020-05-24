@@ -27,6 +27,7 @@
 #include <QStringList>
 
 #define CONFIG_FILE_NAME QString("/etc/easpanel.conf")
+#define CONFIG_RML_PORT 5859
 
 class Config
 {
@@ -43,6 +44,8 @@ class Config
   unsigned rivendellFriendlyOutroCart() const;
   int rivendellNormalizationLevel() const;
   int rivendellAutotrimLevel() const;
+  QString rivendellAlertOnRml() const;
+  QString rivendellAlertOffRml() const;
   QString pathsEasDataDirectory() const;
   QString pathsEasBackupDirectory() const;
   QString pathsEasMessageExtension() const;
@@ -71,6 +74,8 @@ class Config
   unsigned conf_rivendell_friendly_outro_cart;
   int conf_rivendell_normalization_level;
   int conf_rivendell_autotrim_level;
+  QString conf_rivendell_alert_on_rml;
+  QString conf_rivendell_alert_off_rml;
   QString conf_paths_eas_data_directory;
   QString conf_paths_eas_backup_directory;
   QString conf_paths_eas_message_extension;
