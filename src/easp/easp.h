@@ -35,6 +35,7 @@
 #include "modebutton.h"
 
 #define EASP_ALERT_QUAN 5
+#define EASP_USAGE "[--no-raise]\n\n"
 
 class MainWidget : public QWidget
 {
@@ -82,6 +83,7 @@ class MainWidget : public QWidget
   QUdpSocket *main_rml_socket;
   bool main_next_is_voicetrack;
   QString main_current_group;
+  bool main_raise_on_alert;
 };
 
 

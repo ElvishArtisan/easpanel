@@ -42,9 +42,23 @@ MainWidget::MainWidget(QWidget *parent)
   main_selected_alert_id=-1;
   main_next_is_voicetrack=false;
   main_current_group="";
+  main_raise_on_alert=true;
   setFocusPolicy(Qt::StrongFocus);
 
-  new CmdSwitch("easp","\n");
+  CmdSwitch *cmd=new CmdSwitch("easp",EASP_USAGE);
+  for(unsigned i=0;i<cmd->keys();i++) {
+    if(cmd->key(i)=="--no-raise") {
+      main_raise_on_alert=false;
+      cmd->setProcessed(i,true);
+    }
+    if(!cmd->processed(i)) {
+      QMessageBox::critical(this,"EASPanel - "+tr("Unknown Optionm"),
+			    tr("Unknown command-line option:")+
+			    "\""+cmd->key(i)+"\".");
+      exit(1);
+    }
+  }
+  delete cmd;
 
   //
   // Main Configuration
@@ -263,6 +277,8 @@ void MainWidget::autoSendData(int id)
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->messageCart(),offset));
+    }
+    if(!alert->attentionAudio().isEmpty()) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->attentionCart(),offset));
@@ -664,9 +680,11 @@ void MainWidget::SendRml(const QString &rml)
 
 void MainWidget::BringToTop()
 {
-  setWindowState(Qt::WindowActive|Qt::WindowMaximized);
-  raise();
-  activateWindow();
+  if(main_raise_on_alert) {
+    setWindowState(Qt::WindowActive|Qt::WindowMaximized);
+    raise();
+    activateWindow();
+  }
 }
 
 

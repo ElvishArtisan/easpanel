@@ -153,3 +153,5 @@
 	* Incremented the package version to 0.9.3.
 2020-09-27 Fred Gleason <fredg@paravelsystems.com>
 	* Updated the contents of 'COPYING' to the standard FSF GPLv2.
+2020-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Added a '--no-raise' switch to easp(1).
