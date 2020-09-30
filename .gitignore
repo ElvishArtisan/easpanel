@@ -26,4 +26,12 @@ src/easp/config.h
 src/easp/easp
 src/easp/profile.cpp
 src/easp/profile.h
+src/tests/alert.cpp
+src/tests/alert.h
+src/tests/cmdswitch.cpp
+src/tests/cmdswitch.h
+src/tests/config.cpp
+src/tests/config.h
+src/tests/profile.cpp
+src/tests/profile.h
 src/tests/test_alert_manifest
