@@ -131,6 +131,7 @@ AC_CONFIG_FILES([ \
     src/easp/Makefile \
     src/pypad_easpanel/Makefile \
     src/rlm_easpanel/Makefile \
+    src/tests/Makefile \
     xdg/Makefile \
     easpanel.spec \
     Makefile \
@@ -143,6 +144,7 @@ chmod 755 helpers/install_python.sh
 # Link Common Elements
 #
 ./link_common.sh easp
+./link_common.sh tests
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)

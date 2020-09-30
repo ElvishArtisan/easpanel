@@ -23,7 +23,8 @@
 SUBDIRS = common\
           easp\
           pypad_easpanel\
-          rlm_easpanel
+          rlm_easpanel\
+          tests
 
 CLEANFILES = *~\
              *.idb\

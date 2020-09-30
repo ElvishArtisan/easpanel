@@ -155,3 +155,5 @@
 	* Updated the contents of 'COPYING' to the standard FSF GPLv2.
 2020-09-30 Fred Gleason <fredg@paravelsystems.com>
 	* Added a '--no-raise' switch to easp(1).
+2020-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'test_alert_manifest' test harness in 'src/tests/'.
