@@ -160,3 +160,6 @@
 2020-09-30 Fred Gleason <fredg@paravelsystems.com>
 	* Changed scheduling policy in easp(1) to always send an attention
 	signal to the log if one was provided by Dasdaq.
+2020-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Changed scheduling policy in easp(1) to use PLAY transitions
+	on all events when processing an RWT in Live Assist mode.

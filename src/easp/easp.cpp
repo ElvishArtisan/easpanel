@@ -192,6 +192,7 @@ void MainWidget::liveSendData()
   AlertButton *button=main_alert_buttons[main_selected_alert_id];
   Alert *alert=button->alert();
   QString header_transition="PLAY";
+  QString eom_transition="STOP";
 
   if(alert!=NULL) {
     if(main_next_is_voicetrack) {
@@ -199,6 +200,9 @@ void MainWidget::liveSendData()
     }
     if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
       header_transition="STOP";
+    }
+    if(alert->easType().toLower()=="rwt") {
+      eom_transition="PLAY";
     }
 
     //
@@ -216,9 +220,10 @@ void MainWidget::liveSendData()
       button->setLastCart(alert->eomCart());
     }
 
-    SendRml(QString().sprintf("PX %d %d %d STOP!",    // EOM
+    SendRml(QString().sprintf("PX %d %d %d %s!",    // EOM
 			      1,
-			      alert->eomCart(),offset));
+			      alert->eomCart(),offset,
+			      eom_transition.toUtf8().constData()));
     button->setLastCart(alert->eomCart());
 
     if(alert->attentionCart()!=0) {
@@ -230,14 +235,15 @@ void MainWidget::liveSendData()
     SendRml(QString().sprintf("PX %d %d %d ",    // Header
 			      1,
 			      alert->headerCart(),offset)+
-	    header_transition+"!");
+	    eom_transition+"!");
 
     if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d STOP!",    // Intro Cart
+      SendRml(QString().sprintf("PX %d %d %d %s!",    // Intro Cart
 				1,
 				main_config->
 				liveassistIntroCart(alert->easType()),
-				offset));
+				offset,
+				eom_transition.toUtf8().constData()));
     }
 
     main_alert_buttons[main_selected_alert_id]->setStatus(AlertButton::Sent);
