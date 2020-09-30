@@ -2,7 +2,7 @@
 //
 // Control panel applet for easpanel
 //
-//   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -221,7 +221,7 @@ void MainWidget::liveSendData()
 			      alert->eomCart(),offset));
     button->setLastCart(alert->eomCart());
 
-    if(alert->messageCart()!=0) {
+    if(alert->attentionCart()!=0) {
       SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
@@ -278,8 +278,9 @@ void MainWidget::autoSendData(int id)
 				1,
 				alert->messageCart(),offset));
     }
-    if(!alert->attentionAudio().isEmpty()) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
+
+    if(alert->attentionCart()!=0) {
+      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
     }
@@ -487,7 +488,6 @@ void MainWidget::resizeEvent(QResizeEvent *e)
   main_text_text->setGeometry(10,59,2*w/3,h-129);
 
   main_livesend_button->setGeometry(40,h-60,200,50);
-  //  main_cannedsend_button->setGeometry(180,h-60,120,50);
 
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
     main_alert_buttons[i]->setGeometry(2*w/3+20,
@@ -589,16 +589,16 @@ bool MainWidget::ProcessNewAlert(Alert *alert)
 	}
 	else {
 	  alert->setMessageCart(cartnum);
-	  if((cartnum=main_config->
-	      importCart("*** EAS ATTENTION SIGNAL *** ["+alert->title()+"]",
-			 "/usr/share/easpanel/attention.wav",&err_msg))==0) {
-	    button->setStatus(AlertButton::Error);
-	    button->addStatusText("Missing attention signal audio ["+err_msg+"]. ");
-	  }
-	  else {
-	    alert->setAttentionCart(cartnum);
-	  }
 	}
+      }
+      if((cartnum=main_config->
+	  importCart("*** EAS ATTENTION SIGNAL *** ["+alert->title()+"]",
+		     "/usr/share/easpanel/attention.wav",&err_msg))==0) {
+	button->setStatus(AlertButton::Error);
+	button->addStatusText("Missing attention signal audio ["+err_msg+"]. ");
+      }
+      else {
+	alert->setAttentionCart(cartnum);
       }
       if(i==main_selected_alert_id) {
 	DisplayAlertButton(button);
@@ -635,13 +635,6 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   main_selected_alert_id=button->id();
   main_livesend_button->setDisabled(main_auto||(alert==NULL)||
 				    (button->status()==AlertButton::Error));
-  /*
-  main_livesend_button->setDisabled(main_auto||(alert==NULL)||
-				    (alert->messageCart()==0)||
-				    (button->status()==AlertButton::Error));
-  main_cannedsend_button->setDisabled(main_auto||(alert==NULL)||
-				      (button->status()==AlertButton::Error));
-  */
 }
 
 
@@ -693,7 +686,6 @@ bool MainWidget::AlertLoaded() const
   bool ret=false;
 
   for(int i=0;i<EASP_ALERT_QUAN;i++) {
-    //    ret=ret||(main_alert_buttons[i]->lastCart()!=0);
     ret=(ret||(main_alert_buttons[i]->lastCart()!=0))&&
       (!main_alert_buttons[i]->lastCartPlayed());
   }

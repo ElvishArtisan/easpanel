@@ -157,3 +157,6 @@
 	* Added a '--no-raise' switch to easp(1).
 2020-09-30 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'test_alert_manifest' test harness in 'src/tests/'.
+2020-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Changed scheduling policy in easp(1) to always send an attention
+	signal to the log if one was provided by Dasdaq.
