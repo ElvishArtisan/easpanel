@@ -168,3 +168,5 @@
 	'[Rivendell]' section of easpanel.conf(5).
 	* Modified configuration parser to permit multiple RMLs to be
 	specified on a single line.
+2020-10-01 Fred Gleason <fredg@paravelsystems.com>
+	* Updated the package version to 1.0.0rc0.
