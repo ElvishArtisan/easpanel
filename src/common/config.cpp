@@ -2,7 +2,7 @@
 //
 // Configuration values for easpanel
 //
-//   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -102,15 +102,27 @@ int Config::rivendellAutotrimLevel() const
 }
 
 
-QString Config::rivendellAlertOnRml() const
+QStringList Config::rivendellAlertOnRml() const
 {
   return conf_rivendell_alert_on_rml;
 }
 
 
-QString Config::rivendellAlertOffRml() const
+QStringList Config::rivendellAlertOffRml() const
 {
   return conf_rivendell_alert_off_rml;
+}
+
+
+QStringList Config::rivendellAutomaticRml() const
+{
+  return conf_rivendell_automatic_rml;
+}
+
+
+QStringList Config::rivendellLiveAssistRml() const
+{
+  return conf_rivendell_live_assist_rml;
 }
 
 
@@ -216,6 +228,10 @@ QString Config::dump() const
     QString().sprintf("%d",rivendellNormalizationLevel())+"\n";
   ret+="AutotrimLevel="+
     QString().sprintf("%d",rivendellAutotrimLevel())+"\n";
+  ret+="AlertOnRml="+rivendellAlertOnRml().join("!")+"!\n";
+  ret+="AlertOffRml="+rivendellAlertOffRml().join("!")+"!\n";
+  ret+="AutomaticRml="+rivendellAutomaticRml().join("!")+"!\n";
+  ret+="LiveAssistRml="+rivendellLiveAssistRml().join("!")+"!\n";
   ret+="\n";
   ret+="[Paths]\n";
   ret+="EasDataDirectory="+pathsEasDataDirectory()+"\n";
@@ -259,8 +275,14 @@ bool Config::load()
   conf_rivendell_normalization_level=
     p->intValue("Rivendell","NormalizationLevel",-11);
   conf_rivendell_autotrim_level=p->intValue("Rivendell","AutotrimLevel");
-  conf_rivendell_alert_on_rml=p->stringValue("Rivendell","AlertOnRml");
-  conf_rivendell_alert_off_rml=p->stringValue("Rivendell","AlertOffRml");
+  conf_rivendell_alert_on_rml=
+    RmlList(p->stringValue("Rivendell","AlertOnRml"));
+  conf_rivendell_alert_off_rml=
+    RmlList(p->stringValue("Rivendell","AlertOffRml"));
+  conf_rivendell_automatic_rml=
+    RmlList(p->stringValue("Rivendell","AutomaticRml"));
+  conf_rivendell_live_assist_rml=
+    RmlList(p->stringValue("Rivendell","LiveAssistRml"));
 
   conf_paths_eas_data_directory=
     p->stringValue("Paths","EasDataDirectory","/var/eas");
@@ -361,8 +383,10 @@ void Config::clear()
   conf_rivendell_friendly_outro_cart=0;
   conf_rivendell_normalization_level=0;
   conf_rivendell_autotrim_level=0;
-  conf_rivendell_alert_on_rml="";
-  conf_rivendell_alert_off_rml="";
+  conf_rivendell_alert_on_rml.clear();
+  conf_rivendell_alert_off_rml.clear();
+  conf_rivendell_automatic_rml.clear();
+  conf_rivendell_live_assist_rml.clear();
   conf_paths_eas_data_directory="";
   conf_paths_eas_backup_directory="";
   conf_paths_eas_message_extension="";
@@ -423,4 +447,16 @@ bool Config::removeCart(unsigned cartnum,QString *err_msg)
 		       conf_rivendell_user.toUtf8(),
 		       conf_rivendell_password.toUtf8(),
 		       "",cartnum,conf_user_agent.toUtf8())==0;
+}
+
+
+QStringList Config::RmlList(const QString &rmlstr) const
+{
+  QStringList ret=rmlstr.split("!",QString::SkipEmptyParts);
+
+  for(int i=0;i<ret.size();i++) {
+    ret[i]=ret.at(i)+"!";
+  }
+
+  return ret;
 }

@@ -19,6 +19,7 @@
 //
 
 #include <stdio.h>
+#include <syslog.h>
 #include <unistd.h>
 
 #include <QApplication>
@@ -141,6 +142,16 @@ MainWidget::MainWidget(QWidget *parent)
   main_livesend_button->setDisabled(true);
 
   //
+  // Send Mode
+  //
+  if(main_auto) {
+    SendRml(main_config->rivendellAutomaticRml());
+  }
+  else {
+    SendRml(main_config->rivendellLiveAssistRml());
+  }
+
+  //
   // Alerts
   //
   main_alert_scan_timer=new QTimer(this);
@@ -163,11 +174,13 @@ void MainWidget::autoData()
   if(main_auto) {
     main_auto_button->setText(tr("LiveAssist"));
     main_auto_button->setStyleSheet("background-color: #FFFF00");
+    SendRml(main_config->rivendellLiveAssistRml());
     main_auto=false;
   }
   else {
     main_auto_button->setText(tr("Automatic"));
     main_auto_button->setStyleSheet("background-color: #00FF00");
+    SendRml(main_config->rivendellAutomaticRml());
     main_auto=true;
     for(int i=0;i<EASP_ALERT_QUAN;i++) {
       AlertButton *button=main_alert_buttons[i];
@@ -435,14 +448,10 @@ void MainWidget::rlmReadyReadData()
       if(f0.at(0)!=main_current_group) {
 	if(!f0.at(0).isEmpty()) {
 	  if(f0.at(0)==main_config->rivendellAlertAudioGroup()) {
-	    main_rml_socket->
-	      writeDatagram(main_config->rivendellAlertOnRml().toUtf8(),
-			    orig_addr,CONFIG_RML_PORT);
+	    SendRml(main_config->rivendellAlertOnRml());
 	  }
 	  if(main_current_group==main_config->rivendellAlertAudioGroup()) {
-	    main_rml_socket->
-	      writeDatagram(main_config->rivendellAlertOffRml().toUtf8(),
-			    orig_addr,CONFIG_RML_PORT);
+	    SendRml(main_config->rivendellAlertOffRml());
 	  }
 	}
 	main_current_group=f0.at(0);
@@ -672,8 +681,20 @@ void MainWidget::CompactButtons()
 
 void MainWidget::SendRml(const QString &rml)
 {
+  syslog(LOG_DEBUG,"sending: %s",rml.toUtf8().constData());
   main_rml_socket->
     writeDatagram(rml.toUtf8(),main_config->rivendellHostAddress(),5859);
+}
+
+
+void MainWidget::SendRml(const QStringList &rmllist)
+{
+  for(int i=0;i<rmllist.size();i++) {
+    syslog(LOG_DEBUG,"sending rml: %s",rmllist.at(i).toUtf8().constData());
+    main_rml_socket->
+      writeDatagram(rmllist.at(i).toUtf8(),
+		    main_config->rivendellHostAddress(),CONFIG_RML_PORT);
+  }
 }
 
 

@@ -163,3 +163,8 @@
 2020-09-30 Fred Gleason <fredg@paravelsystems.com>
 	* Changed scheduling policy in easp(1) to use PLAY transitions
 	on all events when processing an RWT in Live Assist mode.
+2020-09-30 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'AutomaticRml='and 'LiveAssitRml=' directives to the
+	'[Rivendell]' section of easpanel.conf(5).
+	* Modified configuration parser to permit multiple RMLs to be
+	specified on a single line.

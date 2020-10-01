@@ -2,7 +2,7 @@
 //
 // Control panel applet for easpanel
 //
-//   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -66,6 +66,7 @@ class MainWidget : public QWidget
   void DisplayAlertButton(AlertButton *button);
   void CompactButtons();
   void SendRml(const QString &rml);
+  void SendRml(const QStringList &rmllist);
   void BringToTop();
   bool AlertLoaded() const;
   void RetireAlertFile(const QString &filename) const;

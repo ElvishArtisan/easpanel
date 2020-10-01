@@ -2,7 +2,7 @@
 //
 // Configuration values for easpanel
 //
-//   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -44,8 +44,10 @@ class Config
   unsigned rivendellFriendlyOutroCart() const;
   int rivendellNormalizationLevel() const;
   int rivendellAutotrimLevel() const;
-  QString rivendellAlertOnRml() const;
-  QString rivendellAlertOffRml() const;
+  QStringList rivendellAlertOnRml() const;
+  QStringList rivendellAlertOffRml() const;
+  QStringList rivendellAutomaticRml() const;
+  QStringList rivendellLiveAssistRml() const;
   QString pathsEasDataDirectory() const;
   QString pathsEasBackupDirectory() const;
   QString pathsEasMessageExtension() const;
@@ -63,6 +65,7 @@ class Config
   bool removeCart(unsigned cartnum,QString *err_msg);
 
  private:
+  QStringList RmlList(const QString &rmlstr) const;
   QHostAddress conf_rivendell_host_address;
   QString conf_rivendell_alert_audio_group;
   QStringList conf_rivendell_voicetrack_groups;
@@ -74,8 +77,10 @@ class Config
   unsigned conf_rivendell_friendly_outro_cart;
   int conf_rivendell_normalization_level;
   int conf_rivendell_autotrim_level;
-  QString conf_rivendell_alert_on_rml;
-  QString conf_rivendell_alert_off_rml;
+  QStringList conf_rivendell_alert_on_rml;
+  QStringList conf_rivendell_alert_off_rml;
+  QStringList conf_rivendell_automatic_rml;
+  QStringList conf_rivendell_live_assist_rml;
   QString conf_paths_eas_data_directory;
   QString conf_paths_eas_backup_directory;
   QString conf_paths_eas_message_extension;
