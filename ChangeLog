@@ -170,3 +170,6 @@
 	specified on a single line.
 2020-10-01 Fred Gleason <fredg@paravelsystems.com>
 	* Updated the package version to 1.0.0rc0.
+2021-03-03 Fred Gleason <fredg@paravelsystems.com>
+	* Removed RLM support.
+	* Removed the 'easpanel-rlm' subpackage.

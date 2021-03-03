@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2018-2021 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -130,7 +130,6 @@ AC_CONFIG_FILES([ \
     src/common/Makefile \
     src/easp/Makefile \
     src/pypad_easpanel/Makefile \
-    src/rlm_easpanel/Makefile \
     src/tests/Makefile \
     xdg/Makefile \
     easpanel.spec \
