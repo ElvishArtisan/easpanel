@@ -173,3 +173,5 @@
 2021-03-03 Fred Gleason <fredg@paravelsystems.com>
 	* Removed RLM support.
 	* Removed the 'easpanel-rlm' subpackage.
+2022-01-09 Fred Gleason <fredg@paravelsystems.com>
+	* Updated the PyPAD plug-in to be compatible with Rivendell v4.x.
