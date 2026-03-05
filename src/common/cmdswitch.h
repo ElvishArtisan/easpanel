@@ -2,43 +2,46 @@
 //
 // Process Command-Line Switches
 //
-//   (C) Copyright 2012-2015 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2013-2025 Fred Gleason <fredg@paravelsystems.com>
 //
-//   This program is free software; you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License version 2 as
-//   published by the Free Software Foundation.
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of version 2.1 of the GNU Lesser General Public
+//    License as published by the Free Software Foundation;
 //
-//   This program is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details.
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Lesser General Public License for more details.
 //
-//   You should have received a copy of the GNU General Public
-//   License along with this program; if not, write to the Free Software
-//   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//    You should have received a copy of the GNU General Public License
+//    along with this program; if not, write to the Free Software
+//    Foundation, Inc., 59 Temple Place, Suite 330, 
+//    Boston, MA  02111-1307  USA
+//
+// EXEMPLAR_VERSION: 2.0.2
 //
 
 #ifndef CMDSWITCH_H
 #define CMDSWITCH_H
 
-#include <vector>
+#include <QList>
 #include <QString>
 
 class CmdSwitch
 {
  public:
-  CmdSwitch(const char *modname,const char *usage);
-  unsigned keys() const;
-  QString key(unsigned n) const;
-  QString value(unsigned n) const;
-  bool processed(unsigned n) const;
-  void setProcessed(unsigned n,bool state);
+  CmdSwitch(const QString &modname,const QString &modver,const QString &usage);
+  int keys() const;
+  QString key(int n) const;
+  QString value(int n) const;
+  bool processed(int n) const;
+  void setProcessed(int n,bool state);
   bool allProcessed() const;
 
  private:
-  std::vector<QString> switch_keys;
-  std::vector<QString> switch_values;
-  std::vector<bool> switch_processed;
+  QList<QString> switch_keys;
+  QList<QString> switch_values;
+  QList<bool> switch_processed;
 };
 
 

@@ -267,7 +267,7 @@ bool Alert::load(const QString &pathname)
       values[key]+=line.replace("'","")+"\n";
     }
     else {
-      QStringList f0=line.split("=",QString::KeepEmptyParts);
+      QStringList f0=line.split("=",Qt::KeepEmptyParts);
       if(f0.size()>=2) {
 	key=f0.at(0).trimmed();
 	for(int i=2;i<f0.size();i++) {
@@ -297,12 +297,12 @@ bool Alert::load(const QString &pathname)
   }
   if(values.find("EAS.START_TIME")!=values.constEnd()) {
     alert_issued_datetime=
-      QDateTime::fromTime_t(values.find("EAS.START_TIME").value().toInt()).
+      QDateTime::fromSecsSinceEpoch(values.find("EAS.START_TIME").value().toInt()).
       addSecs(UtcOffset());
   }
   if(values.find("EAS.END_TIME")!=values.constEnd()) {
     alert_expires_datetime=
-      QDateTime::fromTime_t(values.find("EAS.END_TIME").value().toInt()).
+      QDateTime::fromSecsSinceEpoch(values.find("EAS.END_TIME").value().toInt()).
       addSecs(UtcOffset());
   }
   if(values.find("EAS.AUDIO.FILE.HEADER")!=values.constEnd()) {

@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2018-2021 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -62,14 +62,17 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt (Mandatory)
 #
-PKG_CHECK_MODULES(QT4,QtGui QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
-AC_SUBST(MOC,$MOC_NAME)
+AQ_FIND_QT6(QT6GUI,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 GUI components not found ***])])
 
 #
 # Check for Rivendell C API (Mandatory)
 #
 PKG_CHECK_MODULES(RIVWEBCAPI,rivwebcapi,[],[AC_MSG_ERROR([*** Rivendell C API not found ***])])
+
+#
+# Check for Secret Rabbit Code
+#
+PKG_CHECK_MODULES(SRC,samplerate,[],[AC_MSG_ERROR([*** Libsamplerate not found ***])])
 
 #
 # Check for Python
@@ -97,11 +100,6 @@ AC_SUBST(ARCH,$ar_gcc_arch)
 #
 AR_GET_DISTRO()
 AC_SUBST(DISTRO,$ar_gcc_distro)
-
-AC_SUBST(SIRLIBS,"-lsamplerate -ldl -lQtCore -lQtNetwork")
-AC_SUBST(SIRFLAGS,"")
-AC_SUBST(GUILIBS,"-lsamplerate -lQtCore -lQtNetwork -lQtGui")
-AC_SUBST(GUIFLAGS,"")
 
 #
 # Configure RPM Build

@@ -2,7 +2,7 @@
 //
 // Display summary details for an EAS alert
 //
-//   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -44,7 +44,7 @@ AlertButton::AlertButton(int id,QWidget *parent)
   //
   // ID Label
   //
-  alert_id_label=new QLabel(tr("ALERT")+QString().sprintf(" %d",id+1),this);
+  alert_id_label=new QLabel(tr("ALERT")+QString::asprintf(" %d",id+1),this);
   alert_id_label->setFont(title_font);
   alert_id_label->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -227,7 +227,8 @@ void AlertButton::closeClickedData()
 
 void AlertButton::mouseMoveEvent(QMouseEvent *e)
 {
-  if((e->x()<0)||(e->x()>=width())||(e->y()<0)||(e->y()>=height())) {
+  if((e->position().x()<0)||(e->position().x()>=width())||
+     (e->position().y()<0)||(e->position().y()>=height())) {
     alert_mouse_pressed=false;
   }
 }

@@ -217,17 +217,17 @@ QString Config::dump() const
   ret+="User="+rivendellUser()+"\n";
   ret+="Password="+rivendellPassword()+"\n";
   ret+="FriendlyLiveassistIntroCart="+
-    QString().sprintf("%u",rivendellLiveassistFriendlyIntroCart())+"\n";
+    QString::asprintf("%u",rivendellLiveassistFriendlyIntroCart())+"\n";
   ret+="FriendlyLiveassistOutroCart="+
-    QString().sprintf("%u",rivendellLiveassistFriendlyOutroCart())+"\n";
+    QString::asprintf("%u",rivendellLiveassistFriendlyOutroCart())+"\n";
   ret+="FriendlyIntroCart="+
-    QString().sprintf("%u",rivendellFriendlyIntroCart())+"\n";
+    QString::asprintf("%u",rivendellFriendlyIntroCart())+"\n";
   ret+="FriendlyOutroCart="+
-    QString().sprintf("%u",rivendellFriendlyOutroCart())+"\n";
+    QString::asprintf("%u",rivendellFriendlyOutroCart())+"\n";
   ret+="NormalizationLevel="+
-    QString().sprintf("%d",rivendellNormalizationLevel())+"\n";
+    QString::asprintf("%d",rivendellNormalizationLevel())+"\n";
   ret+="AutotrimLevel="+
-    QString().sprintf("%d",rivendellAutotrimLevel())+"\n";
+    QString::asprintf("%d",rivendellAutotrimLevel())+"\n";
   ret+="AlertOnRml="+rivendellAlertOnRml().join("!")+"!\n";
   ret+="AlertOffRml="+rivendellAlertOffRml().join("!")+"!\n";
   ret+="AutomaticRml="+rivendellAutomaticRml().join("!")+"!\n";
@@ -237,7 +237,7 @@ QString Config::dump() const
   ret+="EasDataDirectory="+pathsEasDataDirectory()+"\n";
   ret+="EasBackupDirectory="+pathsEasBackupDirectory()+"\n";
   ret+="EasMessageExtension="+pathsEasMessageExtension()+"\n";
-  ret+="RlmReceivePort="+QString().sprintf("%u",pathsRlmReceivePort())+"\n";
+  ret+="RlmReceivePort="+QString::asprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
 
   return ret;
@@ -257,7 +257,7 @@ bool Config::load()
     p->stringValue("Rivendell","AlertAudioGroup","EAS");
   conf_rivendell_voicetrack_groups=
     p->stringValue("Rivendell","VoicetrackGroups").
-    split(",",QString::SkipEmptyParts);
+    split(",",Qt::SkipEmptyParts);
   for(int i=0;i<conf_rivendell_voicetrack_groups.size();i++) {
     conf_rivendell_voicetrack_groups[i]=
       conf_rivendell_voicetrack_groups.at(i).trimmed();
@@ -452,7 +452,7 @@ bool Config::removeCart(unsigned cartnum,QString *err_msg)
 
 QStringList Config::RmlList(const QString &rmlstr) const
 {
-  QStringList ret=rmlstr.split("!",QString::SkipEmptyParts);
+  QStringList ret=rmlstr.split("!",Qt::SkipEmptyParts);
 
   for(int i=0;i<ret.size();i++) {
     ret[i]=ret.at(i)+"!";

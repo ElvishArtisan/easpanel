@@ -46,8 +46,8 @@ MainWidget::MainWidget(QWidget *parent)
   main_raise_on_alert=true;
   setFocusPolicy(Qt::StrongFocus);
 
-  CmdSwitch *cmd=new CmdSwitch("easp",EASP_USAGE);
-  for(unsigned i=0;i<cmd->keys();i++) {
+  CmdSwitch *cmd=new CmdSwitch("easp",VERSION,EASP_USAGE);
+  for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="--no-raise") {
       main_raise_on_alert=false;
       cmd->setProcessed(i,true);
@@ -78,8 +78,8 @@ MainWidget::MainWidget(QWidget *parent)
   if(!main_rml_socket->bind(main_config->pathsRlmReceivePort())) {
     QMessageBox::critical(this,"EAS Panel",
 			  tr("Unable to bind UDP port")+
-			  QString().
-			  sprintf(" %u!",main_config->pathsRlmReceivePort()));
+			  QString::
+			  asprintf(" %u!",main_config->pathsRlmReceivePort()));
     exit(1);
   }
   connect(main_rml_socket,SIGNAL(readyRead()),this,SLOT(rlmReadyReadData()));
@@ -222,7 +222,7 @@ void MainWidget::liveSendData()
     // Load from the bottom up
     //
     if(main_config->liveassistOutroCart(alert->easType())!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Outro Cart
 				1,
 				main_config->
 				liveassistOutroCart(alert->easType()),
@@ -233,25 +233,25 @@ void MainWidget::liveSendData()
       button->setLastCart(alert->eomCart());
     }
 
-    SendRml(QString().sprintf("PX %d %d %d %s!",    // EOM
+    SendRml(QString::asprintf("PX %d %d %d %s!",    // EOM
 			      1,
 			      alert->eomCart(),offset,
 			      eom_transition.toUtf8().constData()));
     button->setLastCart(alert->eomCart());
 
     if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
     }
 
-    SendRml(QString().sprintf("PX %d %d %d ",    // Header
+    SendRml(QString::asprintf("PX %d %d %d ",    // Header
 			      1,
 			      alert->headerCart(),offset)+
 	    eom_transition+"!");
 
     if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d %s!",    // Intro Cart
+      SendRml(QString::asprintf("PX %d %d %d %s!",    // Intro Cart
 				1,
 				main_config->
 				liveassistIntroCart(alert->easType()),
@@ -278,7 +278,7 @@ void MainWidget::autoSendData(int id)
     // Load from the bottom up
     //
     if(main_config->outroCart(alert->easType())!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Outro Cart
 				1,
 				main_config->outroCart(alert->easType()),
 				offset));
@@ -288,28 +288,28 @@ void MainWidget::autoSendData(int id)
       button->setLastCart(alert->eomCart());
     }
 
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // EOM
+    SendRml(QString::asprintf("PX %d %d %d PLAY!",    // EOM
 			      1,
 			      alert->eomCart(),offset));
 
     if(alert->messageCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->messageCart(),offset));
     }
 
     if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
     }
 
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
+    SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Header
 			      1,
 			      alert->headerCart(),offset));
 
     if(main_config->rivendellFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Intro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Intro Cart
 				1,
 				main_config->introCart(alert->easType()),
 				offset));
@@ -417,7 +417,7 @@ void MainWidget::alertClosedData(int id)
     main_alerts.remove(filename);
     main_alert_buttons[id]->setAlert(NULL);
     if(id==main_selected_alert_id) {
-      main_title_label->setText(tr("Alert")+QString().sprintf(" %d",id+1));
+      main_title_label->setText(tr("Alert")+QString::asprintf(" %d",id+1));
       main_datetime_label->clear();
       main_text_text->clear();
     }
@@ -631,13 +631,13 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   Alert *alert=button->alert();
   if(alert==NULL) {
     main_title_label->
-      setText(tr("Alert")+QString().sprintf(" %d",button->id()+1));
+      setText(tr("Alert")+QString::asprintf(" %d",button->id()+1));
     main_datetime_label->clear();
     main_text_text->clear();
   }
   else {
     main_title_label->
-      setText(tr("Alert")+QString().sprintf(" %d - ",button->id()+1)+
+      setText(tr("Alert")+QString::asprintf(" %d - ",button->id()+1)+
 	      alert->title());
     main_datetime_label->
       setText(tr("Issued:")+" "+

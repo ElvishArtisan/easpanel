@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
 ## Makefile for easp(1)
 ##
-## (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,12 +20,11 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT4_CFLAGS@ @RIVWEBCAPI_CFLAGS@
-MOC = @QT4_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++17 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT6GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@ @SRC_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	@QT6GUI_MOC@ $< -o $@
 
 
 bin_PROGRAMS = easp
@@ -44,8 +43,7 @@ nodist_easp_SOURCES = alert.cpp alert.h\
                       moc_modebutton.cpp\
                       profile.cpp profile.h
 
-easp_LDADD = @GUILIBS@ @RIVWEBCAPI_LIBS@
-easp_LDFLAGS = @GUIFLAGS@
+easp_LDADD = @QT6GUI_LIBS@ @RIVWEBCAPI_LIBS@ @SRC_LIBS@
 
 CLEANFILES = *~\
              moc_*\

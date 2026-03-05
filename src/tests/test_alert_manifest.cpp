@@ -30,8 +30,9 @@ MainObject::MainObject(QWidget *parent)
 {
   QString filename;
 
-  CmdSwitch *cmd=new CmdSwitch("test_alert_manifest",TEST_ALERT_MANIFEST_USAGE);
-  for(unsigned i=0;i<cmd->keys();i++) {
+  CmdSwitch *cmd=
+    new CmdSwitch("test_alert_manifest",VERSION,TEST_ALERT_MANIFEST_USAGE);
+  for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="--filename") {
       filename=cmd->value(i);
       cmd->setProcessed(i,true);
