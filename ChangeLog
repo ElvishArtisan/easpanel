@@ -178,3 +178,5 @@
 2026-03-05 Fred Gleason <fredg@paravelsystems.com>
 	* Upgraded CmdSwitch to Exemplar v2.0.2.
 	* Upgrade Qt4 dependency to Qt6.
+2026-03-07 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'DISTRO-SPECIFIC NOTES' section to 'INSTALL'.

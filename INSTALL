@@ -27,21 +27,11 @@ http://www.docbook.org/tdg5/en/html/appa.html#s.stylesheetinstall.
 xsltproc.  Command line XSLT processor.  Available at
 http://xmlsoft.org/XSLT/xsltproc2.html
 
-BUILD ENVIRONMENT
----------------------------------------------------------------------------
-Some distros may require that the CPPFLAGS and LDFLAGS
-environmental variables be set prior to running 'configure' in order for
-Qt4 to be detected properly.  Some known cases are:
+DISTRO-SPECIFIC NOTES
+---------------------
+1) Ubuntu 24.04 LTS
 
-  CentOS/RedHat 5 (i386): export CPPFLAGS=-I/usr/lib/qt4/include
-                	  export LDFLAGS=-L/usr/lib/qt4/lib
-                	  export PATH=/usr/lib/qt4/bin:$PATH
-
-CentOS/RedHat 5 (x86_64): export CPPFLAGS=-I/usr/lib64/qt4/include
-                 	  export LDFLAGS=-L/usr/lib64/qt4/lib64
-                	  export PATH=/usr/lib64/qt4/bin:$PATH
-
-Ubuntu:                   export CPPFLAGS=-I/usr/include/qt4
+Required build packages: autoconf automake fop xsltproc docbook-xsl-ns ubuntu-dev-tools debhelper pbuilder qt6-base-dev rivendell-dev libsamplerate0-dev libcurl4-gnutls-dev libexpat1-dev
 
 INSTALLATION
 Once the prerequisites are set up, building and installation of the code is
