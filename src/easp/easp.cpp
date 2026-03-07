@@ -57,9 +57,9 @@ MainWidget::MainWidget(QWidget *parent)
       cmd->setProcessed(i,true);
     }
     if(!cmd->processed(i)) {
-      QMessageBox::critical(this,"EASPanel - "+tr("Unknown Optionm"),
+      QMessageBox::critical(this,"EASPanel - "+tr("Unknown Option"),
 			    tr("Unknown command-line option:")+
-			    "\""+cmd->key(i)+"\".");
+			    " \""+cmd->key(i)+"\".");
       exit(1);
     }
   }
