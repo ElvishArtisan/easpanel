@@ -18,6 +18,7 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <syslog.h>
 #include <unistd.h>
 
 #include <rivwebcapi/rd_getuseragent.h>
@@ -408,7 +409,6 @@ unsigned Config::importCart(const QString &title,const QString &filename,
   if(pathname.left(1)!="/") {
     pathname=conf_paths_eas_data_directory+"/"+filename;
   }
-
   if(RD_ImportCart(&carts,
 		   conf_rivendell_host_address.toString().toUtf8(),
 		   conf_rivendell_user.toUtf8(),        // Rivendell User
@@ -431,11 +431,21 @@ unsigned Config::importCart(const QString &title,const QString &filename,
       *err_msg=carts[0].error_string;
       delete carts;
     }
+    syslog(LOG_WARNING,"import of file %s [\"%s\"] to group %s failed: %s",
+	   filename.toUtf8().constData(),
+	   title.toUtf8().constData(),
+	   conf_rivendell_alert_audio_group.toUtf8().constData(),
+	   err_msg->toUtf8().constData());
     return 0;
   }
   if(numrecs>=1) {
     ret=carts[0].cart_number;
   }
+  syslog(LOG_DEBUG,"imported file %s [\"%s\"] to cart %06u in group %s",
+	 filename.toUtf8().constData(),
+	 title.toUtf8().constData(),
+	 ret,
+	 conf_rivendell_alert_audio_group.toUtf8().constData());
   free(carts);
   return ret;
 }
@@ -443,10 +453,18 @@ unsigned Config::importCart(const QString &title,const QString &filename,
 
 bool Config::removeCart(unsigned cartnum,QString *err_msg)
 {
-  return RD_RemoveCart(conf_rivendell_host_address.toString().toUtf8(),
-		       conf_rivendell_user.toUtf8(),
-		       conf_rivendell_password.toUtf8(),
-		       "",cartnum,conf_user_agent.toUtf8())==0;
+  int ret=RD_RemoveCart(conf_rivendell_host_address.toString().toUtf8(),
+			conf_rivendell_user.toUtf8(),
+			conf_rivendell_password.toUtf8(),
+			"",cartnum,conf_user_agent.toUtf8());
+  if(ret==0) {
+    syslog(LOG_DEBUG,"removed cart %06u",cartnum);
+  }
+  else {
+    syslog(LOG_WARNING,"failed to remove cart %06u [response code %d]",
+	   cartnum,ret);
+  }
+  return ret;
 }
 
 

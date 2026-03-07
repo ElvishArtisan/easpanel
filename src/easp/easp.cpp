@@ -48,6 +48,10 @@ MainWidget::MainWidget(QWidget *parent)
 
   CmdSwitch *cmd=new CmdSwitch("easp",VERSION,EASP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
+    if(cmd->key(i)=="-d") {
+      openlog("easp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
     if(cmd->key(i)=="--no-raise") {
       main_raise_on_alert=false;
       cmd->setProcessed(i,true);
@@ -75,7 +79,7 @@ MainWidget::MainWidget(QWidget *parent)
   // RML Socket
   //
   main_rml_socket=new QUdpSocket(this);
-  if(!main_rml_socket->bind(main_config->pathsRlmReceivePort())) {
+  if(!main_rml_socket->bind(QHostAddress::AnyIPv4,main_config->pathsRlmReceivePort())) {
     QMessageBox::critical(this,"EAS Panel",
 			  tr("Unable to bind UDP port")+
 			  QString::

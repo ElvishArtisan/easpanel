@@ -180,3 +180,7 @@
 	* Upgrade Qt4 dependency to Qt6.
 2026-03-07 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'DISTRO-SPECIFIC NOTES' section to 'INSTALL'.
+2026-03-07 Fred Gleason <fredg@paravelsystems.com>
+	* Added a work-around to an issue in Qt6 that caused easp(1) to
+	fail to bind to UDP IVv4 ports.
+	* Added debug logging to easp(1).
