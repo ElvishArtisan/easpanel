@@ -40,6 +40,7 @@ class Alert
   QString eomAudio() const;
   QString attentionAudio() const;
   QString messageAudio() const;
+  QString completeAudio() const;
   QString text() const;
   void setText(const QString &str);
   unsigned headerCart() const;
@@ -67,6 +68,7 @@ class Alert
   QString alert_eom_audio;
   QString alert_attention_audio;
   QString alert_message_audio;
+  QString alert_complete_audio;
   QString alert_text;
   unsigned alert_header_cart;
   unsigned alert_attention_cart;

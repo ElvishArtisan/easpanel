@@ -187,3 +187,6 @@
 2026-03-07 Fred Gleason <fredg@paravelsystems.com>
 	* Cleaned up formatting of the 'Unknown Option' error handler
 	in easp(1).
+2026-03-07 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in easp(1) that could cause failure to fully clean
+	up EasDataDirectory after processing an event.

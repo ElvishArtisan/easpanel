@@ -417,6 +417,9 @@ void MainWidget::alertClosedData(int id)
     if(!alert->eomAudio().isEmpty()) {
       RetireAlertFile(alert->eomAudio());
     }
+    if(!alert->completeAudio().isEmpty()) {
+      RetireAlertFile(alert->completeAudio());
+    }
     delete alert;
     main_alerts.remove(filename);
     main_alert_buttons[id]->setAlert(NULL);
@@ -729,10 +732,13 @@ void MainWidget::RetireAlertFile(const QString &filename) const
 {
   if(main_config->pathsEasBackupDirectory().isEmpty()) {
     unlink((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8());
+    syslog(LOG_DEBUG,"deleted alert file %s",filename.toUtf8().constData());
   }
   else {
     rename((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8(),
 	   (main_config->pathsEasBackupDirectory()+"/"+filename).toUtf8());
+    syslog(LOG_DEBUG,"moved alert file %s to archive",
+	   filename.toUtf8().constData());
   }
 }
 

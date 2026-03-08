@@ -105,6 +105,12 @@ QString Alert::messageAudio() const
 }
 
 
+QString Alert::completeAudio() const
+{
+  return alert_complete_audio;
+}
+
+
 QString Alert::text() const
 {
   return alert_text;
@@ -316,6 +322,9 @@ bool Alert::load(const QString &pathname)
   }
   if(values.find("EAS.AUDIO.FILE.ALERT")!=values.constEnd()) {
     alert_message_audio=values.find("EAS.AUDIO.FILE.ALERT").value().trimmed();
+  }
+  if(values.find("EAS.AUDIO.FILE")!=values.constEnd()) {
+    alert_complete_audio=values.find("EAS.AUDIO.FILE").value().trimmed();
   }
   if(values.find("EAS.TRANSLATION")!=values.constEnd()) {
     alert_text=values.find("EAS.TRANSLATION").value();
