@@ -70,11 +70,6 @@ AQ_FIND_QT6(QT6GUI,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 GUI compon
 PKG_CHECK_MODULES(RIVWEBCAPI,rivwebcapi,[],[AC_MSG_ERROR([*** Rivendell C API not found ***])])
 
 #
-# Check for Secret Rabbit Code
-#
-PKG_CHECK_MODULES(SRC,samplerate,[],[AC_MSG_ERROR([*** Libsamplerate not found ***])])
-
-#
 # Check for Python
 #
 AM_PATH_PYTHON([3])
@@ -140,8 +135,8 @@ chmod 755 helpers/install_python.sh
 #
 # Link Common Elements
 #
-./link_common.sh easp
-./link_common.sh tests
+./link_common.sh easp link
+./link_common.sh tests link
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)

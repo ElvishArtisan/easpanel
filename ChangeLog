@@ -194,3 +194,5 @@
 	* Added 'compile' to the 'MAINTAINERCLEANFILES' rule.
 2026-03-11 Fred Gleason <fredg@paravelsystems.com>
 	* Added support for building via CMake.
+2026-03-11 Fred Gleason <fredg@paravelsystems.com>
+	* Removed Secret Rabbit Code dependency.

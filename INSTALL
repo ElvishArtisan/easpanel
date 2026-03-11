@@ -7,12 +7,9 @@ system before building GlassCoder:
 
 Qt6 Toolkit, v6.4 or better (http://www.qt.io/).
 
-Secret Rabbit Code - audio sample rate convert library.
-                     http://www.mega-nerd.com/SRC/
-
 DOCUMENTATION
 -------------
-The eas_panel man pages are written in XML-DocBook5.  Pre-generated troff
+The EasPanel man pages are written in XML-DocBook5.  Pre-generated troff
 versions are included in the source tarball, so special tools will not
 normally be required to install them.  However, if you need to rebuild them
 (either because you've modified the DocBook sources or are installing from
