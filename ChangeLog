@@ -190,3 +190,5 @@
 2026-03-07 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in easp(1) that could cause failure to fully clean
 	up EasDataDirectory after processing an event.
+2026-03-11 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'compile' to the 'MAINTAINERCLEANFILES' rule.
