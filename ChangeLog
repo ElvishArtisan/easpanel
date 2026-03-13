@@ -205,3 +205,6 @@
 	* Downgraded Qt6 dependency to Qt5.
 2026-03-13 Fred Gleason <fredg@paravelsystems.com>
 	* Removed CMake build system.
+2026-03-13 Fred Gleason <fredg@paravelsystems.com>
+	* Changed name of the output flatpak bundle from 'easpanel.flatpak'
+	to 'com.paravelsystems.easpanel.flatpak'.
