@@ -32,18 +32,20 @@ bin_PROGRAMS = easp
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
                     alerttextedit.cpp alerttextedit.h\
                     easp.cpp easp.h\
-                    modebutton.cpp modebutton.h
+                    modebutton.cpp modebutton.h\
+                    alert.cpp alert.h\
+	            cmdswitch.cpp cmdswitch.h\
+	            config.cpp config.h\
+	            profile.cpp profile.h
 
-nodist_easp_SOURCES = alert.cpp alert.h\
-                      cmdswitch.cpp cmdswitch.h\
-                      config.cpp config.h\
-                      moc_alertbutton.cpp\
+nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_alerttextedit.cpp\
                       moc_easp.cpp\
-                      moc_modebutton.cpp\
-                      profile.cpp profile.h
+                      moc_modebutton.cpp
 
 easp_LDADD = @QT6GUI_LIBS@ @RIVWEBCAPI_LIBS@
+
+EXTRA_DIST = CMakeLists.txt
 
 CLEANFILES = *~\
              moc_*\

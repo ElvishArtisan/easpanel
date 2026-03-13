@@ -1,10 +1,13 @@
 ## Makefile.am
 ##
-##   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
+## Makefile.am for easpanel deps/
+##
+##   (C) Copyright 2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
-##   it under the terms of the GNU General Public License version 2 as
-##   published by the Free Software Foundation.
+##   it under the terms of the GNU General Public License as
+##   published by the Free Software Foundation; either version 2 of
+##   the License, or (at your option) any later version.
 ##
 ##   This program is distributed in the hope that it will be useful,
 ##   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,21 +20,18 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-install-exec-am:	
-	mkdir -p ${DESTDIR}@prefix@/share/applications
-	cp easpanel.desktop ${DESTDIR}@prefix@/share/applications/
-
-uninstall:	
-	rm -f ${DESTDIR}@prefix@/share/applications/easpanel.desktop
-
-EXTRA_DIST = CMakeLists.txt\
-             easpanel.desktop
+EXTRA_DIST = rivwebcapi-4.4.1int3.tar.gz
 
 CLEANFILES = *~\
              *.idb\
              *ilk\
              *.obj\
              *.pdb\
+             *.qm\
              moc_*
+
 MAINTAINERCLEANFILES = *~\
-                       Makefile.in
+                       aclocal.m4\
+                       configure\
+                       Makefile.in\
+                       moc_*

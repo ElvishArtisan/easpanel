@@ -115,6 +115,7 @@ fi
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    deps/Makefile \
     helpers/Makefile \
     helpers/install_python.sh \
     icons/Makefile \

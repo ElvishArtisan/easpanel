@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -35,7 +35,8 @@ uninstall-local:
 	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/easpanel.png
 
 
-EXTRA_DIST = easpanel-16x16.png\
+EXTRA_DIST = CMakeLists.txt\
+             easpanel-16x16.png\
              easpanel-22x22.png\
              easpanel-22x22.xpm\
              easpanel-32x32.png\

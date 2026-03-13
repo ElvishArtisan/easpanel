@@ -196,3 +196,5 @@
 	* Added support for building via CMake.
 2026-03-11 Fred Gleason <fredg@paravelsystems.com>
 	* Removed Secret Rabbit Code dependency.
+2026-03-13 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'make flatpak' build target.

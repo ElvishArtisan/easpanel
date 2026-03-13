@@ -14,9 +14,12 @@ target_link_libraries(easp PRIVATE
 	Qt6::Network
 	Qt6::Widgets
 	rivwebcapi
+	curl
 )
 
 set_target_properties(easp PROPERTIES
 	WIN32_EXECUTABLE ON
 	MACOSX_BUNDLE ON
 )
+
+install(TARGETS easp DESTINATION bin)

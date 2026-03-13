@@ -29,15 +29,18 @@ moc_%.cpp:	%.h
 
 noinst_PROGRAMS = test_alert_manifest
 
-dist_test_alert_manifest_SOURCES = test_alert_manifest.cpp test_alert_manifest.h
+dist_test_alert_manifest_SOURCES = alert.cpp alert.h\
+                                   cmdswitch.cpp cmdswitch.h\
+                                   config.cpp config.h\
+                                   profile.cpp profile.h\
+                                   test_alert_manifest.cpp test_alert_manifest.h
 
 nodist_test_alert_manifest_SOURCES = alert.cpp alert.h\
-                                     cmdswitch.cpp cmdswitch.h\
-                                     config.cpp config.h\
-                                     moc_test_alert_manifest.cpp\
-                                     profile.cpp profile.h
+                                     moc_test_alert_manifest.cpp
 
 test_alert_manifest_LDADD = @QT6GUI_LIBS@ @RIVWEBCAPI_LIBS@
+
+EXTRA_DIST = CMakeLists.txt
 
 CLEANFILES = *~\
              moc_*\
