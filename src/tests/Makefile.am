@@ -20,11 +20,11 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++17 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT6GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++14 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@QT6GUI_MOC@ $< -o $@
+	@QT5_MOC@ $< -o $@
 
 
 noinst_PROGRAMS = test_alert_manifest
@@ -35,10 +35,9 @@ dist_test_alert_manifest_SOURCES = alert.cpp alert.h\
                                    profile.cpp profile.h\
                                    test_alert_manifest.cpp test_alert_manifest.h
 
-nodist_test_alert_manifest_SOURCES = alert.cpp alert.h\
-                                     moc_test_alert_manifest.cpp
+nodist_test_alert_manifest_SOURCES = moc_test_alert_manifest.cpp
 
-test_alert_manifest_LDADD = @QT6GUI_LIBS@ @RIVWEBCAPI_LIBS@
+test_alert_manifest_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
 EXTRA_DIST = CMakeLists.txt
 

@@ -227,8 +227,8 @@ void AlertButton::closeClickedData()
 
 void AlertButton::mouseMoveEvent(QMouseEvent *e)
 {
-  if((e->position().x()<0)||(e->position().x()>=width())||
-     (e->position().y()<0)||(e->position().y()>=height())) {
+  if((e->x()<0)||(e->x()>=width())||
+     (e->y()<0)||(e->y()>=height())) {
     alert_mouse_pressed=false;
   }
 }

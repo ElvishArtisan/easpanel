@@ -1,6 +1,6 @@
 id: com.paravelsystems.easpanel
 runtime: org.kde.Platform
-runtime-version: '6.10'
+runtime-version: '5.15-25.08'
 sdk: org.kde.Sdk
 command: easp
 finish-args:
@@ -17,7 +17,7 @@ modules:
       - type: archive
         path: deps/rivwebcapi-4.4.1int3.tar.gz
   - name: easp
-    buildsystem: cmake-ninja
+    buildsystem: autotools
     build-commands:
     sources:
       - type: archive

@@ -20,11 +20,11 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++17 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT6GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++14 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@QT6GUI_MOC@ $< -o $@
+	@QT5_MOC@ $< -o $@
 
 
 bin_PROGRAMS = easp
@@ -43,7 +43,7 @@ nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_easp.cpp\
                       moc_modebutton.cpp
 
-easp_LDADD = @QT6GUI_LIBS@ @RIVWEBCAPI_LIBS@
+easp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
 EXTRA_DIST = CMakeLists.txt
 

@@ -62,7 +62,9 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt (Mandatory)
 #
-AQ_FIND_QT6(QT6GUI,Core Gui Widgets Network,[],[AC_MSG_ERROR([*** Qt6 GUI components not found ***])])
+PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
+AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
+AC_SUBST(QT5_MOC,$MOC_NAME)
 
 #
 # Check for Rivendell C API (Mandatory)

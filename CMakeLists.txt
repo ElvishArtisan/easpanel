@@ -5,7 +5,7 @@ project(easpanel LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Widgets Network)
+find_package(Qt5 REQUIRED COMPONENTS Gui Widgets Network)
 find_package(PkgConfig REQUIRED)
 
 qt_standard_project_setup()
