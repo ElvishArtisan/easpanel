@@ -1,0 +1,24 @@
+id: com.paravelsystems.easpanel
+runtime: org.kde.Platform
+runtime-version: '5.15-25.08'
+sdk: org.kde.Sdk
+command: easp
+finish-args:
+  - --filesystem=host-etc:ro
+  - --filesystem=/var/eas:create
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+modules:
+  - name: rivwebcapi
+    buildsystem: autotools
+    build-commands:
+    sources:
+      - type: archive
+        path: deps/rivwebcapi-4.4.1int3.tar.gz
+  - name: easp
+    buildsystem: autotools
+    build-commands:
+    sources:
+      - type: archive
+        path: easpanel-1.0.0rc0.tar.gz

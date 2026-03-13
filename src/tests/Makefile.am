@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
 ## Makefile for tests
 ##
-## (C) Copyright 2020 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2020-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,26 +20,24 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT4_CFLAGS@ @RIVWEBCAPI_CFLAGS@
-MOC = @QT4_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++11 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	@QT5_MOC@ $< -o $@
 
 
 noinst_PROGRAMS = test_alert_manifest
 
-dist_test_alert_manifest_SOURCES = test_alert_manifest.cpp test_alert_manifest.h
+dist_test_alert_manifest_SOURCES = alert.cpp alert.h\
+                                   cmdswitch.cpp cmdswitch.h\
+                                   config.cpp config.h\
+                                   profile.cpp profile.h\
+                                   test_alert_manifest.cpp test_alert_manifest.h
 
-nodist_test_alert_manifest_SOURCES = alert.cpp alert.h\
-                                     cmdswitch.cpp cmdswitch.h\
-                                     config.cpp config.h\
-                                     moc_test_alert_manifest.cpp\
-                                     profile.cpp profile.h
+nodist_test_alert_manifest_SOURCES = moc_test_alert_manifest.cpp
 
-test_alert_manifest_LDADD = @GUILIBS@ @RIVWEBCAPI_LIBS@
-test_alert_manifest_LDFLAGS = @GUIFLAGS@
+test_alert_manifest_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
 CLEANFILES = *~\
              moc_*\

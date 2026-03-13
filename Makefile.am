@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
-## Top level automake.am
+## Top level Makefile.am
 ##
-##   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -25,10 +25,20 @@
 
 SUBDIRS = helpers\
           conf\
+          deps\
           icons\
           snd\
           src\
           xdg
+
+maintainer-clean-local:
+	rm -rf .flatpak-builder
+	rm -rf flatpak
+	rm -rf m4
+	rm -rf repo
+
+flatpak:	dist
+	./make_flatpak.sh
 
 rpm:	dist
 	cp easpanel-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
@@ -40,13 +50,14 @@ rpm:	dist
 
 EXTRA_DIST = easpanel.spec.in\
              autogen.sh\
-             get_distro.sh\
+             get_distro.pl\
              get_target.sh\
              link_common.sh\
              PACKAGE_VERSION
 
 CLEANFILES = *~\
              *.deb\
+             *.flatpak\
              *.mo\
              *.rpm\
              *.tar.gz\

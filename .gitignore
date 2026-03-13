@@ -1,9 +1,11 @@
 *~
+*.flatpak
+*.flatpak-builder
 *.o
 *.rlm
 *.rpm
 *.spec
-*.tar.gz
+easpanel*.tar.gz
 .deps
 aclocal.m4
 autom4te.cache
@@ -18,6 +20,7 @@ Makefile
 Makefile.in
 missing
 moc_*
+repo
 src/easp/alert.cpp
 src/easp/alert.h
 src/easp/cmdswitch.cpp

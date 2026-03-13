@@ -46,16 +46,20 @@ MainWidget::MainWidget(QWidget *parent)
   main_raise_on_alert=true;
   setFocusPolicy(Qt::StrongFocus);
 
-  CmdSwitch *cmd=new CmdSwitch("easp",EASP_USAGE);
-  for(unsigned i=0;i<cmd->keys();i++) {
+  CmdSwitch *cmd=new CmdSwitch("easp",VERSION,EASP_USAGE);
+  for(int i=0;i<cmd->keys();i++) {
+    if(cmd->key(i)=="-d") {
+      openlog("easp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
     if(cmd->key(i)=="--no-raise") {
       main_raise_on_alert=false;
       cmd->setProcessed(i,true);
     }
     if(!cmd->processed(i)) {
-      QMessageBox::critical(this,"EASPanel - "+tr("Unknown Optionm"),
+      QMessageBox::critical(this,"EASPanel - "+tr("Unknown Option"),
 			    tr("Unknown command-line option:")+
-			    "\""+cmd->key(i)+"\".");
+			    " \""+cmd->key(i)+"\".");
       exit(1);
     }
   }
@@ -75,11 +79,11 @@ MainWidget::MainWidget(QWidget *parent)
   // RML Socket
   //
   main_rml_socket=new QUdpSocket(this);
-  if(!main_rml_socket->bind(main_config->pathsRlmReceivePort())) {
+  if(!main_rml_socket->bind(QHostAddress::AnyIPv4,main_config->pathsRlmReceivePort())) {
     QMessageBox::critical(this,"EAS Panel",
 			  tr("Unable to bind UDP port")+
-			  QString().
-			  sprintf(" %u!",main_config->pathsRlmReceivePort()));
+			  QString::
+			  asprintf(" %u!",main_config->pathsRlmReceivePort()));
     exit(1);
   }
   connect(main_rml_socket,SIGNAL(readyRead()),this,SLOT(rlmReadyReadData()));
@@ -222,7 +226,7 @@ void MainWidget::liveSendData()
     // Load from the bottom up
     //
     if(main_config->liveassistOutroCart(alert->easType())!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Outro Cart
 				1,
 				main_config->
 				liveassistOutroCart(alert->easType()),
@@ -233,25 +237,25 @@ void MainWidget::liveSendData()
       button->setLastCart(alert->eomCart());
     }
 
-    SendRml(QString().sprintf("PX %d %d %d %s!",    // EOM
+    SendRml(QString::asprintf("PX %d %d %d %s!",    // EOM
 			      1,
 			      alert->eomCart(),offset,
 			      eom_transition.toUtf8().constData()));
     button->setLastCart(alert->eomCart());
 
     if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
     }
 
-    SendRml(QString().sprintf("PX %d %d %d ",    // Header
+    SendRml(QString::asprintf("PX %d %d %d ",    // Header
 			      1,
 			      alert->headerCart(),offset)+
 	    eom_transition+"!");
 
     if(main_config->rivendellLiveassistFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d %s!",    // Intro Cart
+      SendRml(QString::asprintf("PX %d %d %d %s!",    // Intro Cart
 				1,
 				main_config->
 				liveassistIntroCart(alert->easType()),
@@ -278,7 +282,7 @@ void MainWidget::autoSendData(int id)
     // Load from the bottom up
     //
     if(main_config->outroCart(alert->easType())!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Outro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Outro Cart
 				1,
 				main_config->outroCart(alert->easType()),
 				offset));
@@ -288,28 +292,28 @@ void MainWidget::autoSendData(int id)
       button->setLastCart(alert->eomCart());
     }
 
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // EOM
+    SendRml(QString::asprintf("PX %d %d %d PLAY!",    // EOM
 			      1,
 			      alert->eomCart(),offset));
 
     if(alert->messageCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Message
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Message
 				1,
 				alert->messageCart(),offset));
     }
 
     if(alert->attentionCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Attention Signal
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Attention Signal
 				1,
 				alert->attentionCart(),offset));
     }
 
-    SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Header
+    SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Header
 			      1,
 			      alert->headerCart(),offset));
 
     if(main_config->rivendellFriendlyIntroCart()!=0) {
-      SendRml(QString().sprintf("PX %d %d %d PLAY!",    // Intro Cart
+      SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Intro Cart
 				1,
 				main_config->introCart(alert->easType()),
 				offset));
@@ -413,11 +417,14 @@ void MainWidget::alertClosedData(int id)
     if(!alert->eomAudio().isEmpty()) {
       RetireAlertFile(alert->eomAudio());
     }
+    if(!alert->completeAudio().isEmpty()) {
+      RetireAlertFile(alert->completeAudio());
+    }
     delete alert;
     main_alerts.remove(filename);
     main_alert_buttons[id]->setAlert(NULL);
     if(id==main_selected_alert_id) {
-      main_title_label->setText(tr("Alert")+QString().sprintf(" %d",id+1));
+      main_title_label->setText(tr("Alert")+QString::asprintf(" %d",id+1));
       main_datetime_label->clear();
       main_text_text->clear();
     }
@@ -631,13 +638,13 @@ void MainWidget::DisplayAlertButton(AlertButton *button)
   Alert *alert=button->alert();
   if(alert==NULL) {
     main_title_label->
-      setText(tr("Alert")+QString().sprintf(" %d",button->id()+1));
+      setText(tr("Alert")+QString::asprintf(" %d",button->id()+1));
     main_datetime_label->clear();
     main_text_text->clear();
   }
   else {
     main_title_label->
-      setText(tr("Alert")+QString().sprintf(" %d - ",button->id()+1)+
+      setText(tr("Alert")+QString::asprintf(" %d - ",button->id()+1)+
 	      alert->title());
     main_datetime_label->
       setText(tr("Issued:")+" "+
@@ -725,10 +732,13 @@ void MainWidget::RetireAlertFile(const QString &filename) const
 {
   if(main_config->pathsEasBackupDirectory().isEmpty()) {
     unlink((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8());
+    syslog(LOG_DEBUG,"deleted alert file %s",filename.toUtf8().constData());
   }
   else {
     rename((main_config->pathsEasDataDirectory()+"/"+filename).toUtf8(),
 	   (main_config->pathsEasBackupDirectory()+"/"+filename).toUtf8());
+    syslog(LOG_DEBUG,"moved alert file %s to archive",
+	   filename.toUtf8().constData());
   }
 }
 

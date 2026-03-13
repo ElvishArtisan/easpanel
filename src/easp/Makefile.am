@@ -1,8 +1,8 @@
-## automake.am
+## Makefile.am
 ##
 ## Makefile for easp(1)
 ##
-## (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+## (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,12 +20,11 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT4_CFLAGS@ @RIVWEBCAPI_CFLAGS@
-MOC = @QT4_MOC@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++11 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
-	@MOC@ $< -o $@
+	@QT5_MOC@ $< -o $@
 
 
 bin_PROGRAMS = easp
@@ -33,19 +32,18 @@ bin_PROGRAMS = easp
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
                     alerttextedit.cpp alerttextedit.h\
                     easp.cpp easp.h\
-                    modebutton.cpp modebutton.h
+                    modebutton.cpp modebutton.h\
+                    alert.cpp alert.h\
+	            cmdswitch.cpp cmdswitch.h\
+	            config.cpp config.h\
+	            profile.cpp profile.h
 
-nodist_easp_SOURCES = alert.cpp alert.h\
-                      cmdswitch.cpp cmdswitch.h\
-                      config.cpp config.h\
-                      moc_alertbutton.cpp\
+nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_alerttextedit.cpp\
                       moc_easp.cpp\
-                      moc_modebutton.cpp\
-                      profile.cpp profile.h
+                      moc_modebutton.cpp
 
-easp_LDADD = @GUILIBS@ @RIVWEBCAPI_LIBS@
-easp_LDFLAGS = @GUIFLAGS@
+easp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
 CLEANFILES = *~\
              moc_*\

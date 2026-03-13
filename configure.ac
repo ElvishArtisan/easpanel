@@ -4,7 +4,7 @@ dnl Autoconf configuration
 dnl
 dnl Use autoconf to process this into a configure script
 dnl
-dnl   (C) Copyright 2018-2021 Fred Gleason <fredg@paravelsystems.com>
+dnl   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 dnl
 dnl   This program is free software; you can redistribute it and/or modify
 dnl   it under the terms of the GNU General Public License version 2 as
@@ -62,9 +62,9 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 #
 # Check for Qt (Mandatory)
 #
-PKG_CHECK_MODULES(QT4,QtGui QtCore QtNetwork,[],[AC_MSG_ERROR([*** Qt4 not found ***])])
-AC_CHECK_PROG(MOC_NAME,moc-qt4,[moc-qt4],[moc])
-AC_SUBST(MOC,$MOC_NAME)
+PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
+AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
+AC_SUBST(QT5_MOC,$MOC_NAME)
 
 #
 # Check for Rivendell C API (Mandatory)
@@ -98,11 +98,6 @@ AC_SUBST(ARCH,$ar_gcc_arch)
 AR_GET_DISTRO()
 AC_SUBST(DISTRO,$ar_gcc_distro)
 
-AC_SUBST(SIRLIBS,"-lsamplerate -ldl -lQtCore -lQtNetwork")
-AC_SUBST(SIRFLAGS,"")
-AC_SUBST(GUILIBS,"-lsamplerate -lQtCore -lQtNetwork -lQtGui")
-AC_SUBST(GUIFLAGS,"")
-
 #
 # Configure RPM Build
 #
@@ -122,6 +117,7 @@ fi
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    deps/Makefile \
     helpers/Makefile \
     helpers/install_python.sh \
     icons/Makefile \
@@ -142,8 +138,8 @@ chmod 755 helpers/install_python.sh
 #
 # Link Common Elements
 #
-./link_common.sh easp
-./link_common.sh tests
+./link_common.sh easp link
+./link_common.sh tests link
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Now enter 'make' to build the software.)
