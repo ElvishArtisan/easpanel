@@ -24,8 +24,7 @@ install-exec-am:
 uninstall:	
 	rm -f ${DESTDIR}@prefix@/share/applications/easpanel.desktop
 
-EXTRA_DIST = CMakeLists.txt\
-             easpanel.desktop
+EXTRA_DIST = easpanel.desktop
 
 CLEANFILES = *~\
              *.idb\

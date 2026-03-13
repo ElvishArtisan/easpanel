@@ -45,8 +45,6 @@ nodist_easp_SOURCES = moc_alertbutton.cpp\
 
 easp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
-EXTRA_DIST = CMakeLists.txt
-
 CLEANFILES = *~\
              moc_*\
              *.obj\

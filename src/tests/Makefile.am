@@ -39,8 +39,6 @@ nodist_test_alert_manifest_SOURCES = moc_test_alert_manifest.cpp
 
 test_alert_manifest_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
-EXTRA_DIST = CMakeLists.txt
-
 CLEANFILES = *~\
              moc_*\
              *.obj\

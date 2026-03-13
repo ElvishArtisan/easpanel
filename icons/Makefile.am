@@ -35,8 +35,7 @@ uninstall-local:
 	rm -f $(DESTDIR)@prefix@/share/icons/hicolor/48x48/apps/easpanel.png
 
 
-EXTRA_DIST = CMakeLists.txt\
-             easpanel-16x16.png\
+EXTRA_DIST = easpanel-16x16.png\
              easpanel-22x22.png\
              easpanel-22x22.xpm\
              easpanel-32x32.png\

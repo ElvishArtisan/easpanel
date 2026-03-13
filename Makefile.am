@@ -33,7 +33,6 @@ SUBDIRS = helpers\
 
 maintainer-clean-local:
 	rm -rf .flatpak-builder
-	rm -rf build
 	rm -rf flatpak
 	rm -rf m4
 	rm -rf repo
@@ -51,7 +50,6 @@ rpm:	dist
 
 EXTRA_DIST = easpanel.spec.in\
              autogen.sh\
-             CMakeLists.txt\
              get_distro.pl\
              get_target.sh\
              link_common.sh\
