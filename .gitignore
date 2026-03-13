@@ -5,7 +5,7 @@
 *.rlm
 *.rpm
 *.spec
-*.tar.gz
+easpanel*.tar.gz
 .deps
 aclocal.m4
 autom4te.cache
