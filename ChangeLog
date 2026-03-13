@@ -208,3 +208,5 @@
 2026-03-13 Fred Gleason <fredg@paravelsystems.com>
 	* Changed name of the output flatpak bundle from 'easpanel.flatpak'
 	to 'com.paravelsystems.easpanel.flatpak'.
+2026-03-13 Fred Gleason <fredg@paravelsystems.com>
+	* Changed the C++ compatibility level fromC++14 to C++11.

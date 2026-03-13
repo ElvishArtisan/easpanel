@@ -20,7 +20,7 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++14 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
+AM_CPPFLAGS = -Wall -DPREFIX=\"$(prefix)\" -std=c++11 -fPIC -DARCH=\"@ARCH@\" -Wno-strict-aliasing @QT5GUI_CFLAGS@ @RIVWEBCAPI_CFLAGS@
 
 # The dependency for qt's Meta Object Compiler (moc)
 moc_%.cpp:	%.h
