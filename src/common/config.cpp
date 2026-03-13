@@ -251,7 +251,9 @@ bool Config::load()
   Profile *p=new Profile();
 
   ret=p->setSource(CONFIG_FILE_NAME);
-
+  if(!ret) {
+    ret=p->setSource(CONFIG_FLATPAK_FILE_NAME);
+  }
   conf_rivendell_host_address=
     QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
   conf_rivendell_alert_audio_group=

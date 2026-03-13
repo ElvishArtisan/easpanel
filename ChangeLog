@@ -198,3 +198,6 @@
 	* Removed Secret Rabbit Code dependency.
 2026-03-13 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make flatpak' build target.
+2026-03-13 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a regression in easp(1) that caused it to fail to read
+	easpanel.conf(5) when built as a a flatpak.

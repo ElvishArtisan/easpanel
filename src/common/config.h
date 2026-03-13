@@ -27,6 +27,7 @@
 #include <QStringList>
 
 #define CONFIG_FILE_NAME QString("/etc/easpanel.conf")
+#define CONFIG_FLATPAK_FILE_NAME QString("/run/host/etc/easpanel.conf")
 #define CONFIG_RML_PORT 5859
 
 class Config
