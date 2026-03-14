@@ -214,3 +214,7 @@
 	* Changed the C++ compatibility level fromC++14 to C++11.
 2026-03-14 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make flatpak-post' target.
+2026-03-14 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in the 'make flatpak-post' target that caused
+	mirrored deletes to fail to work.
+

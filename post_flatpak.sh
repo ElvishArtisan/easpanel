@@ -28,4 +28,4 @@ flatpak build-export \
 #
 # Post it
 #
-rsync -rptgoDv --copy-links --delete $FLATPAK_REPO_PATH/* $FLATPAK_POST_RSYNC
+rsync -rptgoDv --copy-links --delete $FLATPAK_REPO_PATH/ $FLATPAK_POST_RSYNC
