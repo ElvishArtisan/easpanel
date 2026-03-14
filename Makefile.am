@@ -40,6 +40,9 @@ maintainer-clean-local:
 flatpak:	dist
 	./make_flatpak.sh
 
+flatpak-post:
+	./post_flatpak.sh
+
 rpm:	dist
 	cp easpanel-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
 	$(RPMBUILD) -ba --target $(ARCH)-$(VENDOR)-linux easpanel.spec
@@ -53,7 +56,9 @@ EXTRA_DIST = easpanel.spec.in\
              get_distro.pl\
              get_target.sh\
              link_common.sh\
-             PACKAGE_VERSION
+             make_flatpak.sh\
+             PACKAGE_VERSION\
+             post_flatpak.sh
 
 CLEANFILES = *~\
              *.deb\

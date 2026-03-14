@@ -212,3 +212,5 @@
 	to 'com.paravelsystems.easpanel.flatpak'.
 2026-03-13 Fred Gleason <fredg@paravelsystems.com>
 	* Changed the C++ compatibility level fromC++14 to C++11.
+2026-03-14 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'make flatpak-post' target.
