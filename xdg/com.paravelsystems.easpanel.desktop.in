@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Terminal=false
-Categories=GNOME;GTK;Utility;Calculator;
+Categories=Qt;Audio;News;Monitor
 Name=EASPanel
 GenericName=Emergency Alert System
 Exec=@prefix@/bin/easp
