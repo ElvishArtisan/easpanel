@@ -217,4 +217,6 @@
 2026-03-14 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in the 'make flatpak-post' target that caused
 	mirrored deletes to fail to work.
-
+2026-03-15 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in the desktop entry file that prevented the menu
+	entry for easp(1) from appearing when installed as a flatpak.

@@ -19,12 +19,12 @@
 
 install-exec-am:	
 	mkdir -p ${DESTDIR}@prefix@/share/applications
-	cp easpanel.desktop ${DESTDIR}@prefix@/share/applications/
+	cp com.paravelsystems.easpanel.desktop ${DESTDIR}@prefix@/share/applications/
 
 uninstall:	
-	rm -f ${DESTDIR}@prefix@/share/applications/easpanel.desktop
+	rm -f ${DESTDIR}@prefix@/share/applications/com.paravelsystems.easpanel.desktop
 
-EXTRA_DIST = easpanel.desktop
+EXTRA_DIST = com.paravelsystems.easpanel.desktop.in
 
 CLEANFILES = *~\
              *.idb\
@@ -32,5 +32,6 @@ CLEANFILES = *~\
              *.obj\
              *.pdb\
              moc_*
+DISTCLEANFILES = *.desktop
 MAINTAINERCLEANFILES = *~\
                        Makefile.in

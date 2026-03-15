@@ -127,6 +127,7 @@ AC_CONFIG_FILES([ \
     src/easp/Makefile \
     src/pypad_easpanel/Makefile \
     src/tests/Makefile \
+    xdg/com.paravelsystems.easpanel.desktop \
     xdg/Makefile \
     easpanel.spec \
     Makefile \
