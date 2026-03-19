@@ -222,3 +222,6 @@
 	entry for easp(1) from appearing when installed as a flatpak.
 2026-03-15 Fred Gleason <fredg@paravelsystems.com>
 	* Tweaked the 'Categories=' directive in the menu entry for easp(1).
+2026-03-19 Fred Gleason <fredg@paravelsystems.com>
+	* Added an easbelt(8) command.
+	* Added an 'easbelt' Systemd service.

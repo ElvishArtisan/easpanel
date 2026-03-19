@@ -63,6 +63,7 @@ AC_ARG_ENABLE(docbook,[  --disable-docbook       disable building of documentati
 # Check for Qt (Mandatory)
 #
 PKG_CHECK_MODULES(QT5GUI,Qt5Core Qt5Gui Qt5Widgets Qt5Network,[],[AC_MSG_ERROR([*** Qt5 GUI components not found ***])])
+PKG_CHECK_MODULES(QT5CLI,Qt5Core Qt5Network,[],[AC_MSG_ERROR([*** Qt5 CLI components not found ***])])
 AC_CHECK_PROG(MOC_NAME,moc-qt5,[moc-qt5],[moc])
 AC_SUBST(QT5_MOC,$MOC_NAME)
 
@@ -115,6 +116,18 @@ else
   AC_SUBST(VENDOR,suse)
 fi 
 
+#
+# Generated File Warnings
+#
+AC_SUBST_FILE(GENERATED_C_FILE_WARNING)
+GENERATED_C_FILE_WARNING=$srcdir/helpers/c_file_warning
+
+AC_SUBST_FILE(GENERATED_SCRIPT_FILE_WARNING)
+GENERATED_SCRIPT_FILE_WARNING=$srcdir/helpers/script_file_warning
+
+AC_SUBST_FILE(GENERATED_XML_FILE_WARNING)
+GENERATED_XML_FILE_WARNING=$srcdir/helpers/xml_file_warning
+
 AC_CONFIG_FILES([ \
     conf/Makefile \
     deps/Makefile \
@@ -124,9 +137,12 @@ AC_CONFIG_FILES([ \
     snd/Makefile \
     src/Makefile \
     src/common/Makefile \
+    src/easbelt/Makefile \
     src/easp/Makefile \
     src/pypad_easpanel/Makefile \
     src/tests/Makefile \
+    systemd/easbelt.service \
+    systemd/Makefile \
     xdg/com.paravelsystems.easpanel.desktop \
     xdg/Makefile \
     easpanel.spec \
@@ -139,6 +155,7 @@ chmod 755 helpers/install_python.sh
 #
 # Link Common Elements
 #
+./link_common.sh easbelt link
 ./link_common.sh easp link
 ./link_common.sh tests link
 

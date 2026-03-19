@@ -201,6 +201,68 @@ int Config::liveassistOutroCart(const QString &code) const
 }
 
 
+int Config::easbeltQuantity() const
+{
+  return conf_easbelt_source_files.size();
+}
+
+
+QString Config::easbeltSourceFiles(int n) const
+{
+  return conf_easbelt_source_files.at(n);
+}
+
+
+QDir *Config::easbeltSourceFilesDir(int n) const
+{
+  return conf_easbelt_source_files_dirs.at(n);
+}
+
+
+QString Config::easbeltSftpIdentity(int n) const
+{
+  return QString(CONFIG_SFTP_IDENTITY_PATH)+"/"+
+    conf_easbelt_sftp_identities.at(n);
+}
+
+
+QString Config::easbeltSftpUsername(int n) const
+{
+  return conf_easbelt_sftp_usernames.at(n);
+}
+
+
+QString Config::easbeltDestinationHostname(int src_n,int n) const
+{
+  return conf_easbelt_destination_hostnames.at(src_n).at(n);
+}
+
+
+QString Config::easbeltDestinationPath(int src_n,int n) const
+{
+  return conf_easbelt_destination_paths.at(src_n).at(n);
+}
+
+
+int Config::easbeltDestinationQuantity(int src_n) const
+{
+  return conf_easbelt_destination_hostnames.at(src_n).size();
+}
+
+
+QString Config::easbeltDestinationSftpIdentity(int src_n,int n) const
+{
+  return QString(CONFIG_SFTP_IDENTITY_PATH)+"/"+
+    conf_easbelt_destination_sftp_identities.at(src_n).at(n);
+}
+
+
+QString Config::easbeltDestinationSftpUsername(int src_n,int n) const
+{
+  return conf_easbelt_destination_sftp_usernames.at(src_n).at(n);
+}
+
+
 QString Config::dump() const
 {
   QString ret="";
@@ -240,6 +302,24 @@ QString Config::dump() const
   ret+="EasMessageExtension="+pathsEasMessageExtension()+"\n";
   ret+="RlmReceivePort="+QString::asprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
+
+  for(int i=0;i<conf_easbelt_source_files.size();i++) {
+    ret+=QString::asprintf("[Easbelt%d]\n",1+i);
+    ret+="SourceFiles="+conf_easbelt_source_files.at(i)+"\n";
+    ret+="SftpIdentity="+conf_easbelt_sftp_identities.at(i)+"\n";
+    ret+="SftpUsername="+conf_easbelt_sftp_usernames.at(i)+"\n";
+    for(int j=0;j<conf_easbelt_destination_hostnames.at(i).size();j++) {
+      ret+=QString::asprintf("Destination%dHostname=",1+j)+
+	conf_easbelt_destination_hostnames.at(i).at(j)+"\n";
+      ret+=QString::asprintf("Destination%dPath=",1+j)+
+	conf_easbelt_destination_paths.at(i).at(j)+"\n";
+      ret+=QString::asprintf("Destination%dSftpIdentity=",1+j)+
+	conf_easbelt_destination_sftp_identities.at(i).at(j)+"\n";
+      ret+=QString::asprintf("Destination%dSftpUsername=",1+j)+
+	conf_easbelt_destination_sftp_usernames.at(i).at(j)+"\n";
+    }
+    ret+="\n";
+  }
 
   return ret;
 }
@@ -367,6 +447,64 @@ bool Config::load()
       p->intValue("LiveassistOutroCarts",eas_codes[i],-1);
   }
 
+  //
+  // Eas Conveyor Belts
+  //
+  int src_count=0;
+  int dest_count=0;
+  bool ok=false;
+  QString source=QString::asprintf("Easbelt%d",1+src_count);
+  QString source_file=p->stringValue(source,"SourceFiles","",&ok);
+  while(ok) {
+    conf_easbelt_source_files.push_back(source_file);
+    QStringList f0=
+      conf_easbelt_source_files.back().split("/",Qt::KeepEmptyParts);
+    QString filter=f0.last();
+    f0.removeLast();
+    conf_easbelt_source_files_dirs.push_back(new QDir(f0.join("/")));
+    conf_easbelt_source_files_dirs.back()->
+      setFilter(QDir::Files|QDir::Readable);
+    conf_easbelt_source_files_dirs.back()->setSorting(QDir::Time);
+    conf_easbelt_source_files_dirs.back()->setNameFilters(QStringList(filter));
+    conf_easbelt_sftp_identities.
+      push_back(p->stringValue(source,"SftpIdentity"));
+    conf_easbelt_sftp_usernames.
+      push_back(p->stringValue(source,"SftpUsername"));
+    conf_easbelt_destination_hostnames.push_back(QStringList());
+    conf_easbelt_destination_paths.push_back(QStringList());
+    conf_easbelt_destination_sftp_identities.push_back(QStringList());
+    conf_easbelt_destination_sftp_usernames.push_back(QStringList());
+    QString dest_hostname=
+      p->stringValue(source,
+		     QString::asprintf("Destination%dHostname",1+dest_count),
+		     "",&ok);
+    while(ok) {
+      conf_easbelt_destination_hostnames[src_count].push_back(dest_hostname);
+      conf_easbelt_destination_paths[src_count].
+	push_back(p->stringValue(source,
+		     QString::asprintf("Destination%dPath",1+dest_count)));
+      conf_easbelt_destination_sftp_identities[src_count].
+	push_back(p->stringValue(source,
+		     QString::asprintf("Destination%dSftpIdentity",
+				       1+dest_count),
+				 conf_easbelt_sftp_identities.back()));
+      conf_easbelt_destination_sftp_usernames[src_count].
+	push_back(p->stringValue(source,
+				 QString::asprintf("Destination%dUsername",
+						   1+dest_count),
+				 conf_easbelt_sftp_usernames.back()));
+      dest_count++;
+      dest_hostname=
+	p->stringValue(source,
+		       QString::asprintf("Destination%dHostname",1+dest_count),
+		       "",&ok);
+    }
+    src_count++;
+    source=QString::asprintf("Easbelt%d",1+src_count);
+    source_file=p->stringValue(source,"SourceFiles","",&ok);
+    dest_count=0;
+  }
+
   delete p;
 
   return ret;
@@ -398,6 +536,13 @@ void Config::clear()
   conf_outro_carts.clear();
   conf_liveassist_intro_carts.clear();
   conf_liveassist_outro_carts.clear();
+  conf_easbelt_source_files.clear();
+  conf_easbelt_sftp_identities.clear();
+  conf_easbelt_sftp_usernames.clear();
+  conf_easbelt_destination_hostnames.clear();
+  conf_easbelt_destination_paths.clear();
+  conf_easbelt_destination_sftp_identities.clear();
+  conf_easbelt_destination_sftp_usernames.clear();
 }
 
 

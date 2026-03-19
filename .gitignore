@@ -1,9 +1,11 @@
 *~
+*.desktop
 *.flatpak
 *.flatpak-builder
 *.o
 *.rlm
 *.rpm
+*.service
 *.spec
 easpanel*.tar.gz
 .deps
@@ -30,6 +32,15 @@ src/easp/config.h
 src/easp/easp
 src/easp/profile.cpp
 src/easp/profile.h
+src/easbelt/alert.cpp
+src/easbelt/alert.h
+src/easbelt/cmdswitch.cpp
+src/easbelt/cmdswitch.h
+src/easbelt/config.cpp
+src/easbelt/config.h
+src/easbelt/easbelt
+src/easbelt/profile.cpp
+src/easbelt/profile.h
 src/tests/alert.cpp
 src/tests/alert.h
 src/tests/cmdswitch.cpp

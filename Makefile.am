@@ -29,6 +29,7 @@ SUBDIRS = helpers\
           icons\
           snd\
           src\
+          systemd\
           xdg
 
 maintainer-clean-local:

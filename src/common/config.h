@@ -21,6 +21,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <QDir>
 #include <QHostAddress>
 #include <QMap>
 #include <QString>
@@ -29,6 +30,7 @@
 #define CONFIG_FILE_NAME QString("/etc/easpanel.conf")
 #define CONFIG_FLATPAK_FILE_NAME QString("/run/host/etc/easpanel.conf")
 #define CONFIG_RML_PORT 5859
+#define CONFIG_SFTP_IDENTITY_PATH "/etc/pki/easpanel"
 
 class Config
 {
@@ -58,6 +60,16 @@ class Config
   int outroCart(const QString &code) const;
   int liveassistIntroCart(const QString &code) const;
   int liveassistOutroCart(const QString &code) const;
+  int easbeltQuantity() const;
+  QString easbeltSourceFiles(int n) const;
+  QDir *easbeltSourceFilesDir(int n) const;
+  QString easbeltSftpIdentity(int n) const;
+  QString easbeltSftpUsername(int n) const;
+  int easbeltDestinationQuantity(int src_n) const;
+  QString easbeltDestinationHostname(int src_n,int n) const;
+  QString easbeltDestinationPath(int src_n,int n) const;
+  QString easbeltDestinationSftpIdentity(int src_n,int n) const;
+  QString easbeltDestinationSftpUsername(int src_n,int n) const;
   QString dump() const;
   bool load();
   void clear();
@@ -92,6 +104,14 @@ class Config
   QMap<QString,int> conf_liveassist_intro_carts;
   QMap<QString,int> conf_liveassist_outro_carts;
   QString conf_user_agent;
+  QStringList conf_easbelt_source_files;
+  QList<QDir *> conf_easbelt_source_files_dirs; 
+  QStringList conf_easbelt_sftp_identities;
+  QStringList conf_easbelt_sftp_usernames;
+  QList<QStringList> conf_easbelt_destination_hostnames;
+  QList<QStringList> conf_easbelt_destination_paths;
+  QList<QStringList> conf_easbelt_destination_sftp_identities;
+  QList<QStringList> conf_easbelt_destination_sftp_usernames;
 };
 
 

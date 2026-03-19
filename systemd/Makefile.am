@@ -1,10 +1,8 @@
 ## Makefile.am
 ##
-## helpers/ Makefile.am for EASPanel
-##
-## (C) Copyright 2020-2026 Fred Gleason <fredg@paravelsystems.com>
-##
 ## Use automake to process this into a Makefile.in
+##
+##   (C) Copyright 2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,23 +18,21 @@
 ##   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ##
 
+install-exec-local:	
+	mkdir -p $(DESTDIR)/lib/systemd/system
+	cp easbelt.service $(DESTDIR)/lib/systemd/system/easbelt.service
+	./daemon-reload.sh
 
-AM_CFLAGS = -Wall
+uninstall-local:	
+	rm -f $(DESTDIR)/lib/systemd/system/easbelt.service
+	./daemon-reload.sh
 
-EXTRA_DIST = c_file_warning\
-             install_python.sh.in\
-             script_file_warning\
-             xml_file_warning
+EXTRA_DIST = daemon-reload.sh\
+             easbelt.service.in
 
-CLEANFILES = *~\
-             *.tar.gz\
-             moc_*
+CLEANFILES = *~
 
-DISTCLEANFILES = install_python.sh
+DISTCLEANFILES = Makefile.in\
+                 *.service
 
-MAINTAINERCLEANFILES = *~\
-                       *.tar.gz\
-                       aclocal.m4\
-                       configure\
-                       Makefile.in\
-                       moc_*
+MAINTAINERCLEANFILES = *~
