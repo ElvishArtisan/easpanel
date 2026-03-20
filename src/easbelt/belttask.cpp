@@ -29,7 +29,7 @@ BeltTask::BeltTask(QProcess *proc,int src_n,int dst_n,
   d_source_filename=src_filename;
   d_command=command;
   d_log_id=QString::asprintf("%d:%d:",1+src_n,1+dst_n)+
-    src_filename.split("/",Qt::KeepEmptyParts).last();
+    src_filename.split("/",QString::KeepEmptyParts).last();
 }
 
 

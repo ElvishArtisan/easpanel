@@ -91,7 +91,7 @@ void MainObject::taskData()
 {
   for(int i=0;i<d_config->easbeltQuantity();i++) {
     QStringList f0=
-      d_config->easbeltSourceFiles(i).split("/",Qt::KeepEmptyParts);
+      d_config->easbeltSourceFiles(i).split("/",QString::KeepEmptyParts);
     QString filter=f0.last();
     f0.removeLast();
     QDir dir(f0.join("/"));

@@ -458,7 +458,7 @@ bool Config::load()
   while(ok) {
     conf_easbelt_source_files.push_back(source_file);
     QStringList f0=
-      conf_easbelt_source_files.back().split("/",Qt::KeepEmptyParts);
+      conf_easbelt_source_files.back().split("/",QString::KeepEmptyParts);
     QString filter=f0.last();
     f0.removeLast();
     conf_easbelt_source_files_dirs.push_back(new QDir(f0.join("/")));
