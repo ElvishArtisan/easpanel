@@ -18,3 +18,9 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Conveyor belt service for distributing files
  This package provides the easbelt(8) service, which can be used to
  automate the distribution of files in a one-to-many fashion.
+
+Package: easpanel-pypad
+Architecture: all
+Depends: python3, rivendell
+Description: Rivendell PyPAD Script for EASPanel
+ This package provides a Rivendell PyPAD Script for EASPanel.

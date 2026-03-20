@@ -232,3 +232,5 @@
 	* Fixed regressions that caused the build to break on CentOS 7.
 2026-03-20 Fred Gleason <fredg@paravelsystems.com>
 	* Added an 'easpanel-belt' RPM package.
+2026-03-20 Fred Gleason <fredg@paravelsystems.com>
+	* Added an 'easpanel-pypad' DEB package.

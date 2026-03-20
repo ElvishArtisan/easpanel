@@ -42,6 +42,12 @@ binary:
 	mkdir -p debian/easpanel-belt/usr/share/easpanel-belt
 	mv conf/easpanel-sample.conf debian/easpanel-belt/usr/share/easpanel-belt/
 
+#
+# easpanel-pypad
+#
+	mkdir -p debian/easpanel-pypad/usr/lib/rivendell/pypad
+	mv debian/tmp/usr/lib/rivendell/pypad/* debian/easpanel-pypad/usr/lib/rivendell/pypad/
+
 	dh_strip_nondeterminism
 	dh_compress
 	dh_fixperms
