@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: easpanel
+Upstream-Contact: fredg@paravelsystems.com
+
+Files: *
+Copyright: 2015-2021 Fred Gleason <fredg@paravelsystems.com>
+License: Proprietary
+ All Rights Reserved.

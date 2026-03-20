@@ -24,6 +24,7 @@
 #endif
 
 SUBDIRS = helpers\
+          debian\
           conf\
           deps\
           icons\
@@ -34,6 +35,7 @@ SUBDIRS = helpers\
 
 maintainer-clean-local:
 	rm -rf .flatpak-builder
+	rm -rf easpanel-@VERSION@
 	rm -rf flatpak
 	rm -rf m4
 	rm -rf repo
@@ -43,6 +45,9 @@ flatpak:	dist
 
 flatpak-post:
 	./post_flatpak.sh
+
+deb:	dist
+	./build_debs.sh
 
 rpm:	dist
 	cp easpanel-$(VERSION).tar.gz $(HOME)/rpmbuild/SOURCES/
@@ -54,6 +59,7 @@ rpm:	dist
 
 EXTRA_DIST = easpanel.spec.in\
              autogen.sh\
+             build_debs.sh.in\
              get_distro.pl\
              get_target.sh\
              link_common.sh\
@@ -62,7 +68,10 @@ EXTRA_DIST = easpanel.spec.in\
              post_flatpak.sh
 
 CLEANFILES = *~\
+             *.buildinfo\
+             *.changes\
              *.deb\
+             *.ddeb\
              *.flatpak\
              *.mo\
              *.rpm\
@@ -70,13 +79,16 @@ CLEANFILES = *~\
              *.tgz\
              *.zip
 
-DISTCLEANFILES = easpanel.spec\
+DISTCLEANFILES = build_debs.sh\
+                 easpanel.spec\
                  config.guess\
                  config.sub\
                  ltmain.sh
 
 MAINTAINERCLEANFILES = *~\
+                       *.dsc\
                        *.tar.gz\
+                       *.tar.xz\
                        aclocal.m4\
                        compile\
                        config.guess\

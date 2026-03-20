@@ -225,3 +225,5 @@
 2026-03-19 Fred Gleason <fredg@paravelsystems.com>
 	* Added an easbelt(8) command.
 	* Added an 'easbelt' Systemd service.
+2026-03-20 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'make deb' build target.

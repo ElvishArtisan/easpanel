@@ -1,5 +1,10 @@
 *~
+*.buildinfo
+*.changes
+*.deb
+*.ddeb
 *.desktop
+*.dsc
 *.flatpak
 *.flatpak-builder
 *.o
@@ -7,10 +12,13 @@
 *.rpm
 *.service
 *.spec
+*.tar.xz
+changelog
 easpanel*.tar.gz
 .deps
 aclocal.m4
 autom4te.cache
+build_debs.sh
 compile
 config.log
 config.status

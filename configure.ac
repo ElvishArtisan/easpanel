@@ -130,6 +130,8 @@ GENERATED_XML_FILE_WARNING=$srcdir/helpers/xml_file_warning
 
 AC_CONFIG_FILES([ \
     conf/Makefile \
+    debian/Makefile \
+    debian/source/Makefile \
     deps/Makefile \
     helpers/Makefile \
     helpers/install_python.sh \
@@ -145,12 +147,14 @@ AC_CONFIG_FILES([ \
     systemd/Makefile \
     xdg/com.paravelsystems.easpanel.desktop \
     xdg/Makefile \
+    build_debs.sh \
     easpanel.spec \
     Makefile \
     ])
 AC_OUTPUT()
 
 chmod 755 helpers/install_python.sh
+chmod 755 build_debs.sh
 
 #
 # Link Common Elements
