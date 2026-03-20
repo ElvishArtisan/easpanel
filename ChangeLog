@@ -1,3 +1,4 @@
+
 2018-08-24 Fred Gleason <fredg@paravelsystems.com>
 	* Initial package creation.
 2018-08-24 Fred Gleason <fredg@paravelsystems.com>
@@ -227,3 +228,5 @@
 	* Added an 'easbelt' Systemd service.
 2026-03-20 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'make deb' build target.
+2026-03-20 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed regressions that caused the build to break on CentOS 7.

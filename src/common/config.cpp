@@ -340,7 +340,7 @@ bool Config::load()
     p->stringValue("Rivendell","AlertAudioGroup","EAS");
   conf_rivendell_voicetrack_groups=
     p->stringValue("Rivendell","VoicetrackGroups").
-    split(",",Qt::SkipEmptyParts);
+    split(",",QString::SkipEmptyParts);
   for(int i=0;i<conf_rivendell_voicetrack_groups.size();i++) {
     conf_rivendell_voicetrack_groups[i]=
       conf_rivendell_voicetrack_groups.at(i).trimmed();
@@ -617,7 +617,7 @@ bool Config::removeCart(unsigned cartnum,QString *err_msg)
 
 QStringList Config::RmlList(const QString &rmlstr) const
 {
-  QStringList ret=rmlstr.split("!",Qt::SkipEmptyParts);
+  QStringList ret=rmlstr.split("!",QString::SkipEmptyParts);
 
   for(int i=0;i<ret.size();i++) {
     ret[i]=ret.at(i)+"!";

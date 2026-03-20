@@ -273,7 +273,7 @@ bool Alert::load(const QString &pathname)
       values[key]+=line.replace("'","")+"\n";
     }
     else {
-      QStringList f0=line.split("=",Qt::KeepEmptyParts);
+      QStringList f0=line.split("=",QString::KeepEmptyParts);
       if(f0.size()>=2) {
 	key=f0.at(0).trimmed();
 	for(int i=2;i<f0.size();i++) {
