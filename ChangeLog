@@ -210,3 +210,5 @@
 	to 'com.paravelsystems.easpanel.flatpak'.
 2026-03-13 Fred Gleason <fredg@paravelsystems.com>
 	* Changed the C++ compatibility level fromC++14 to C++11.
+2026-06-09 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed regressions that broke the build against Qt v5.9.7.
