@@ -37,6 +37,18 @@ Config::Config()
 }
 
 
+bool Config::startupInAuto() const
+{
+  return conf_startup_in_auto;
+}
+
+
+bool Config::raiseOnNewAlert() const
+{
+  return conf_raise_on_new_alert;
+}
+
+
 QHostAddress Config::rivendellHostAddress() const
 {
   return conf_rivendell_host_address;
@@ -267,6 +279,22 @@ QString Config::dump() const
 {
   QString ret="";
 
+  ret+="[Global]\n";
+  if(startupInAuto()) {
+    ret+="StartupInAuto=Yes\n";
+  }
+  else {
+    ret+="StartupInAuto=No\n";
+  }
+  if(raiseOnNewAlert()) {
+    ret+="RaiseOnNewAlert=Yes\n";
+  }
+  else {
+    ret+="RaiseOnNewAlert=No\n";
+  }
+
+  ret+="\n";
+
   ret+="[Rivendell]\n";
   ret+="HostAddress="+rivendellHostAddress().toString()+"\n";
   ret+="AlertAudioGroup="+rivendellAlertAudioGroup()+"\n";
@@ -334,6 +362,9 @@ bool Config::load()
   if(!ret) {
     ret=p->setSource(CONFIG_FLATPAK_FILE_NAME);
   }
+  conf_startup_in_auto=p->boolValue("Global","StartupInAuto",false);
+  conf_raise_on_new_alert=p->boolValue("Global","RaiseOnNewAlert",true);
+
   conf_rivendell_host_address=
     QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
   conf_rivendell_alert_audio_group=
@@ -379,63 +410,66 @@ bool Config::load()
 
   //
   // EAS Codes
+  // (See Table 2 in 47 CFR Part 11 Subpart A 11.31(e) for the official list)
   //
   QStringList eas_codes;
-  eas_codes.push_back("EAN");
-  eas_codes.push_back("NPT");
-  eas_codes.push_back("NIC");
-  eas_codes.push_back("RMT");
-  eas_codes.push_back("RWT");
-  eas_codes.push_back("ADR");
-  eas_codes.push_back("AVW");
-  eas_codes.push_back("AVA");
-  eas_codes.push_back("BZW");
-  eas_codes.push_back("CAE");
-  eas_codes.push_back("CDW");
-  eas_codes.push_back("CEM");
-  eas_codes.push_back("CFW");
-  eas_codes.push_back("CFA");
-  eas_codes.push_back("DMO");
-  eas_codes.push_back("DSW");
-  eas_codes.push_back("EQW");
-  eas_codes.push_back("EWW");
-  eas_codes.push_back("EVI");
-  eas_codes.push_back("FRW");
-  eas_codes.push_back("FFW");
-  eas_codes.push_back("FFA");
-  eas_codes.push_back("FFS");
-  eas_codes.push_back("FLW");
-  eas_codes.push_back("FLA");
-  eas_codes.push_back("FLS");
-  eas_codes.push_back("HMW");
-  eas_codes.push_back("HWW");
-  eas_codes.push_back("HWA");
-  eas_codes.push_back("HUW");
-  eas_codes.push_back("HUA");
-  eas_codes.push_back("HLS");
-  eas_codes.push_back("LEW");
-  eas_codes.push_back("LAE");
-  eas_codes.push_back("NMN");
-  eas_codes.push_back("TOE");
-  eas_codes.push_back("NUW");
-  eas_codes.push_back("RHW");
-  eas_codes.push_back("SVR");
-  eas_codes.push_back("SVA");
-  eas_codes.push_back("SVS");
-  eas_codes.push_back("SPW");
-  eas_codes.push_back("SMW");
-  eas_codes.push_back("SPS");
-  eas_codes.push_back("SSA");
-  eas_codes.push_back("SSW");
-  eas_codes.push_back("TOR");
-  eas_codes.push_back("TOA");
-  eas_codes.push_back("TRW");
-  eas_codes.push_back("TRA");
-  eas_codes.push_back("TSW");
-  eas_codes.push_back("TSA");
-  eas_codes.push_back("VOW");
-  eas_codes.push_back("WSA");
-  eas_codes.push_back("WSW");
+  eas_codes.push_back("EAN");  // Emergency Action Notification
+  eas_codes.push_back("NIC");  // National Information Center
+  eas_codes.push_back("NPT");  // National Periodic Test
+  eas_codes.push_back("RMT");  // Required Monthly Test
+  eas_codes.push_back("RWT");  // Required Weekly Test
+  eas_codes.push_back("ADR");  // Administrative Message
+  eas_codes.push_back("AVW");  // Avalanche Warning
+  eas_codes.push_back("AVA");  // Avalance Watch
+  eas_codes.push_back("BZW");  // Blizzard Warning
+  eas_codes.push_back("BLU");  // Blue Alert
+  eas_codes.push_back("CAE");  // Child Abduction Emergency
+  eas_codes.push_back("CDW");  // Civil Danger Warning
+  eas_codes.push_back("CEM");  // Civil Emergency Message
+  eas_codes.push_back("CFW");  // Coastal Flood Warning
+  eas_codes.push_back("CFA");  // Coast Flood Watch
+  eas_codes.push_back("DSW");  // Dust Storm Warning
+  eas_codes.push_back("EQW");  // Earthquake Warning
+  eas_codes.push_back("EVI");  // Evacuation Immediate
+  eas_codes.push_back("EWW");  // Extreme Wind Warning
+  eas_codes.push_back("FRW");  // Fire Warning
+  eas_codes.push_back("FFW");  // Flash Flood Warning
+  eas_codes.push_back("FFA");  // Flash Flood Watch
+  eas_codes.push_back("FFS");  // Flash Flood Statement
+  eas_codes.push_back("FLW");  // Flood Warning
+  eas_codes.push_back("FLA");  // Flood Watch
+  eas_codes.push_back("FLS");  // Flood Statement
+  eas_codes.push_back("HMW");  // Hazardous Materials Warning
+  eas_codes.push_back("HWW");  // High Wind Warning
+  eas_codes.push_back("HWA");  // High Wind Watch
+  eas_codes.push_back("HUW");  // Hurricane Warning
+  eas_codes.push_back("HUA");  // Hurricane Watch
+  eas_codes.push_back("HLS");  // Hurricane Statement
+  eas_codes.push_back("LEW");  // Law Enforcement Warning
+  eas_codes.push_back("LAE");  // Local Area Emergency
+  eas_codes.push_back("MEP");  // Missing and Endangered Persons
+  eas_codes.push_back("NMN");  // Network Message Notification
+  eas_codes.push_back("TOE");  // 911 Telephone Outage Emergency
+  eas_codes.push_back("NUW");  // Nuclear Power Plant Warning
+  eas_codes.push_back("DMO");  // Practice/Demo Warning
+  eas_codes.push_back("RHW");  // Radiological Hazard Warning
+  eas_codes.push_back("SVR");  // Severe Thunderstorm Warning
+  eas_codes.push_back("SVA");  // Severe Thunderstorm Watch
+  eas_codes.push_back("SVS");  // Severe Weather Statement
+  eas_codes.push_back("SPW");  // Shelter in Place Warning
+  eas_codes.push_back("SMW");  // Special Marine Warning
+  eas_codes.push_back("SPS");  // Special Weather Statement
+  eas_codes.push_back("SSA");  // Storm Surge Watch
+  eas_codes.push_back("SSW");  // Storm Surge Warning
+  eas_codes.push_back("TOR");  // Tornado Warning
+  eas_codes.push_back("TOA");  // Tornado Watch
+  eas_codes.push_back("TRW");  // Tropical Storm Warning
+  eas_codes.push_back("TRA");  // Tropical Storm Watch
+  eas_codes.push_back("TSW");  // Tsunami Warning
+  eas_codes.push_back("TSA");  // Tsunami Watch
+  eas_codes.push_back("VOW");  // Volcano Warning
+  eas_codes.push_back("WSW");  // Winter Storm Warning
+  eas_codes.push_back("WSA");  // Winter Storm Watch
 
   for(int i=0;i<eas_codes.size();i++) {
     conf_intro_carts[eas_codes[i]]=p->intValue("IntroCarts",eas_codes[i],-1);
@@ -513,6 +547,7 @@ bool Config::load()
 
 void Config::clear()
 {
+  conf_startup_in_auto=false;
   conf_rivendell_host_address=QHostAddress();
   conf_rivendell_alert_audio_group="";
   conf_rivendell_voicetrack_groups.clear();

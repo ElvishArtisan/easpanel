@@ -234,3 +234,17 @@
 	* Added an 'easpanel-belt' RPM package.
 2026-03-20 Fred Gleason <fredg@paravelsystems.com>
 	* Added an 'easpanel-pypad' DEB package.
+2026-06-09 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed regressions that broke the build against Qt v5.9.7.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug that broke [IntroCarts] insertion in Automatic mode.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'BLU' (Blue Alert) to the set of EAS Event Codes.
+	* Added 'MEP' (Missing and Endangered Persons) to the set of EAS
+	Event Codes.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'StartupInAuto=' directive to the '[Global]' section of
+	easpanel.conf(5).
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'RaiseOnNewAlert=' directive to the '[Global]' section of
+	easpanel.conf(5).

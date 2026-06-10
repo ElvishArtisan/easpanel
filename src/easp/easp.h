@@ -60,6 +60,8 @@ class MainWidget : public QWidget
   void closeEvent(QCloseEvent *e);
 
  private:
+  void SetLiveAssistMode();
+  void SetAutomaticMode();
   void SendNextAlert();
   void ProcessNowPlaying(unsigned cartnum);
   bool ProcessNewAlert(Alert *alert);
