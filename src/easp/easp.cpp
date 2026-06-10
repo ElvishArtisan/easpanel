@@ -312,7 +312,7 @@ void MainWidget::autoSendData(int id)
 			      1,
 			      alert->headerCart(),offset));
 
-    if(main_config->rivendellFriendlyIntroCart()!=0) {
+    if(main_config->introCart(alert->easType())!=0) {
       SendRml(QString::asprintf("PX %d %d %d PLAY!",    // Intro Cart
 				1,
 				main_config->introCart(alert->easType()),

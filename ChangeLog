@@ -212,3 +212,5 @@
 	* Changed the C++ compatibility level fromC++14 to C++11.
 2026-06-09 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed regressions that broke the build against Qt v5.9.7.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug that broke [IntroCarts] insertion in Automatic mode.
