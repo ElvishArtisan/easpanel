@@ -218,3 +218,6 @@
 	* Added 'BLU' (Blue Alert) to the set of EAS Event Codes.
 	* Added 'MEP' (Missing and Endangered Persons) to the set of EAS
 	Event Codes.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'StartupInAuto=' directive to the '[Global]' section of
+	easpanel.conf(5).

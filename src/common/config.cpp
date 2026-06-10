@@ -37,6 +37,12 @@ Config::Config()
 }
 
 
+bool Config::startupInAuto() const
+{
+  return conf_startup_in_auto;
+}
+
+
 QHostAddress Config::rivendellHostAddress() const
 {
   return conf_rivendell_host_address;
@@ -205,6 +211,15 @@ QString Config::dump() const
 {
   QString ret="";
 
+  ret+="[Global]\n";
+  if(startupInAuto()) {
+    ret+="StartupInAuto=Yes\n";
+  }
+  else {
+    ret+="StartupInAuto=No\n";
+  }
+  ret+="\n";
+
   ret+="[Rivendell]\n";
   ret+="HostAddress="+rivendellHostAddress().toString()+"\n";
   ret+="AlertAudioGroup="+rivendellAlertAudioGroup()+"\n";
@@ -254,6 +269,8 @@ bool Config::load()
   if(!ret) {
     ret=p->setSource(CONFIG_FLATPAK_FILE_NAME);
   }
+  conf_startup_in_auto=p->boolValue("Global","StartupInAuto",false);
+
   conf_rivendell_host_address=
     QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
   conf_rivendell_alert_audio_group=
@@ -378,6 +395,7 @@ bool Config::load()
 
 void Config::clear()
 {
+  conf_startup_in_auto=false;
   conf_rivendell_host_address=QHostAddress();
   conf_rivendell_alert_audio_group="";
   conf_rivendell_voicetrack_groups.clear();

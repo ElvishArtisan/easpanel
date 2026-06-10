@@ -34,6 +34,7 @@ class Config
 {
  public:
   Config();
+  bool startupInAuto() const;
   QHostAddress rivendellHostAddress() const;
   QString rivendellAlertAudioGroup() const;
   QStringList rivendellVoicetrackGroups() const;
@@ -66,6 +67,7 @@ class Config
   bool removeCart(unsigned cartnum,QString *err_msg);
 
  private:
+  bool conf_startup_in_auto;
   QStringList RmlList(const QString &rmlstr) const;
   QHostAddress conf_rivendell_host_address;
   QString conf_rivendell_alert_audio_group;

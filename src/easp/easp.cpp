@@ -148,11 +148,11 @@ MainWidget::MainWidget(QWidget *parent)
   //
   // Send Mode
   //
-  if(main_auto) {
-    SendRml(main_config->rivendellAutomaticRml());
+  if(main_config->startupInAuto()) {
+    SetAutomaticMode();
   }
   else {
-    SendRml(main_config->rivendellLiveAssistRml());
+    SetLiveAssistMode();
   }
 
   //
@@ -173,32 +173,11 @@ QSize MainWidget::sizeHint() const
 
 void MainWidget::autoData()
 {
-  int ready_id=-1;
-
   if(main_auto) {
-    main_auto_button->setText(tr("LiveAssist"));
-    main_auto_button->setStyleSheet("background-color: #FFFF00");
-    SendRml(main_config->rivendellLiveAssistRml());
-    main_auto=false;
+    SetLiveAssistMode();
   }
   else {
-    main_auto_button->setText(tr("Automatic"));
-    main_auto_button->setStyleSheet("background-color: #00FF00");
-    SendRml(main_config->rivendellAutomaticRml());
-    main_auto=true;
-    for(int i=0;i<EASP_ALERT_QUAN;i++) {
-      AlertButton *button=main_alert_buttons[i];
-      if((button->status()==AlertButton::Ready)&&(ready_id<0)) {
-	ready_id=i;
-      }
-      if(button->status()==AlertButton::Sent) {
-	ready_id=-1;
-	break;
-      }
-    }
-    if(ready_id>=0) {
-      autoSendData(ready_id);
-    }
+    SetAutomaticMode();
   }
 }
 
@@ -532,6 +511,39 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 void MainWidget::closeEvent(QCloseEvent *e)
 {
   quit();
+}
+
+
+void MainWidget::SetLiveAssistMode()
+{
+  main_auto_button->setText(tr("LiveAssist"));
+  main_auto_button->setStyleSheet("background-color: #FFFF00");
+  SendRml(main_config->rivendellLiveAssistRml());
+  main_auto=false;
+}
+
+
+void MainWidget::SetAutomaticMode()
+{
+  int ready_id=-1;
+
+  main_auto_button->setText(tr("Automatic"));
+  main_auto_button->setStyleSheet("background-color: #00FF00");
+  SendRml(main_config->rivendellAutomaticRml());
+  main_auto=true;
+  for(int i=0;i<EASP_ALERT_QUAN;i++) {
+    AlertButton *button=main_alert_buttons[i];
+    if((button->status()==AlertButton::Ready)&&(ready_id<0)) {
+      ready_id=i;
+    }
+    if(button->status()==AlertButton::Sent) {
+      ready_id=-1;
+      break;
+    }
+  }
+  if(ready_id>=0) {
+    autoSendData(ready_id);
+  }
 }
 
 
