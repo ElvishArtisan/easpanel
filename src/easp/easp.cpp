@@ -74,6 +74,9 @@ MainWidget::MainWidget(QWidget *parent)
 			  tr("Unable to open configuration file!"));
     exit(1);
   }
+  if(main_raise_on_alert) {
+    main_raise_on_alert=main_config->raiseOnNewAlert();
+  }
 
   //
   // RML Socket

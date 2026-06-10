@@ -35,6 +35,7 @@ class Config
  public:
   Config();
   bool startupInAuto() const;
+  bool raiseOnNewAlert() const;
   QHostAddress rivendellHostAddress() const;
   QString rivendellAlertAudioGroup() const;
   QStringList rivendellVoicetrackGroups() const;
@@ -68,6 +69,7 @@ class Config
 
  private:
   bool conf_startup_in_auto;
+  bool conf_raise_on_new_alert;
   QStringList RmlList(const QString &rmlstr) const;
   QHostAddress conf_rivendell_host_address;
   QString conf_rivendell_alert_audio_group;

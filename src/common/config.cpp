@@ -43,6 +43,12 @@ bool Config::startupInAuto() const
 }
 
 
+bool Config::raiseOnNewAlert() const
+{
+  return conf_raise_on_new_alert;
+}
+
+
 QHostAddress Config::rivendellHostAddress() const
 {
   return conf_rivendell_host_address;
@@ -218,6 +224,13 @@ QString Config::dump() const
   else {
     ret+="StartupInAuto=No\n";
   }
+  if(raiseOnNewAlert()) {
+    ret+="RaiseOnNewAlert=Yes\n";
+  }
+  else {
+    ret+="RaiseOnNewAlert=No\n";
+  }
+
   ret+="\n";
 
   ret+="[Rivendell]\n";
@@ -270,6 +283,7 @@ bool Config::load()
     ret=p->setSource(CONFIG_FLATPAK_FILE_NAME);
   }
   conf_startup_in_auto=p->boolValue("Global","StartupInAuto",false);
+  conf_raise_on_new_alert=p->boolValue("Global","RaiseOnNewAlert",true);
 
   conf_rivendell_host_address=
     QHostAddress(p->stringValue("Rivendell","HostAddress","127.0.0.1"));
