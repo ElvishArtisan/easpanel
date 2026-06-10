@@ -214,3 +214,7 @@
 	* Fixed regressions that broke the build against Qt v5.9.7.
 2026-06-10 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug that broke [IntroCarts] insertion in Automatic mode.
+2026-06-10 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'BLU' (Blue Alert) to the set of EAS Event Codes.
+	* Added 'MEP' (Missing and Endangered Persons) to the set of EAS
+	Event Codes.
