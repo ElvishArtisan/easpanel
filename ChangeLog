@@ -251,3 +251,6 @@
 2026-06-11 Fred Gleason <fredg@paravelsystems.com>
 	* Added the ability to insert arbitrary files into a Rivendell log
 	using '[DirectFile<n>] clauses in easpanel.conf(5).
+2026-06-11 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'IntroCart=' and 'OutroCart=' directives to '[DirectFile<n>]'
+	clauses in easpanel.conf(5).

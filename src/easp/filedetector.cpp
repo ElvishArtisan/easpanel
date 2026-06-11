@@ -228,9 +228,31 @@ void FileDetector::ProcessFile(FileInfo *info)
   //
   // Insert Into The Log
   //
+  // Outro Cart
+  //
+  if(d_config->directFileOutroCart(id())!=0) {
+    QString rml=QString::asprintf("PX 1 %u 0 PLAY!",
+				  d_config->directFileOutroCart(id()));
+    d_rml_socket->writeDatagram(rml.toUtf8(),
+			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+  }
+
+  //
+  // Direct File
+  //
   QString rml=QString::asprintf("PX 1 %d 0 PLAY!",cartnum);
   d_rml_socket->writeDatagram(rml.toUtf8(),
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+
+  //
+  // Intro Cart
+  //
+  if(d_config->directFileIntroCart(id())!=0) {
+    QString rml=QString::asprintf("PX 1 %u 0 PLAY!",
+				  d_config->directFileIntroCart(id()));
+    d_rml_socket->writeDatagram(rml.toUtf8(),
+			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+  }
 
   //
   // Start Play-Out

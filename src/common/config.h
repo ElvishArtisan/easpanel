@@ -69,6 +69,8 @@ class Config
   QString directFilePath(int n) const;
   QString directFileDescription(int n) const;
   SchedulePolicy directFileSchedulePolicy(int n) const;
+  unsigned directFileIntroCart(int n) const;
+  unsigned directFileOutroCart(int n) const;
 
   int easbeltQuantity() const;
   QString easbeltSourceFiles(int n) const;
@@ -122,6 +124,9 @@ class Config
   QStringList conf_direct_file_paths;
   QStringList conf_direct_file_descriptions;
   QList<SchedulePolicy> conf_direct_file_schedule_policies;
+  QList<unsigned> conf_direct_file_intro_carts;
+  QList<unsigned> conf_direct_file_outro_carts;
+
   QStringList conf_easbelt_source_files;
   QList<QDir *> conf_easbelt_source_files_dirs; 
   QStringList conf_easbelt_sftp_identities;

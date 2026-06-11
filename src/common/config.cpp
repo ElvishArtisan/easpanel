@@ -237,6 +237,18 @@ Config::SchedulePolicy Config::directFileSchedulePolicy(int n) const
 }
 
 
+unsigned Config::directFileIntroCart(int n) const
+{
+  return conf_direct_file_intro_carts.at(n);
+}
+
+
+unsigned Config::directFileOutroCart(int n) const
+{
+  return conf_direct_file_outro_carts.at(n);
+}
+
+
 int Config::easbeltQuantity() const
 {
   return conf_easbelt_source_files.size();
@@ -361,6 +373,8 @@ QString Config::dump() const
     ret+="Description="+conf_direct_file_descriptions.at(i)+"\n";
     ret+="SchedulePolicy="+
       Config::schedulePolicyText(conf_direct_file_schedule_policies.at(i))+"\n";
+    ret+=QString::asprintf("IntroCart=%u\n",conf_direct_file_intro_carts.at(i));
+    ret+=QString::asprintf("OutroCart=%u\n",conf_direct_file_outro_carts.at(i));
   }
 
   for(int i=0;i<conf_easbelt_source_files.size();i++) {
@@ -527,6 +541,8 @@ bool Config::load()
     conf_direct_file_schedule_policies.
       push_back(Config::schedulePolicy(p->stringValue(section,"SchedulePolicy",
 						      "next")));
+    conf_direct_file_intro_carts.push_back(p->intValue(section,"IntroCart"));
+    conf_direct_file_outro_carts.push_back(p->intValue(section,"OutroCart"));
     count++;
     section=QString::asprintf("DirectFile%d",1+count);
     path=p->stringValue(section,"Path","",&ok);
