@@ -35,6 +35,8 @@
 class Config
 {
  public:
+  enum SchedulePolicy {ScheduleDisabled=0,ScheduleImmediate=1,ScheduleNext=2,
+		       ScheduleLast=3};
   Config();
   bool startupInAuto() const;
   bool raiseOnNewAlert() const;
@@ -62,6 +64,12 @@ class Config
   int outroCart(const QString &code) const;
   int liveassistIntroCart(const QString &code) const;
   int liveassistOutroCart(const QString &code) const;
+
+  int directFileQuantity() const;
+  QString directFilePath(int n) const;
+  QString directFileDescription(int n) const;
+  SchedulePolicy directFileSchedulePolicy(int n) const;
+
   int easbeltQuantity() const;
   QString easbeltSourceFiles(int n) const;
   QDir *easbeltSourceFilesDir(int n) const;
@@ -78,6 +86,8 @@ class Config
   unsigned importCart(const QString &title,const QString &filename,
 		      QString *err_msg);
   bool removeCart(unsigned cartnum,QString *err_msg);
+  static QString schedulePolicyText(SchedulePolicy policy);
+  static SchedulePolicy schedulePolicy(const QString &str);
 
  private:
   bool conf_startup_in_auto;
@@ -108,6 +118,10 @@ class Config
   QMap<QString,int> conf_liveassist_intro_carts;
   QMap<QString,int> conf_liveassist_outro_carts;
   QString conf_user_agent;
+
+  QStringList conf_direct_file_paths;
+  QStringList conf_direct_file_descriptions;
+  QList<SchedulePolicy> conf_direct_file_schedule_policies;
   QStringList conf_easbelt_source_files;
   QList<QDir *> conf_easbelt_source_files_dirs; 
   QStringList conf_easbelt_sftp_identities;

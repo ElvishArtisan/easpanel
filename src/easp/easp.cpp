@@ -165,6 +165,8 @@ MainWidget::MainWidget(QWidget *parent)
   main_alert_scan_timer->setSingleShot(true);
   connect(main_alert_scan_timer,SIGNAL(timeout()),this,SLOT(alertScanData()));
   alertScanData();
+
+  main_direct_file=new DirectFile(main_rml_socket,main_config,this);
 }
 
 
@@ -431,6 +433,7 @@ void MainWidget::rlmReadyReadData()
       unsigned cartnum=f0.at(1).toUInt(&ok);
       if(ok) {
 	ProcessNowPlaying(cartnum);
+	main_direct_file->playedCart(cartnum);
       }
       main_next_is_voicetrack=
 	main_config->rivendellVoicetrackGroups().contains(f0.at(2));

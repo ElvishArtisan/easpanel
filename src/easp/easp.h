@@ -34,6 +34,8 @@
 #include "config.h"
 #include "modebutton.h"
 
+#include "directfile.h"
+
 #define EASP_ALERT_QUAN 5
 #define EASP_USAGE "[--no-raise]\n\n"
 
@@ -87,6 +89,8 @@ class MainWidget : public QWidget
   bool main_next_is_voicetrack;
   QString main_current_group;
   bool main_raise_on_alert;
+
+  DirectFile *main_direct_file;
 };
 
 

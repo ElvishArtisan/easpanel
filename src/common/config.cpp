@@ -213,6 +213,30 @@ int Config::liveassistOutroCart(const QString &code) const
 }
 
 
+int Config::directFileQuantity() const
+{
+  return conf_direct_file_paths.size();
+}
+
+
+QString Config::directFilePath(int n) const
+{
+  return conf_direct_file_paths.at(n);
+}
+
+
+QString Config::directFileDescription(int n) const
+{
+  return conf_direct_file_descriptions.at(n);
+}
+
+
+Config::SchedulePolicy Config::directFileSchedulePolicy(int n) const
+{
+  return conf_direct_file_schedule_policies.at(n);
+}
+
+
 int Config::easbeltQuantity() const
 {
   return conf_easbelt_source_files.size();
@@ -330,6 +354,14 @@ QString Config::dump() const
   ret+="EasMessageExtension="+pathsEasMessageExtension()+"\n";
   ret+="RlmReceivePort="+QString::asprintf("%u",pathsRlmReceivePort())+"\n";
   ret+="\n";
+
+  for(int i=0;i<conf_direct_file_paths.size();i++) {
+    ret+=QString::asprintf("[DirectFile%d]\n",1+i);
+    ret+="Path="+conf_direct_file_paths.at(i)+"\n";
+    ret+="Description="+conf_direct_file_descriptions.at(i)+"\n";
+    ret+="SchedulePolicy="+
+      Config::schedulePolicyText(conf_direct_file_schedule_policies.at(i))+"\n";
+  }
 
   for(int i=0;i<conf_easbelt_source_files.size();i++) {
     ret+=QString::asprintf("[Easbelt%d]\n",1+i);
@@ -482,11 +514,29 @@ bool Config::load()
   }
 
   //
+  // Direct File Processors
+  //
+  int count=0;
+  bool ok=false;
+  QString section=QString::asprintf("DirectFile%d",1+count);
+  QString path=p->stringValue(section,"Path","",&ok);
+  while(ok) {
+    conf_direct_file_paths.push_back(path);
+    conf_direct_file_descriptions.
+      push_back(p->stringValue(section,"Description",section));
+    conf_direct_file_schedule_policies.
+      push_back(Config::schedulePolicy(p->stringValue(section,"SchedulePolicy",
+						      "next")));
+    count++;
+    section=QString::asprintf("DirectFile%d",1+count);
+    path=p->stringValue(section,"Path","",&ok);
+  }
+
+  //
   // Eas Conveyor Belts
   //
   int src_count=0;
   int dest_count=0;
-  bool ok=false;
   QString source=QString::asprintf("Easbelt%d",1+src_count);
   QString source_file=p->stringValue(source,"SourceFiles","",&ok);
   while(ok) {
@@ -656,6 +706,46 @@ QStringList Config::RmlList(const QString &rmlstr) const
 
   for(int i=0;i<ret.size();i++) {
     ret[i]=ret.at(i)+"!";
+  }
+
+  return ret;
+}
+
+
+QString Config::schedulePolicyText(Config::SchedulePolicy policy)
+{
+  QString ret="unknown";
+
+  switch(policy) {
+  case Config::ScheduleDisabled:
+    ret="disabled";
+    break;
+
+  case Config::ScheduleImmediate:
+    ret="immediate";
+    break;
+
+  case Config::ScheduleNext:
+    ret="next";
+    break;
+
+  case Config::ScheduleLast:
+    break;
+  }
+
+  return ret;
+}
+
+
+Config::SchedulePolicy Config::schedulePolicy(const QString &str)
+{
+  Config::SchedulePolicy ret=Config::ScheduleDisabled;
+
+  for(int i=0;i<Config::ScheduleLast;i++) {
+    Config::SchedulePolicy policy=(Config::SchedulePolicy)i;
+    if(Config::schedulePolicyText(policy)==str.toLower()) {
+      ret=policy;
+    }
   }
 
   return ret;

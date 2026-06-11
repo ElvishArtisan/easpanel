@@ -31,7 +31,9 @@ bin_PROGRAMS = easp
 
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
                     alerttextedit.cpp alerttextedit.h\
+                    directfile.cpp directfile.h\
                     easp.cpp easp.h\
+                    filedetector.cpp filedetector.h\
                     modebutton.cpp modebutton.h\
                     alert.cpp alert.h\
 	            cmdswitch.cpp cmdswitch.h\
@@ -40,7 +42,9 @@ dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
 
 nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_alerttextedit.cpp\
+                      moc_directfile.cpp\
                       moc_easp.cpp\
+                      moc_filedetector.cpp\
                       moc_modebutton.cpp
 
 easp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
