@@ -27,7 +27,19 @@ moc_%.cpp:	%.h
 	@QT5_MOC@ $< -o $@
 
 
-bin_PROGRAMS = easp
+bin_PROGRAMS = directp\
+               easp
+
+dist_directp_SOURCES = directfilewidget.cpp directfilewidget.h\
+                       directp.cpp directp.h\
+                       filedetector.cpp filedetector.h
+
+nodist_directp_SOURCES = cmdswitch.cpp cmdswitch.h\
+	                 config.cpp config.h\
+                         moc_directfilewidget.cpp\
+                         moc_directp.cpp\
+                         moc_filedetector.cpp\
+	                 profile.cpp profile.h
 
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
                     alerttextedit.cpp alerttextedit.h\
@@ -46,6 +58,8 @@ nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_easp.cpp\
                       moc_filedetector.cpp\
                       moc_modebutton.cpp
+
+directp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 
 easp_LDADD = @QT5GUI_LIBS@ @RIVWEBCAPI_LIBS@
 

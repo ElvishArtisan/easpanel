@@ -261,3 +261,5 @@
 	subdirectory persistent after package removal.
 2026-06-12 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc0.
+2026-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Added a directp(1) applet.

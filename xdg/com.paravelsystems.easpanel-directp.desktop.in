@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Terminal=false
+Categories=Qt;Audio;News;Monitor
+Name=DirectPanel
+GenericName=Direct File Processor
+Exec=@prefix@/bin/directp
+Icon=easpanel
+Type=Application
+Path=@prefix@/bin
+StartupNotify=false
