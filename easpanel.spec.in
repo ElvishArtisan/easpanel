@@ -68,7 +68,6 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/var/eas
 mkdir -p $RPM_BUILD_ROOT/usr/lib/easpanel
 cp conf/easpanel-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel/
 mkdir -p $RPM_BUILD_ROOT/usr/lib/easpanel-belt
@@ -82,6 +81,8 @@ fi
 if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
   %{_bindir}/gtk-update-icon-cache -f --quiet %{_datadir}/icons/hicolor || :
 fi
+mkdir -p /var/eas
+chmod 0777 /var/eas
 
 
 %clean
@@ -97,7 +98,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/22x22/apps/easpanel.png
 %{_datadir}/icons/hicolor/32x32/apps/easpanel.png
 %{_datadir}/icons/hicolor/48x48/apps/easpanel.png
-%attr(0777,root,root) %dir /var/eas
 /usr/lib/easpanel/easpanel-sample.conf
 %doc AUTHORS
 %doc ChangeLog
