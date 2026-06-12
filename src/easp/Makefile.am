@@ -31,7 +31,7 @@ bin_PROGRAMS = easp
 
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
                     alerttextedit.cpp alerttextedit.h\
-                    directfile.cpp directfile.h\
+                    directfilewidget.cpp directfilewidget.h\
                     easp.cpp easp.h\
                     filedetector.cpp filedetector.h\
                     modebutton.cpp modebutton.h\
@@ -42,7 +42,7 @@ dist_easp_SOURCES = alertbutton.cpp alertbutton.h\
 
 nodist_easp_SOURCES = moc_alertbutton.cpp\
                       moc_alerttextedit.cpp\
-                      moc_directfile.cpp\
+                      moc_directfilewidget.cpp\
                       moc_easp.cpp\
                       moc_filedetector.cpp\
                       moc_modebutton.cpp

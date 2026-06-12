@@ -166,7 +166,10 @@ MainWidget::MainWidget(QWidget *parent)
   connect(main_alert_scan_timer,SIGNAL(timeout()),this,SLOT(alertScanData()));
   alertScanData();
 
-  main_direct_file=new DirectFile(main_rml_socket,main_config,this);
+  main_direct_file_widget=
+    new DirectFileWidget(main_rml_socket,main_config,this);
+
+  setMinimumSize(sizeHint());
 }
 
 
@@ -433,7 +436,7 @@ void MainWidget::rlmReadyReadData()
       unsigned cartnum=f0.at(1).toUInt(&ok);
       if(ok) {
 	ProcessNowPlaying(cartnum);
-	main_direct_file->playedCart(cartnum);
+	main_direct_file_widget->playedCart(cartnum);
       }
       main_next_is_voicetrack=
 	main_config->rivendellVoicetrackGroups().contains(f0.at(2));
@@ -496,12 +499,18 @@ void MainWidget::resizeEvent(QResizeEvent *e)
 
   main_livesend_button->setGeometry(40,h-60,200,50);
 
-  for(int i=0;i<EASP_ALERT_QUAN;i++) {
-    main_alert_buttons[i]->setGeometry(2*w/3+20,
-				       59+i*((h-129)/EASP_ALERT_QUAN+13),
-				       w/3-30,
-				       5+(h-129)/EASP_ALERT_QUAN);
+  int direct_h=main_direct_file_widget->sizeHint().height();
+  for(int i=0;i<(EASP_ALERT_QUAN);i++) {
+    main_alert_buttons[i]->
+      setGeometry(2*w/3+20,
+		  72-13+i*((h-129-direct_h)/EASP_ALERT_QUAN),
+		  w/3-30,
+		  (h-129-direct_h)/EASP_ALERT_QUAN);
   }
+  main_direct_file_widget->setGeometry(2*w/3+20,
+				       h-70-direct_h,
+				       w/3-30,
+				       direct_h);
 }
 
 

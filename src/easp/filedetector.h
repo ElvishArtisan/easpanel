@@ -60,6 +60,8 @@ class FileDetector : public QObject
   FileDetector(int id,QUdpSocket *rml_sock,Config *c,QObject *parent=0);
   ~FileDetector();
   int id() const;
+  bool eventActive() const;
+  bool isScanning() const;
   QString path() const;
   bool setPath(const QString &path);
   void playedCart(unsigned cartnum);
@@ -67,18 +69,31 @@ class FileDetector : public QObject
  signals:
   void fileAdded(int id,const QString &pathname);
   void fileRemoved(int id,const QString &pathname);
+  void eventStarted(int id);
+  void eventStopped(int id);
+  void scanningStarted(int id);
+  void scanningStopped(int id);
+
+ public slots:
+  void startScanning();
+  void stopScanning();
 
  private slots:
   void scanData();
 
  private:
   void ProcessFile(FileInfo *info);
+  bool CartIsLoaded(unsigned cartnum) const;
   int d_id;
   QUdpSocket *d_rml_socket;
   QDir *d_path_dir;
   QMap<QString,FileInfo *> d_file_infos;
   QTimer *d_scan_timer;
   Config *d_config;
+  QList<unsigned> d_event_carts;
+  bool d_event_loaded;
+  bool d_event_active;
+  bool d_scanning;
 };
 
 

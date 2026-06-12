@@ -102,6 +102,9 @@ void FileInfo::makeDeletable()
 FileDetector::FileDetector(int id,QUdpSocket *rml_sock,Config *c,QObject *parent)
 {
   d_id=id;
+  d_event_active=false;
+  d_event_loaded=false;
+  d_scanning=true;
   d_rml_socket=rml_sock;
   d_config=c;
   d_path_dir=new QDir();
@@ -122,6 +125,18 @@ FileDetector::~FileDetector()
 int FileDetector::id() const
 {
   return d_id;
+}
+
+
+bool FileDetector::eventActive() const
+{
+  return d_event_active;
+}
+
+
+bool FileDetector::isScanning() const
+{
+  return d_scanning;
 }
 
 
@@ -149,6 +164,30 @@ void FileDetector::playedCart(unsigned cartnum)
 {
   QString err_msg;
 
+  //
+  // Event State Logic
+  //
+  if(d_event_loaded) {
+    if((cartnum==d_config->directFileIntroCart(id()))||
+       (cartnum==d_config->directFileOutroCart(id()))||
+       CartIsLoaded(cartnum)) {
+      if(!d_event_active) {
+	d_event_active=true;
+	emit eventStarted(id());
+      }
+    }
+    else {
+      if(d_event_active) {
+	d_event_active=false;
+	d_event_loaded=false;
+	emit eventStopped(id());
+      }
+    }
+  }
+
+  //
+  // Clean Up Used Rivendell Carts
+  //
   for(QMap<QString,FileInfo *>::iterator it=d_file_infos.begin();
       it!=d_file_infos.end();it++) {
     if(it.value()->cartNumber()==cartnum) {
@@ -156,14 +195,29 @@ void FileDetector::playedCart(unsigned cartnum)
     }
     else {
       if(it.value()->isDeletable()) {
-	if(!d_config->removeCart(it.value()->cartNumber(),&err_msg)) {
-	  syslog(LOG_WARNING,"DirectFile%d failed to remove cart %06u [%s]",
-		 1+id(),it.value()->cartNumber(),err_msg.toUtf8().constData());
-	}
+	d_config->removeCart(it.value()->cartNumber(),&err_msg);
 	it.value()->setCartNumber(0);
 	unlink(it.value()->fileInfo().absoluteFilePath().toUtf8());
       }
     }
+  }
+}
+
+
+void FileDetector::startScanning()
+{
+  if(!d_scanning) {
+    d_scanning=true;
+    emit scanningStarted(id());
+  }
+}
+
+
+void FileDetector::stopScanning()
+{
+  if(d_scanning) {
+    d_scanning=false;
+    emit scanningStopped(id());
   }
 }
 
@@ -211,6 +265,13 @@ void FileDetector::ProcessFile(FileInfo *info)
   unsigned cartnum=0;
   QString err_msg;
 
+  if(!d_scanning) {  // Scanning suspended, throw the file away
+    syslog(LOG_DEBUG,"DirectFile%d scanning suspended, throwing away file %s",
+	   1+id(),info->fileInfo().absoluteFilePath().toUtf8().constData());
+    unlink(info->fileInfo().absoluteFilePath().toUtf8());
+    return;
+  }
+
   //
   // Import Audio to Rivendell Cart
   //
@@ -235,6 +296,7 @@ void FileDetector::ProcessFile(FileInfo *info)
 				  d_config->directFileOutroCart(id()));
     d_rml_socket->writeDatagram(rml.toUtf8(),
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+    d_event_carts.push_back(d_config->directFileOutroCart(id()));
   }
 
   //
@@ -243,6 +305,7 @@ void FileDetector::ProcessFile(FileInfo *info)
   QString rml=QString::asprintf("PX 1 %d 0 PLAY!",cartnum);
   d_rml_socket->writeDatagram(rml.toUtf8(),
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+  d_event_carts.push_back(cartnum);
 
   //
   // Intro Cart
@@ -252,7 +315,9 @@ void FileDetector::ProcessFile(FileInfo *info)
 				  d_config->directFileIntroCart(id()));
     d_rml_socket->writeDatagram(rml.toUtf8(),
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+    d_event_carts.push_back(d_config->directFileIntroCart(id()));
   }
+  d_event_loaded=true;
 
   //
   // Start Play-Out
@@ -263,3 +328,15 @@ void FileDetector::ProcessFile(FileInfo *info)
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
   }
 }
+
+
+ bool FileDetector::CartIsLoaded(unsigned cartnum) const
+ {
+   for(QMap<QString,FileInfo *>::const_iterator it=d_file_infos.begin();
+       it!=d_file_infos.end();it++) {
+     if(it.value()->cartNumber()==cartnum) {
+       return true;
+     }
+   }
+   return false;
+ }

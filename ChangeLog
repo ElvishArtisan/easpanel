@@ -254,3 +254,5 @@
 2026-06-11 Fred Gleason <fredg@paravelsystems.com>
 	* Added 'IntroCart=' and 'OutroCart=' directives to '[DirectFile<n>]'
 	clauses in easpanel.conf(5).
+2026-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Added a direct file importer widget to easp(1).

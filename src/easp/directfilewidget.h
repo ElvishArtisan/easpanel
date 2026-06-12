@@ -1,4 +1,4 @@
-// directfile.h
+// directfilewidget.h
 //
 // Direct File Importer Subsystem
 //
@@ -18,30 +18,45 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
-#ifndef DIRECTFILE_H
-#define DIRECTFILE_H
+#ifndef DIRECTFILEWIDGET_H
+#define DIRECTFILEWIDGET_H
 
-#include <QObject>
-#include <QUdpSocket>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QSignalMapper>
 
 #include "config.h"
 #include "filedetector.h"
 
-class DirectFile : public QObject
+class DirectFileWidget : public QFrame
 {
   Q_OBJECT;
  public:
-  DirectFile(QUdpSocket *rml_sock,Config *c,QObject *parent=0);
+  DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *parent=0);
+  QSize sizeHint() const;
   void playedCart(unsigned cartnum);
 
  private slots:
-  void detectorFileAddedData(int id,const QString &pathname);
-  void detectorFileRemovedData(int id,const QString &pathname);
+  void onButtonData(int id);
+  void offButtonData(int id);
+  void eventStartedData(int id);
+  void eventStoppedData(int id);
+  void scanningStartedData(int id);
+  void scanningStoppedData(int id);
+
+ protected:
+  void resizeEvent(QResizeEvent *e);
 
  private:
+  QSignalMapper *d_on_button_mapper;
+  QList<QPushButton *> d_on_buttons;
+  QSignalMapper *d_off_button_mapper;
+  QList<QPushButton *> d_off_buttons;
+  QList<QLabel *> d_description_labels;
   QList<FileDetector *> d_detectors;
   Config *d_config;
 };
 
 
-#endif  // DIRECTFILE_H
+#endif  // DIRECTFILEWIDGET_H
