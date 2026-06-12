@@ -259,3 +259,5 @@
 2026-06-12 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the 'easpanel' RPM package to make the '/var/eas/'
 	subdirectory persistent after package removal.
+2026-06-12 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to v2.0.0rc0.

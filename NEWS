@@ -1,6 +1,20 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc0 - 12 June 2026
+
+Update the Qt dependency to use Qt5.
+
+Added Flatpak support.
+
+Added DEB packaging support.
+
+Added support for 'BLU' (Blue Alert) and 'MEP' (Missing and Endnagered Person)
+event code support.
+
+Added support for direct file imports.
+
+-------------------------------------------------------------------------------
 1.0.0rc0 - 1 October 2020
 
 Initial release candidate.
