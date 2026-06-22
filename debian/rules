@@ -17,8 +17,10 @@ binary:
 #
 	mkdir -p debian/easpanel/usr/bin
 	mv debian/tmp/usr/bin/easp debian/easpanel/usr/bin
+	mv debian/tmp/usr/bin/directp debian/easpanel/usr/bin
 	mkdir -p debian/easpanel/usr/share/applications
 	mv debian/tmp/usr/share/applications/com.paravelsystems.easpanel.desktop debian/easpanel/usr/share/applications/
+	mv debian/tmp/usr/share/applications/com.paravelsystems.easpanel-directp.desktop debian/easpanel/usr/share/applications/
 	mkdir -p debian/easpanel/usr/share/easpanel
 	mv debian/tmp/usr/share/easpanel/attention.wav debian/easpanel/usr/share/easpanel/
 	mkdir -p debian/easpanel/usr/share/icons/hicolor/16x16/apps
