@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include "filedetector.h"
+#include "modebutton.h"
 
 class DirectFileWidget : public QFrame
 {
@@ -37,24 +38,36 @@ class DirectFileWidget : public QFrame
   QSize sizeHint() const;
   void playedCart(unsigned cartnum);
 
+ signals:
+  void raiseRequested();
+  void quitRequested();
+
  private slots:
-  void onButtonData(int id);
-  void offButtonData(int id);
-  void eventStartedData(int id);
+  void autoData(int id);
+  void sendData(int id);
+  void dismissData(int id);
+  void eventStartedData(int id,FileInfo *info);
   void eventStoppedData(int id);
   void scanningStartedData(int id);
   void scanningStoppedData(int id);
+  void quitRequestedData();
 
  protected:
   void resizeEvent(QResizeEvent *e);
 
  private:
-  QSignalMapper *d_on_button_mapper;
-  QList<QPushButton *> d_on_buttons;
-  QSignalMapper *d_off_button_mapper;
-  QList<QPushButton *> d_off_buttons;
+  void SetLiveAssistMode(int id);
+  void SetAutomaticMode(int id);
+  QSignalMapper *d_mode_button_mapper;
+  QList<ModeButton *> d_mode_buttons;
+  QSignalMapper *d_send_button_mapper;
+  QList<QPushButton *> d_send_buttons;
+  QSignalMapper *d_dismiss_button_mapper;
+  QList<QPushButton *> d_dismiss_buttons;
   QList<QLabel *> d_description_labels;
+  QList<QLabel *> d_datetime_labels;
   QList<FileDetector *> d_detectors;
+  QList<bool> d_autos;
   Config *d_config;
 };
 

@@ -20,6 +20,7 @@
 
 #include <syslog.h>
 
+#include <QDateTime>
 #include <QMessageBox>
 
 #include "directfilewidget.h"
@@ -34,20 +35,23 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
 
   d_config=c;
-  d_on_button_mapper=new QSignalMapper(this);
-  connect(d_on_button_mapper,SIGNAL(mapped(int)),
-	  this,SLOT(onButtonData(int)));
-  d_off_button_mapper=new QSignalMapper(this);
-  connect(d_off_button_mapper,SIGNAL(mapped(int)),
-	  this,SLOT(offButtonData(int)));
+
+  d_send_button_mapper=new QSignalMapper(this);
+  connect(d_send_button_mapper,SIGNAL(mapped(int)),this,SLOT(sendData(int)));
+
+  d_dismiss_button_mapper=new QSignalMapper(this);
+  connect(d_dismiss_button_mapper,SIGNAL(mapped(int)),this,SLOT(dismissData(int)));
+
+  d_mode_button_mapper=new QSignalMapper(this);
+  connect(d_mode_button_mapper,SIGNAL(mapped(int)),this,SLOT(autoData(int)));
 
   for(int i=0;i<d_config->directFileQuantity();i++) {
     //
     // File Detectors
     //
     d_detectors.push_back(new FileDetector(i,rml_sock,d_config,this));
-    connect(d_detectors.back(),SIGNAL(eventStarted(int)),
-	    this,SLOT(eventStartedData(int)));
+    connect(d_detectors.back(),SIGNAL(eventStarted(int,FileInfo *)),
+	    this,SLOT(eventStartedData(int,FileInfo *)));
     connect(d_detectors.back(),SIGNAL(eventStopped(int)),
 	    this,SLOT(eventStoppedData(int)));
     connect(d_detectors.back(),SIGNAL(scanningStarted(int)),
@@ -79,28 +83,39 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
     //
     // UI Elements
     //
-    d_on_buttons.push_back(new QPushButton(tr("On"),this));
-    d_on_buttons.back()->setFont(bold_font);
-    d_on_button_mapper->setMapping(d_on_buttons.back(),i);
-    connect(d_on_buttons.back(),SIGNAL(clicked()),
-    	    d_on_button_mapper,SLOT(map()));
-    d_off_buttons.push_back(new QPushButton(tr("Off"),this));
-    d_off_buttons.back()->setFont(bold_font);
-    d_off_button_mapper->setMapping(d_off_buttons.back(),i);
-    connect(d_off_buttons.back(),SIGNAL(clicked()),
-    	    d_off_button_mapper,SLOT(map()));
+    d_autos.push_back(true);
+    d_mode_buttons.push_back(new ModeButton(tr("Auto"),this));
+    d_mode_buttons.back()->setFont(bold_font);
+    d_mode_buttons.back()->setStyleSheet("background-color: #00FF00");
+    d_mode_button_mapper->setMapping(d_mode_buttons.back(),i);
+    connect(d_mode_buttons.back(),SIGNAL(clicked()),
+    	    d_mode_button_mapper,SLOT(map()));
+    connect(d_mode_buttons.back(),SIGNAL(quitRequested()),
+	    this,SLOT(quitRequestedData()));
+
+    d_send_buttons.push_back(new QPushButton(tr("To Log"),this));
+    d_send_button_mapper->setMapping(d_send_buttons.back(),i);
+    connect(d_send_buttons.back(),SIGNAL(clicked()),
+    	    d_send_button_mapper,SLOT(map()));
+
+    d_dismiss_buttons.push_back(new QPushButton(tr("Dismiss"),this));
+    d_dismiss_button_mapper->setMapping(d_dismiss_buttons.back(),i);
+    connect(d_dismiss_buttons.back(),SIGNAL(clicked()),
+    	    d_dismiss_button_mapper,SLOT(map()));
 
     d_description_labels.
       push_back(new QLabel(d_config->directFileDescription(i),this));
     d_description_labels.back()->setFont(bold_font);
-    //    d_description_labels.back()->setStyleSheet("background-color: #00FF00");
+
+    d_datetime_labels.push_back(new QLabel(this));
   }
 }
 
 
 QSize DirectFileWidget::sizeHint() const
 {
-  return QSize(1020/3,26*d_detectors.size());
+  //  return QSize(1020/3,26*d_detectors.size());
+  return QSize(600,26*d_detectors.size());
 }
 
 
@@ -112,27 +127,42 @@ void DirectFileWidget::playedCart(unsigned cartnum)
 }
 
 
-void DirectFileWidget::onButtonData(int id)
+void DirectFileWidget::autoData(int id)
 {
-  d_detectors.at(id)->startScanning();
+  if(d_autos.at(id)) {
+    SetLiveAssistMode(id);
+  }
+  else {
+    SetAutomaticMode(id);
+  }
 }
 
 
-void DirectFileWidget::offButtonData(int id)
+void DirectFileWidget::sendData(int id)
 {
-  d_detectors.at(id)->stopScanning();
 }
 
 
-void DirectFileWidget::eventStartedData(int id)
+void DirectFileWidget::dismissData(int id)
 {
+}
+
+
+void DirectFileWidget::eventStartedData(int id,FileInfo *info)
+{
+  emit raiseRequested();
   d_description_labels.at(id)->setStyleSheet("background-color: #00FF00");
+  d_datetime_labels.at(id)->setStyleSheet("background-color: #00FF00");
+  d_datetime_labels.at(id)->setText(info->fileInfo().lastModified().
+				    toString("ddd, MMM d yyyy @ hh:mm:ss"));
 }
 
 
 void DirectFileWidget::eventStoppedData(int id)
 {
   d_description_labels.at(id)->setStyleSheet("");
+  d_datetime_labels.at(id)->setStyleSheet("");
+  d_datetime_labels.at(id)->clear();
 }
 
 
@@ -148,14 +178,45 @@ void DirectFileWidget::scanningStoppedData(int id)
 }
 
 
+void DirectFileWidget::quitRequestedData()
+{
+  emit quitRequested();
+}
+
+
 void DirectFileWidget::resizeEvent(QResizeEvent *e)
 {
   int w=size().width();
   //  int h=size().height();
 
+  printf("w: %d\n",w);
   for(int i=0;i<d_description_labels.size();i++) {
-    d_description_labels.at(i)->setGeometry(10,3+26*i,w-135,20);
-    d_on_buttons.at(i)->setGeometry(w-120,3+i*26,50,20);
-    d_off_buttons.at(i)->setGeometry(w-60,3+i*26,50,20);
+    d_mode_buttons.at(i)->setGeometry(10,3+i*26,50,20);
+    d_description_labels.at(i)->setGeometry(10+60,3+26*i,w-500+150,20);
+    d_datetime_labels.at(i)->setGeometry(w-490+145,3+26*i,190,20);
+    d_send_buttons.at(i)->setGeometry(w-210+60,3+i*26,60,20);
+    d_dismiss_buttons.at(i)->setGeometry(w-140+60,3+i*26,70,20);
   }
+}
+
+
+void DirectFileWidget::SetLiveAssistMode(int id)
+{
+  d_mode_buttons.at(id)->setText(tr("Assist"));
+  d_mode_buttons.at(id)->setStyleSheet("background-color: #FFFF00");
+  d_detectors.at(id)->stopScanning();
+  d_autos[id]=false;
+}
+
+
+void DirectFileWidget::SetAutomaticMode(int id)
+{
+  //  int ready_id=-1;
+
+  d_mode_buttons.at(id)->setText(tr("Auto"));
+  d_mode_buttons.at(id)->setStyleSheet("background-color: #00FF00");
+  //  SendRml(main_config->rivendellAutomaticRml());
+  d_detectors.at(id)->startScanning();  
+  d_autos[id]=true;
+
 }

@@ -102,12 +102,12 @@ void FileInfo::makeDeletable()
 FileDetector::FileDetector(int id,QUdpSocket *rml_sock,Config *c,QObject *parent)
 {
   d_id=id;
-  d_event_active=false;
   d_event_loaded=false;
   d_scanning=true;
   d_rml_socket=rml_sock;
   d_config=c;
   d_path_dir=new QDir();
+  d_event_info=NULL;
 
   d_scan_timer=new QTimer(this);
   d_scan_timer->setSingleShot(true);
@@ -130,7 +130,7 @@ int FileDetector::id() const
 
 bool FileDetector::eventActive() const
 {
-  return d_event_active;
+  return !d_scan_timer->isActive();
 }
 
 
@@ -163,6 +163,7 @@ bool FileDetector::setPath(const QString &path)
 void FileDetector::playedCart(unsigned cartnum)
 {
   QString err_msg;
+  FileInfo *info=NULL;
 
   //
   // Event State Logic
@@ -171,16 +172,17 @@ void FileDetector::playedCart(unsigned cartnum)
     if((cartnum==d_config->directFileIntroCart(id()))||
        (cartnum==d_config->directFileOutroCart(id()))||
        CartIsLoaded(cartnum)) {
-      if(!d_event_active) {
-	d_event_active=true;
-	emit eventStarted(id());
+      if(d_scan_timer->isActive()) {
+	d_scan_timer->stop();
+	emit eventStarted(id(),d_event_info);
       }
     }
     else {
-      if(d_event_active) {
-	d_event_active=false;
+      if(!d_scan_timer->isActive()) {
+	d_scan_timer->start(1000);
 	d_event_loaded=false;
 	emit eventStopped(id());
+	d_event_info=NULL;
       }
     }
   }
@@ -317,6 +319,7 @@ void FileDetector::ProcessFile(FileInfo *info)
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
     d_event_carts.push_back(d_config->directFileIntroCart(id()));
   }
+  d_event_info=info;
   d_event_loaded=true;
 
   //
@@ -330,7 +333,7 @@ void FileDetector::ProcessFile(FileInfo *info)
 }
 
 
- bool FileDetector::CartIsLoaded(unsigned cartnum) const
+bool FileDetector::CartIsLoaded(unsigned cartnum) const
  {
    for(QMap<QString,FileInfo *>::const_iterator it=d_file_infos.begin();
        it!=d_file_infos.end();it++) {

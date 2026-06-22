@@ -69,7 +69,7 @@ class FileDetector : public QObject
  signals:
   void fileAdded(int id,const QString &pathname);
   void fileRemoved(int id,const QString &pathname);
-  void eventStarted(int id);
+  void eventStarted(int id,FileInfo *info);
   void eventStopped(int id);
   void scanningStarted(int id);
   void scanningStopped(int id);
@@ -91,8 +91,9 @@ class FileDetector : public QObject
   QTimer *d_scan_timer;
   Config *d_config;
   QList<unsigned> d_event_carts;
+  FileInfo *d_event_info;
   bool d_event_loaded;
-  bool d_event_active;
+  //  bool d_event_active;
   bool d_scanning;
 };
 

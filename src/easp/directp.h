@@ -43,6 +43,7 @@ class MainWidget : public QWidget
 
  private slots:
   void rlmReadyReadData();
+  void bringToTop();
   void quit();
 
  protected:
@@ -54,6 +55,7 @@ class MainWidget : public QWidget
   DirectFileWidget *main_direct_file_widget;
   QUdpSocket *main_rml_socket;
   Config *main_config;
+  bool d_raise_on_alert;
 };
 
 

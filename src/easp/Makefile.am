@@ -32,13 +32,15 @@ bin_PROGRAMS = directp\
 
 dist_directp_SOURCES = directfilewidget.cpp directfilewidget.h\
                        directp.cpp directp.h\
-                       filedetector.cpp filedetector.h
+                       filedetector.cpp filedetector.h\
+                       modebutton.cpp modebutton.h
 
 nodist_directp_SOURCES = cmdswitch.cpp cmdswitch.h\
 	                 config.cpp config.h\
                          moc_directfilewidget.cpp\
                          moc_directp.cpp\
                          moc_filedetector.cpp\
+                         moc_modebutton.cpp\
 	                 profile.cpp profile.h
 
 dist_easp_SOURCES = alertbutton.cpp alertbutton.h\

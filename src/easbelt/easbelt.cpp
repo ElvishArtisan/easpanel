@@ -70,7 +70,7 @@ MainObject::MainObject(QObject *parent)
   // Process Handler
   //
   d_task_mapper=new QSignalMapper(this);
-  connect(d_task_mapper,SIGNAL(mappedObject(QObject *)),
+  connect(d_task_mapper,SIGNAL(mapped(QObject *)),
 	  this,SLOT(taskFinished(QObject *)));
   for(int i=0;i<d_config->easbeltQuantity();i++) {
     if(d_config->easbeltDestinationQuantity(i)>0) {

@@ -37,10 +37,16 @@
 MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent,Qt::CustomizeWindowHint|Qt::WindowMinimizeButtonHint|Qt::WindowMaximizeButtonHint)
 {
+  d_raise_on_alert=true;
+
   CmdSwitch *cmd=new CmdSwitch("directp",VERSION,DIRECTP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="-d") {
       openlog("directp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--no-raise") {
+      d_raise_on_alert=false;
       cmd->setProcessed(i,true);
     }
     if(!cmd->processed(i)) {
@@ -79,7 +85,9 @@ MainWidget::MainWidget(QWidget *parent)
 
   main_direct_file_widget=
     new DirectFileWidget(main_rml_socket,main_config,this);
-
+  connect(main_direct_file_widget,SIGNAL(quitRequested()),this,SLOT(quit()));
+  connect(main_direct_file_widget,SIGNAL(raiseRequested()),
+	  this,SLOT(bringToTop()));
   setMinimumSize(sizeHint());
   setMaximumHeight(sizeHint().height());
 }
@@ -107,6 +115,16 @@ void MainWidget::rlmReadyReadData()
 	main_direct_file_widget->playedCart(cartnum);
       }
     }
+  }
+}
+
+
+void MainWidget::bringToTop()
+{
+  if(d_raise_on_alert) {
+    setWindowState(Qt::WindowActive|Qt::WindowMaximized);
+    raise();
+    activateWindow();
   }
 }
 
