@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 if test ! -e /etc/easpanel.conf ; then
   cp /usr/lib/%{name}-belt/easpanel-sample.conf /etc/easpanel.conf
 fi
+mkdir -p /etc/pki/easpanel
 /bin/systemctl daemon-reload
 /bin/systemctl restart easbelt.service
 /bin/systemctl enable easbelt.service

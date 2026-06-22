@@ -265,4 +265,7 @@
 	* Added a directp(1) applet.
 2026-06-22 Fred Gleason <fredg@paravelsystems.com>
 	* Added directp(1) to the 'easpanel' DEB package.
+2026-06-22 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to create '/etc/pki/easpanel' to the 'easpanel-belt'
+	RPM and DEB packages.
 
