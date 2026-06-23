@@ -278,3 +278,5 @@
 2026-06-23 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in directp(1) that caused '*.txt' files to fail to be
 	retired properly after alert activation.
+2026-06-23 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to v2.0.0rc1.

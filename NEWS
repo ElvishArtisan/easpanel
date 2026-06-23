@@ -1,6 +1,12 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc1 - 23 June 2026
+
+New Applet. Added a directp(1) applet for fully automatic direct file
+insertions.
+
+-------------------------------------------------------------------------------
 2.0.0rc0 - 12 June 2026
 
 Update the Qt dependency to use Qt5.
