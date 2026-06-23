@@ -275,3 +275,6 @@
 2026-06-23 Fred Gleason <fredg@paravelsystems.com>
 	* Added a 'BackupDirectory=' directive to the '[DirectFile<n>] sections
 	of easpanel.conf(5).
+2026-06-23 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in directp(1) that caused '*.txt' files to fail to be
+	retired properly after alert activation.

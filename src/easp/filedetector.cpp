@@ -212,7 +212,7 @@ void FileDetector::playedCart(unsigned cartnum)
       if(it.value()->isDeletable()) {
 	d_config->removeCart(it.value()->cartNumber(),&err_msg);
 	it.value()->setCartNumber(0);
-	RetireFile(it.value()->fileInfo().absoluteFilePath());
+	RetireFileSet(it.value()->fileInfo().absoluteFilePath());
       }
     }
   }
@@ -283,7 +283,7 @@ void FileDetector::ProcessFile(FileInfo *info)
   if(!d_scanning) {  // Scanning suspended, throw the file away
     syslog(LOG_DEBUG,"DirectFile%d scanning suspended, throwing away file %s",
 	   1+id(),info->fileInfo().absoluteFilePath().toUtf8().constData());
-    RetireFile(info->fileInfo().absoluteFilePath());
+    RetireFileSet(info->fileInfo().absoluteFilePath());
     return;
   }
 
@@ -296,7 +296,7 @@ void FileDetector::ProcessFile(FileInfo *info)
 	   1+id(),info->fileInfo().absoluteFilePath().toUtf8().constData(),
 	   err_msg.toUtf8().constData());
     info->setCartNumber(0);
-    RetireFile(info->fileInfo().absoluteFilePath());
+    RetireFileSet(info->fileInfo().absoluteFilePath());
     return;
   }
   info->setCartNumber(cartnum);
@@ -346,22 +346,31 @@ void FileDetector::ProcessFile(FileInfo *info)
 }
 
 
-void FileDetector::RetireFile(const QString &filename) const
+void FileDetector::RetireFileSet(const QString &filename) const
 {
-  if(d_backup_dir->exists()) {
-    QStringList f0=filename.split("/",QString::SkipEmptyParts);
-    QString destname=d_backup_dir->path()+"/"+f0.last();
-    if(rename(filename.toUtf8(),
-	      destname.toUtf8())!=0) {
-      syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
-	     filename.toUtf8().constData(),
-	     destname.toUtf8().constData(),
-	     strerror(errno));
-      unlink(filename.toUtf8());
+  QStringList f0=filename.split(".",QString::KeepEmptyParts);
+  f0.replace(f0.size()-1,"*");
+  QStringList f1=f0.join(".").split("/",QString::KeepEmptyParts);
+  QString filter=f1.last();
+
+  QStringList files=d_path_dir->entryList(QStringList(filter),QDir::Files);
+  for(int i=0;i<files.size();i++) {
+    QString pathname=d_path_dir->path()+"/"+files.at(i);
+    syslog(LOG_DEBUG,"retiring \"%s\"",pathname.toUtf8().constData());
+    QStringList f2=pathname.split("/",QString::SkipEmptyParts);
+    QString destname=d_backup_dir->path()+"/"+f2.last();
+    if(d_backup_dir->exists()) {
+      if(rename(pathname.toUtf8(),destname.toUtf8())!=0) {
+	syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
+	       pathname.toUtf8().constData(),
+	       destname.toUtf8().constData(),
+	       strerror(errno));
+	unlink(pathname.toUtf8());
+      }
     }
-  }
-  else {
-    unlink(filename.toUtf8());
+    else {
+      unlink(pathname.toUtf8());
+    }
   }
 }
 

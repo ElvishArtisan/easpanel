@@ -44,8 +44,6 @@ class DirectFileWidget : public QFrame
 
  private slots:
   void autoData(int id);
-  void sendData(int id);
-  void dismissData(int id);
   void eventStartedData(int id,FileInfo *info);
   void eventStoppedData(int id);
   void scanningStartedData(int id);
@@ -56,14 +54,10 @@ class DirectFileWidget : public QFrame
   void resizeEvent(QResizeEvent *e);
 
  private:
-  void SetLiveAssistMode(int id);
+  void SetPausedMode(int id);
   void SetAutomaticMode(int id);
   QSignalMapper *d_mode_button_mapper;
   QList<ModeButton *> d_mode_buttons;
-  QSignalMapper *d_send_button_mapper;
-  QList<QPushButton *> d_send_buttons;
-  QSignalMapper *d_dismiss_button_mapper;
-  QList<QPushButton *> d_dismiss_buttons;
   QList<QLabel *> d_description_labels;
   QList<QLabel *> d_datetime_labels;
   QList<FileDetector *> d_detectors;

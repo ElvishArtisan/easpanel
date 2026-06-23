@@ -29,18 +29,13 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
   : QFrame(parent)
 {
   setFrameStyle(QFrame::Panel|QFrame::Sunken);
+
   //
   // Fonts
   //
   QFont bold_font(font().family(),font().pointSize(),QFont::Bold);
 
   d_config=c;
-
-  d_send_button_mapper=new QSignalMapper(this);
-  connect(d_send_button_mapper,SIGNAL(mapped(int)),this,SLOT(sendData(int)));
-
-  d_dismiss_button_mapper=new QSignalMapper(this);
-  connect(d_dismiss_button_mapper,SIGNAL(mapped(int)),this,SLOT(dismissData(int)));
 
   d_mode_button_mapper=new QSignalMapper(this);
   connect(d_mode_button_mapper,SIGNAL(mapped(int)),this,SLOT(autoData(int)));
@@ -58,12 +53,6 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 	    this,SLOT(scanningStartedData(int)));
     connect(d_detectors.back(),SIGNAL(scanningStopped(int)),
 	    this,SLOT(scanningStoppedData(int)));
-    /*
-    connect(d_detectors.back(),SIGNAL(fileAdded(int,const QString &)),
-	    this,SLOT(detectorFileAddedData(int,const QString &)));
-    connect(d_detectors.back(),SIGNAL(fileRemoved(int,const QString &)),
-	    this,SLOT(detectorFileRemovedData(int,const QString &)));
-    */
     if(d_detectors.back()->setPath(d_config->directFilePath(i))) {
       syslog(LOG_DEBUG,"DirectFile%d set path for %s",
 	     1+i,d_config->directFilePath(i).toUtf8().constData());
@@ -79,21 +68,23 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 	     1+i,d_config->directFilePath(i).toUtf8().constData());
       exit(1);
     }
-    if(d_detectors.back()->
-       setBackupDirectory(d_config->directFileBackupDirectory(i))) {
-      syslog(LOG_DEBUG,"DirectFile%d set backup directory for %s",
-	     1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
-    }
-    else {
-      QMessageBox::critical(this,"Eas Panel",
-			    tr("The backup directory")+" \""+
-			    d_detectors.back()->backupDirectory()+"\" "+
-			    tr("does not exist for the")+
-			    QString::asprintf(" DirectFile%d ",1+i)+
-			    tr("processor."));
-      syslog(LOG_ERR,"DirectFile%d failed to set backup directory %s",
-	     1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
-      exit(1);
+    if(!d_config->directFileBackupDirectory(i).isEmpty()) {
+      if(d_detectors.back()->
+	 setBackupDirectory(d_config->directFileBackupDirectory(i))) {
+	syslog(LOG_DEBUG,"DirectFile%d set backup directory for %s",
+	       1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
+      }
+      else {
+	QMessageBox::critical(this,"Eas Panel",
+			      tr("The backup directory")+" \""+
+			      d_detectors.back()->backupDirectory()+"\" "+
+			      tr("does not exist for the")+
+			      QString::asprintf(" DirectFile%d ",1+i)+
+			      tr("processor."));
+	syslog(LOG_ERR,"DirectFile%d failed to set backup directory %s",
+	       1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
+	exit(1);
+      }
     }
 
     //
@@ -109,28 +100,20 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
     connect(d_mode_buttons.back(),SIGNAL(quitRequested()),
 	    this,SLOT(quitRequestedData()));
 
-    d_send_buttons.push_back(new QPushButton(tr("To Log"),this));
-    d_send_button_mapper->setMapping(d_send_buttons.back(),i);
-    connect(d_send_buttons.back(),SIGNAL(clicked()),
-    	    d_send_button_mapper,SLOT(map()));
-
-    d_dismiss_buttons.push_back(new QPushButton(tr("Dismiss"),this));
-    d_dismiss_button_mapper->setMapping(d_dismiss_buttons.back(),i);
-    connect(d_dismiss_buttons.back(),SIGNAL(clicked()),
-    	    d_dismiss_button_mapper,SLOT(map()));
-
     d_description_labels.
       push_back(new QLabel(d_config->directFileDescription(i),this));
     d_description_labels.back()->setFont(bold_font);
+    //  d_description_labels.back()->setStyleSheet("background-color: #FF0000");
 
     d_datetime_labels.push_back(new QLabel(this));
+    //  d_datetime_labels.back()->setStyleSheet("background-color: #FFFF00");
   }
 }
 
 
 QSize DirectFileWidget::sizeHint() const
 {
-  return QSize(600,26*d_detectors.size());
+  return QSize(600-130,26*d_detectors.size());
 }
 
 
@@ -145,21 +128,11 @@ void DirectFileWidget::playedCart(unsigned cartnum)
 void DirectFileWidget::autoData(int id)
 {
   if(d_autos.at(id)) {
-    SetLiveAssistMode(id);
+    SetPausedMode(id);
   }
   else {
     SetAutomaticMode(id);
   }
-}
-
-
-void DirectFileWidget::sendData(int id)
-{
-}
-
-
-void DirectFileWidget::dismissData(int id)
-{
 }
 
 
@@ -205,19 +178,18 @@ void DirectFileWidget::resizeEvent(QResizeEvent *e)
   //  int h=size().height();
 
   for(int i=0;i<d_description_labels.size();i++) {
-    d_mode_buttons.at(i)->setGeometry(10,3+i*26,50,20);
-    d_description_labels.at(i)->setGeometry(10+60,3+26*i,w-500+150,20);
-    d_datetime_labels.at(i)->setGeometry(w-490+145,3+26*i,190,20);
-    d_send_buttons.at(i)->setGeometry(w-210+60,3+i*26,60,20);
-    d_dismiss_buttons.at(i)->setGeometry(w-140+60,3+i*26,70,20);
+    d_mode_buttons.at(i)->setGeometry(10,3+i*26,60,20);
+    d_description_labels.at(i)->setGeometry(80,3+29*i,w-270,20);
+    d_datetime_labels.at(i)->setGeometry(w-190,3+29*i,190,20);
   }
 }
 
 
-void DirectFileWidget::SetLiveAssistMode(int id)
+void DirectFileWidget::SetPausedMode(int id)
 {
-  d_mode_buttons.at(id)->setText(tr("Assist"));
-  d_mode_buttons.at(id)->setStyleSheet("background-color: #FFFF00");
+  d_mode_buttons.at(id)->setText(tr("Paused"));
+  d_mode_buttons.at(id)->
+    setStyleSheet("background-color: #FF0000;color=#FFFFFF");
   d_detectors.at(id)->stopScanning();
   d_autos[id]=false;
 }
