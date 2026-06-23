@@ -225,6 +225,12 @@ QString Config::directFilePath(int n) const
 }
 
 
+QString Config::directFileBackupDirectory(int n) const
+{
+  return Config::conf_direct_file_backup_directories.at(n);
+}
+
+
 QString Config::directFileDescription(int n) const
 {
   return conf_direct_file_descriptions.at(n);
@@ -370,6 +376,7 @@ QString Config::dump() const
   for(int i=0;i<conf_direct_file_paths.size();i++) {
     ret+=QString::asprintf("[DirectFile%d]\n",1+i);
     ret+="Path="+conf_direct_file_paths.at(i)+"\n";
+    ret+="BackupDirectory="+conf_direct_file_backup_directories.at(i)+"\n";
     ret+="Description="+conf_direct_file_descriptions.at(i)+"\n";
     ret+="SchedulePolicy="+
       Config::schedulePolicyText(conf_direct_file_schedule_policies.at(i))+"\n";
@@ -536,6 +543,8 @@ bool Config::load()
   QString path=p->stringValue(section,"Path","",&ok);
   while(ok) {
     conf_direct_file_paths.push_back(path);
+    conf_direct_file_backup_directories.
+      push_back(p->stringValue(section,"BackupDirectory"));
     conf_direct_file_descriptions.
       push_back(p->stringValue(section,"Description",section));
     conf_direct_file_schedule_policies.

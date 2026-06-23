@@ -79,6 +79,22 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 	     1+i,d_config->directFilePath(i).toUtf8().constData());
       exit(1);
     }
+    if(d_detectors.back()->
+       setBackupDirectory(d_config->directFileBackupDirectory(i))) {
+      syslog(LOG_DEBUG,"DirectFile%d set backup directory for %s",
+	     1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
+    }
+    else {
+      QMessageBox::critical(this,"Eas Panel",
+			    tr("The backup directory")+" \""+
+			    d_detectors.back()->backupDirectory()+"\" "+
+			    tr("does not exist for the")+
+			    QString::asprintf(" DirectFile%d ",1+i)+
+			    tr("processor."));
+      syslog(LOG_ERR,"DirectFile%d failed to set backup directory %s",
+	     1+i,d_config->directFileBackupDirectory(i).toUtf8().constData());
+      exit(1);
+    }
 
     //
     // UI Elements
@@ -114,7 +130,6 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 
 QSize DirectFileWidget::sizeHint() const
 {
-  //  return QSize(1020/3,26*d_detectors.size());
   return QSize(600,26*d_detectors.size());
 }
 
@@ -189,7 +204,6 @@ void DirectFileWidget::resizeEvent(QResizeEvent *e)
   int w=size().width();
   //  int h=size().height();
 
-  printf("w: %d\n",w);
   for(int i=0;i<d_description_labels.size();i++) {
     d_mode_buttons.at(i)->setGeometry(10,3+i*26,50,20);
     d_description_labels.at(i)->setGeometry(10+60,3+26*i,w-500+150,20);

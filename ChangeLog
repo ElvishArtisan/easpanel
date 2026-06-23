@@ -272,3 +272,6 @@
 	* Added a '--no-raise' switch to directp(1).
 2026-06-23 Fred Gleason <fredg@paravelsystems.com>
 	* Added a '--dump-config' switch to directp(1).
+2026-06-23 Fred Gleason <fredg@paravelsystems.com>
+	* Added a 'BackupDirectory=' directive to the '[DirecFile<n>] sections
+	of easpanel.conf(5).

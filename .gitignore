@@ -37,6 +37,7 @@ src/easp/cmdswitch.cpp
 src/easp/cmdswitch.h
 src/easp/config.cpp
 src/easp/config.h
+src/easp/directp
 src/easp/easp
 src/easp/profile.cpp
 src/easp/profile.h

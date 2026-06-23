@@ -67,6 +67,7 @@ class Config
 
   int directFileQuantity() const;
   QString directFilePath(int n) const;
+  QString directFileBackupDirectory(int n) const;
   QString directFileDescription(int n) const;
   SchedulePolicy directFileSchedulePolicy(int n) const;
   unsigned directFileIntroCart(int n) const;
@@ -122,6 +123,7 @@ class Config
   QString conf_user_agent;
 
   QStringList conf_direct_file_paths;
+  QStringList conf_direct_file_backup_directories;
   QStringList conf_direct_file_descriptions;
   QList<SchedulePolicy> conf_direct_file_schedule_policies;
   QList<unsigned> conf_direct_file_intro_carts;

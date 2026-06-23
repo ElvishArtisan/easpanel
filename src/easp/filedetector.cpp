@@ -107,6 +107,7 @@ FileDetector::FileDetector(int id,QUdpSocket *rml_sock,Config *c,QObject *parent
   d_rml_socket=rml_sock;
   d_config=c;
   d_path_dir=new QDir();
+  d_backup_dir=new QDir();
   d_event_info=NULL;
 
   d_scan_timer=new QTimer(this);
@@ -160,10 +161,22 @@ bool FileDetector::setPath(const QString &path)
 }
 
 
+QString FileDetector::backupDirectory() const
+{
+  return d_backup_dir->path();
+}
+
+
+bool FileDetector::setBackupDirectory(const QString &dirpath)
+{
+  d_backup_dir->setPath(dirpath);
+  return d_backup_dir->exists();
+}
+
+
 void FileDetector::playedCart(unsigned cartnum)
 {
   QString err_msg;
-  FileInfo *info=NULL;
 
   //
   // Event State Logic
@@ -199,7 +212,7 @@ void FileDetector::playedCart(unsigned cartnum)
       if(it.value()->isDeletable()) {
 	d_config->removeCart(it.value()->cartNumber(),&err_msg);
 	it.value()->setCartNumber(0);
-	unlink(it.value()->fileInfo().absoluteFilePath().toUtf8());
+	RetireFile(it.value()->fileInfo().absoluteFilePath());
       }
     }
   }
@@ -270,7 +283,7 @@ void FileDetector::ProcessFile(FileInfo *info)
   if(!d_scanning) {  // Scanning suspended, throw the file away
     syslog(LOG_DEBUG,"DirectFile%d scanning suspended, throwing away file %s",
 	   1+id(),info->fileInfo().absoluteFilePath().toUtf8().constData());
-    unlink(info->fileInfo().absoluteFilePath().toUtf8());
+    RetireFile(info->fileInfo().absoluteFilePath());
     return;
   }
 
@@ -283,7 +296,7 @@ void FileDetector::ProcessFile(FileInfo *info)
 	   1+id(),info->fileInfo().absoluteFilePath().toUtf8().constData(),
 	   err_msg.toUtf8().constData());
     info->setCartNumber(0);
-    unlink(info->fileInfo().absoluteFilePath().toUtf8());
+    RetireFile(info->fileInfo().absoluteFilePath());
     return;
   }
   info->setCartNumber(cartnum);
@@ -329,6 +342,26 @@ void FileDetector::ProcessFile(FileInfo *info)
     rml="PN 1!";
     d_rml_socket->writeDatagram(rml.toUtf8(),
 			      d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+  }
+}
+
+
+void FileDetector::RetireFile(const QString &filename) const
+{
+  if(d_backup_dir->exists()) {
+    QStringList f0=filename.split("/",QString::SkipEmptyParts);
+    QString destname=d_backup_dir->path()+"/"+f0.last();
+    if(rename(filename.toUtf8(),
+	      destname.toUtf8())!=0) {
+      syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
+	     filename.toUtf8().constData(),
+	     destname.toUtf8().constData(),
+	     strerror(errno));
+      unlink(filename.toUtf8());
+    }
+  }
+  else {
+    unlink(filename.toUtf8());
   }
 }
 
