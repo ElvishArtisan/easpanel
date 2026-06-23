@@ -38,11 +38,16 @@ MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent,Qt::CustomizeWindowHint|Qt::WindowMinimizeButtonHint|Qt::WindowMaximizeButtonHint)
 {
   d_raise_on_alert=true;
+  bool dump_config=false;
 
   CmdSwitch *cmd=new CmdSwitch("directp",VERSION,DIRECTP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="-d") {
       openlog("directp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--dump-config") {
+      dump_config=true;
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--no-raise") {
@@ -63,6 +68,10 @@ MainWidget::MainWidget(QWidget *parent)
   //
   main_config=new Config();
   main_config->load();
+  if(dump_config) {
+    printf("%s",main_config->dump().toUtf8().constData());
+    exit(0);
+  }
 
   //
   // RML Socket

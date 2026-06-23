@@ -270,3 +270,5 @@
 	RPM and DEB packages.
 2026-06-22 Fred Gleason <fredg@paravelsystems.com>
 	* Added a '--no-raise' switch to directp(1).
+2026-06-23 Fred Gleason <fredg@paravelsystems.com>
+	* Added a '--dump-config' switch to directp(1).
