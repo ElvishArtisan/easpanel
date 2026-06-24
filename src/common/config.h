@@ -86,7 +86,7 @@ class Config
   QString easbeltDestinationSftpIdentity(int src_n,int n) const;
   QString easbeltDestinationSftpUsername(int src_n,int n) const;
   QString dump() const;
-  bool load();
+  bool load(const QString &pathname=CONFIG_FILE_NAME);
   void clear();
   unsigned importCart(const QString &title,const QString &filename,
 		      QString *err_msg);

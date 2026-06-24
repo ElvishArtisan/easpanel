@@ -301,3 +301,5 @@
 	* Added a 'directp' Systemd service.
 2026-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc2.
+2026-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added a '--config-file=' directive to directp(1).

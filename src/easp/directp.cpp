@@ -41,6 +41,7 @@ MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent,Qt::CustomizeWindowHint|Qt::WindowMinimizeButtonHint|Qt::WindowMaximizeButtonHint)
 {
   d_raise_on_alert=true;
+  QString config_file=CONFIG_FILE_NAME;
   bool dump_config=false;
   bool no_publish_point_cleanup=false;
   bool automatic=false;
@@ -54,6 +55,10 @@ MainWidget::MainWidget(QWidget *parent)
     }
     if(cmd->key(i)=="--automatic") {
       automatic=true;
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--config-file") {
+      config_file=cmd->value(i);
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--dump-config") {
@@ -106,7 +111,7 @@ MainWidget::MainWidget(QWidget *parent)
   // Main Configuration
   //
   main_config=new Config();
-  main_config->load();
+  main_config->load(config_file);
   if(dump_config) {
     printf("%s",main_config->dump().toUtf8().constData());
     exit(0);

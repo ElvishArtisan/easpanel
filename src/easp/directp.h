@@ -34,7 +34,7 @@
 #include "directfilewidget.h"
 #include "sigwatcher.h"
 
-#define DIRECTP_USAGE "[--dump-config]|[--no-publish-point-cleanup] [--no-raise] [--automatic|--paused]\n\n"
+#define DIRECTP_USAGE "[--config-file=<conf-path>] [--dump-config]|[--no-publish-point-cleanup] [--no-raise] [--automatic|--paused]\n\n"
 
 class MainWidget : public QWidget
 {

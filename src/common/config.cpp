@@ -420,12 +420,12 @@ QString Config::dump() const
 }
 
 
-bool Config::load()
+bool Config::load(const QString &pathname)
 {
   bool ret=false;
   Profile *p=new Profile();
 
-  ret=p->setSource(CONFIG_FILE_NAME);
+  ret=p->setSource(pathname);
   if(!ret) {
     ret=p->setSource(CONFIG_FLATPAK_FILE_NAME);
   }
