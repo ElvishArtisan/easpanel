@@ -295,3 +295,5 @@
 2026-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Added code to directp(1) to automatically raise its window when
 	switched to 'Auto' mode.
+2026-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a regression in directp(1) that broke automatic processing.

@@ -234,6 +234,7 @@ void FileDetector::startScanning()
     d_rml_socket->
       writeDatagram(d_config->directFileAutomaticModeRml(id()).toUtf8(),
 		    d_config->rivendellHostAddress(),CONFIG_RML_PORT);
+    d_scan_timer->start(1000);
     emit scanningStarted(id());
   }
 }
@@ -253,6 +254,7 @@ void FileDetector::stopScanning()
 
 void FileDetector::scanData()
 {
+  printf("scanData()\n");
   for(QMap<QString,FileInfo *>::const_iterator it=d_file_infos.begin();
       it!=d_file_infos.end();it++) {
     it.value()->reset();
