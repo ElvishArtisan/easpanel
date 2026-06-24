@@ -143,6 +143,7 @@ AC_CONFIG_FILES([ \
     src/easp/Makefile \
     src/pypad_easpanel/Makefile \
     src/tests/Makefile \
+    systemd/directp.service \
     systemd/easbelt.service \
     systemd/Makefile \
     xdg/com.paravelsystems.easpanel.desktop \

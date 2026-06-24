@@ -254,7 +254,6 @@ void FileDetector::stopScanning()
 
 void FileDetector::scanData()
 {
-  printf("scanData()\n");
   for(QMap<QString,FileInfo *>::const_iterator it=d_file_infos.begin();
       it!=d_file_infos.end();it++) {
     it.value()->reset();

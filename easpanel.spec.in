@@ -83,6 +83,17 @@ if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
 fi
 mkdir -p /var/eas
 chmod 0777 /var/eas
+/bin/systemctl daemon-reload
+/bin/systemctl enable directp.service
+
+
+%preun
+/bin/systemctl stop directp.service
+/bin/systemctl disable directp.service
+
+
+%postun
+/bin/systemctl daemon-reload
 
 
 %clean
@@ -101,6 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/icons/hicolor/32x32/apps/easpanel.png
 %{_datadir}/icons/hicolor/48x48/apps/easpanel.png
 /usr/lib/easpanel/easpanel-sample.conf
+/lib/systemd/system/directp.service
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING 

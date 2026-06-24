@@ -1,0 +1,18 @@
+@GENERATED_SCRIPT_FILE_WARNING@
+
+[Unit]
+Description=Automatic file processor for Rivendell
+After=network.target remote-fs.target nss-lookup.target sound.target
+
+[Service]
+LimitNOFILE=4096
+Type=simple
+ExecStart=@prefix@/bin/directp -display :0
+PrivateTmp=true
+Restart=always
+RestartSec=5
+StartLimitInterval=120
+StartLimitBurst=50
+
+[Install]
+WantedBy=graphical.target

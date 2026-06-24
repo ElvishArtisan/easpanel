@@ -20,14 +20,17 @@
 
 install-exec-local:	
 	mkdir -p $(DESTDIR)/lib/systemd/system
+	cp directp.service $(DESTDIR)/lib/systemd/system/directp.service
 	cp easbelt.service $(DESTDIR)/lib/systemd/system/easbelt.service
 	./daemon-reload.sh
 
 uninstall-local:	
+	rm -f $(DESTDIR)/lib/systemd/system/directp.service
 	rm -f $(DESTDIR)/lib/systemd/system/easbelt.service
 	./daemon-reload.sh
 
 EXTRA_DIST = daemon-reload.sh\
+             directp.service.in\
              easbelt.service.in
 
 CLEANFILES = *~
