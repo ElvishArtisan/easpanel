@@ -133,6 +133,22 @@ void DirectFileWidget::cleanPaths() const
 }
 
 
+void DirectFileWidget::setAutomaticMode(int id)
+{
+  for(int i=0;i<d_detectors.size();i++) {
+    SetAutomaticMode(i);
+  }
+}
+
+
+void DirectFileWidget::setPausedMode(int id)
+{
+  for(int i=0;i<d_detectors.size();i++) {
+    SetPausedMode(i);
+  }
+}
+
+
 void DirectFileWidget::autoData(int id)
 {
   if(d_autos.at(id)) {

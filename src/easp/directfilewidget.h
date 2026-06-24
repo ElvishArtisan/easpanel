@@ -38,6 +38,8 @@ class DirectFileWidget : public QFrame
   QSize sizeHint() const;
   void playedCart(unsigned cartnum);
   void cleanPaths() const;
+  void setAutomaticMode(int id=-1);
+  void setPausedMode(int id=-1);
 
  signals:
   void raiseRequested();

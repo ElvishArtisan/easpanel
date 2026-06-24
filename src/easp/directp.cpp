@@ -2,7 +2,7 @@
 //
 // Direct importer control applet for EasPanel
 //
-//   (C) Copyright 2018-2020 Fred Gleason <fredg@paravelsystems.com>
+//   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License version 2 as
@@ -20,11 +20,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <syslog.h>
+#include <sys/types.h>
 
 #include <QApplication>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QProcess>
 
 #include "directp.h"
 #include "cmdswitch.h"
@@ -40,11 +43,17 @@ MainWidget::MainWidget(QWidget *parent)
   d_raise_on_alert=true;
   bool dump_config=false;
   bool no_publish_point_cleanup=false;
+  bool automatic=false;
+  bool paused=false;
 
   CmdSwitch *cmd=new CmdSwitch("directp",VERSION,DIRECTP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="-d") {
       openlog("directp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--automatic") {
+      automatic=true;
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--dump-config") {
@@ -59,6 +68,10 @@ MainWidget::MainWidget(QWidget *parent)
       d_raise_on_alert=false;
       cmd->setProcessed(i,true);
     }
+    if(cmd->key(i)=="--paused") {
+      paused=true;
+      cmd->setProcessed(i,true);
+    }
     if(!cmd->processed(i)) {
       QMessageBox::critical(this,"DirectPanel - "+tr("Unknown Option"),
 			    tr("Unknown command-line option:")+
@@ -67,6 +80,27 @@ MainWidget::MainWidget(QWidget *parent)
     }
   }
   delete cmd;
+  if(automatic) {
+    if(paused) {
+      // Conflict error!
+      QMessageBox::critical(this,"DirectPanel - "+tr("Error"),
+			    tr("The")+" \"--automatic\" "+tr("and")+
+			    " \"--paused\" "+
+			    tr("switches are mutually exclusive."));
+      exit(1);
+    }
+    else {
+      // Using auto mode
+    }
+  }
+  else {
+    if(paused) {
+      // Using paused mode
+    }
+    else {
+      // Implies automatic mode
+    }
+  }
 
   //
   // Main Configuration
@@ -75,6 +109,21 @@ MainWidget::MainWidget(QWidget *parent)
   main_config->load();
   if(dump_config) {
     printf("%s",main_config->dump().toUtf8().constData());
+    exit(0);
+  }
+
+  QList<pid_t> pids=GetPids();
+  if(pids.size()>0) {
+    //
+    // Another instance is already running, so tell it to use the
+    // specified mode.
+    //
+    if(automatic) {
+      kill(pids.first(),SIGUSR1);
+    }
+    if(paused) {
+      kill(pids.first(),SIGUSR2);
+    }
     exit(0);
   }
 
@@ -97,6 +146,9 @@ MainWidget::MainWidget(QWidget *parent)
   setWindowTitle(QString("DirectPanel - v")+VERSION);
   setWindowIcon(QPixmap(easpanel_22x22_xpm));
 
+  //
+  // File Widget
+  //
   main_direct_file_widget=
     new DirectFileWidget(main_rml_socket,main_config,this);
   connect(main_direct_file_widget,SIGNAL(quitRequested()),this,SLOT(quit()));
@@ -105,8 +157,30 @@ MainWidget::MainWidget(QWidget *parent)
   setMinimumSize(sizeHint());
   setMaximumHeight(sizeHint().height());
 
+  //
+  // POSIX Signal Monitoring
+  //
+  d_sig_watcher=new SigWatcher(this);
+  connect(d_sig_watcher,SIGNAL(receivedSignal(int)),
+	  this,SLOT(receivedSignalData(int)));
+  d_sig_watcher->addWatchedSignal(SIGUSR1);
+  d_sig_watcher->addWatchedSignal(SIGUSR2);
+
+  //
+  // Publish Point Cleanup
+  //
   if(!no_publish_point_cleanup) {
     main_direct_file_widget->cleanPaths();
+  }
+
+  //
+  // Set Operating Mode
+  //
+  if(paused) {
+    main_direct_file_widget->setPausedMode();
+  }
+  if(automatic) {
+    main_direct_file_widget->setAutomaticMode();
   }
 }
 
@@ -147,6 +221,21 @@ void MainWidget::bringToTop()
 }
 
 
+void MainWidget::receivedSignalData(int signum)
+{
+  switch(signum) {
+  case SIGUSR1:
+    main_direct_file_widget->setAutomaticMode();
+    break;
+
+  case SIGUSR2:
+    main_direct_file_widget->setPausedMode();
+    break;
+  }
+  printf("receivedSignalData(%d)\n",signum);
+}
+
+
 void MainWidget::quit()
 {
   exit(0);
@@ -171,6 +260,46 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 void MainWidget::closeEvent(QCloseEvent *e)
 {
   quit();
+}
+
+
+QList<pid_t> MainWidget::GetPids()
+{
+  QStringList args;
+  pid_t pid;
+  bool ok=false;
+  QList<pid_t> ret;
+
+  args.push_back("-C");
+  args.push_back(qApp->applicationName());
+  args.push_back("-o");
+  args.push_back("pid=");
+
+  QProcess *proc=new QProcess(this);
+  proc->start("ps",args);
+  proc->waitForFinished();
+  if(proc->exitStatus()!=QProcess::NormalExit) {
+    QMessageBox::critical(this,"DirectPanel - "+tr("Error"),
+			  tr("ps(1) process crashed!"));
+    exit(1);
+  }
+  if(proc->exitCode()!=0) {
+    QMessageBox::critical(this,"DirectPanel - "+tr("Error"),
+			  tr("ps(1) returned exit code")+
+			  QString::asprintf("%d.\n\n",proc->exitCode())+
+			  QString::fromUtf8(proc->readAllStandardError()));
+    exit(1);
+  }
+  QStringList f0=QString::fromUtf8(proc->readAllStandardOutput()).
+    split("\n",QString::SkipEmptyParts);
+  for(int i=0;i<f0.size();i++) {
+    pid=f0.at(i).toInt(&ok);
+    if(ok&&(pid>0)&&(pid!=qApp->applicationPid())) {
+      ret.push_back(pid);
+    }
+  }
+
+  return ret;
 }
 
 

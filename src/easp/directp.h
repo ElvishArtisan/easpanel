@@ -22,6 +22,7 @@
 #define DIRECTP_H
 
 #include <QLabel>
+#include <QList>
 #include <QTextEdit>
 #include <QTimer>
 #include <QMap>
@@ -31,8 +32,9 @@
 
 #include "config.h"
 #include "directfilewidget.h"
+#include "sigwatcher.h"
 
-#define DIRECTP_USAGE "[--dump-config]|[--no-publish-point-cleanup] [--no-raise]\n\n"
+#define DIRECTP_USAGE "[--dump-config]|[--no-publish-point-cleanup] [--no-raise] [--automatic|--paused]\n\n"
 
 class MainWidget : public QWidget
 {
@@ -44,6 +46,7 @@ class MainWidget : public QWidget
  private slots:
   void rlmReadyReadData();
   void bringToTop();
+  void receivedSignalData(int signum);
   void quit();
 
  protected:
@@ -52,8 +55,10 @@ class MainWidget : public QWidget
   void closeEvent(QCloseEvent *e);
 
  private:
+  QList<pid_t> GetPids();
   DirectFileWidget *main_direct_file_widget;
   QUdpSocket *main_rml_socket;
+  SigWatcher *d_sig_watcher;
   Config *main_config;
   bool d_raise_on_alert;
 };
