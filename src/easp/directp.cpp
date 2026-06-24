@@ -39,6 +39,7 @@ MainWidget::MainWidget(QWidget *parent)
 {
   d_raise_on_alert=true;
   bool dump_config=false;
+  bool no_publish_point_cleanup=false;
 
   CmdSwitch *cmd=new CmdSwitch("directp",VERSION,DIRECTP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
@@ -48,6 +49,10 @@ MainWidget::MainWidget(QWidget *parent)
     }
     if(cmd->key(i)=="--dump-config") {
       dump_config=true;
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--no-publish-point-cleanup") {
+      no_publish_point_cleanup=true;
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--no-raise") {
@@ -99,6 +104,10 @@ MainWidget::MainWidget(QWidget *parent)
 	  this,SLOT(bringToTop()));
   setMinimumSize(sizeHint());
   setMaximumHeight(sizeHint().height());
+
+  if(!no_publish_point_cleanup) {
+    main_direct_file_widget->cleanPaths();
+  }
 }
 
 

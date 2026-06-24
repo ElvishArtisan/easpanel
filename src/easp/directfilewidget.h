@@ -37,6 +37,7 @@ class DirectFileWidget : public QFrame
   DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *parent=0);
   QSize sizeHint() const;
   void playedCart(unsigned cartnum);
+  void cleanPaths() const;
 
  signals:
   void raiseRequested();

@@ -125,6 +125,14 @@ void DirectFileWidget::playedCart(unsigned cartnum)
 }
 
 
+void DirectFileWidget::cleanPaths() const
+{
+  for(int i=0;i<d_detectors.size();i++) {
+    d_detectors.at(i)->cleanPath();
+  }
+}
+
+
 void DirectFileWidget::autoData(int id)
 {
   if(d_autos.at(id)) {

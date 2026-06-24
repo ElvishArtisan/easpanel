@@ -32,7 +32,7 @@
 #include "config.h"
 #include "directfilewidget.h"
 
-#define DIRECTP_USAGE "[--no-raise]\n\n"
+#define DIRECTP_USAGE "[--dump-config]|[--no-publish-point-cleanup] [--no-raise]\n\n"
 
 class MainWidget : public QWidget
 {

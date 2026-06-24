@@ -280,3 +280,7 @@
 	retired properly after alert activation.
 2026-06-23 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc1.
+2026-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added a '--no-publish-point-cleanup' switch to directp(1).
+	* Fixed a bug in directp(1) that caused 'BackupDirectory=' directive
+	in the '[DirectFile<n>] sections to get a default value of '.'.

@@ -66,6 +66,7 @@ class FileDetector : public QObject
   bool setPath(const QString &path);
   QString backupDirectory() const;
   bool setBackupDirectory(const QString &dirpath);
+  void cleanPath() const;
   void playedCart(unsigned cartnum);
 
  signals:
@@ -86,6 +87,7 @@ class FileDetector : public QObject
  private:
   void ProcessFile(FileInfo *info);
   void RetireFileSet(const QString &filename) const;
+  void RetireFiles(const QString &filespec) const;
   bool CartIsLoaded(unsigned cartnum) const;
   int d_id;
   QUdpSocket *d_rml_socket;

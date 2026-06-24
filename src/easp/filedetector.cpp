@@ -174,6 +174,14 @@ bool FileDetector::setBackupDirectory(const QString &dirpath)
 }
 
 
+void FileDetector::cleanPath() const
+{
+  syslog(LOG_DEBUG,"cleaning publish point \"%s\"",
+	 path().toUtf8().constData());
+  RetireFiles("*");
+}
+
+
 void FileDetector::playedCart(unsigned cartnum)
 {
   QString err_msg;
@@ -351,8 +359,9 @@ void FileDetector::RetireFileSet(const QString &filename) const
   QStringList f0=filename.split(".",QString::KeepEmptyParts);
   f0.replace(f0.size()-1,"*");
   QStringList f1=f0.join(".").split("/",QString::KeepEmptyParts);
-  QString filter=f1.last();
 
+  RetireFiles(f1.last());
+  /*
   QStringList files=d_path_dir->entryList(QStringList(filter),QDir::Files);
   for(int i=0;i<files.size();i++) {
     QString pathname=d_path_dir->path()+"/"+files.at(i);
@@ -360,6 +369,37 @@ void FileDetector::RetireFileSet(const QString &filename) const
     QStringList f2=pathname.split("/",QString::SkipEmptyParts);
     QString destname=d_backup_dir->path()+"/"+f2.last();
     if(d_backup_dir->exists()) {
+      if(rename(pathname.toUtf8(),destname.toUtf8())!=0) {
+	syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
+	       pathname.toUtf8().constData(),
+	       destname.toUtf8().constData(),
+	       strerror(errno));
+	unlink(pathname.toUtf8());
+      }
+    }
+    else {
+      unlink(pathname.toUtf8());
+    }
+  }
+  */
+}
+
+
+void FileDetector::RetireFiles(const QString &filespec) const
+{
+  QStringList files=d_path_dir->entryList(QStringList(filespec),QDir::Files);
+  /*
+  printf("filespec: %s\n",filespec.toUtf8().constData());
+  for(int i=0;i<files.size();i++) {
+    printf("files[%d]: %s\n",i,files.at(i).toUtf8().constData());
+  }
+  */
+  for(int i=0;i<files.size();i++) {
+    QString pathname=d_path_dir->path()+"/"+files.at(i);
+    syslog(LOG_DEBUG,"retiring \"%s\"",pathname.toUtf8().constData());
+    QStringList f2=pathname.split("/",QString::SkipEmptyParts);
+    QString destname=d_backup_dir->path()+"/"+f2.last();
+    if((d_backup_dir->path()!=".")&&d_backup_dir->exists()) {
       if(rename(pathname.toUtf8(),destname.toUtf8())!=0) {
 	syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
 	       pathname.toUtf8().constData(),
