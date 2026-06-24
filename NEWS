@@ -1,6 +1,13 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc2 - 24 June 2026
+
+DirectPanel. Added the ability to remotely set the mode of an operating
+panel instance by means of the '--automatic' and '--paused' command line
+switches.
+
+-------------------------------------------------------------------------------
 2.0.0rc1 - 23 June 2026
 
 New Applet. Added a directp(1) applet for fully automatic direct file
