@@ -1,6 +1,12 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc3 - 24 June 2026
+
+DirectPanel. Fixed a bug that cause a UDP port conflict between easp(1)
+and directp(1).
+
+-------------------------------------------------------------------------------
 2.0.0rc2 - 24 June 2026
 
 DirectPanel. Added the ability to remotely set the mode of an operating
