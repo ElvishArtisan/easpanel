@@ -292,3 +292,6 @@
 2026-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Fixed a bug in directp(1) that caused it to not send the RML
 	specified by 'PausedModeRml=' direct at shutdown.
+2026-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to directp(1) to automatically raise its window when
+	switched to 'Auto' mode.

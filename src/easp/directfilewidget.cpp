@@ -115,7 +115,7 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 
 QSize DirectFileWidget::sizeHint() const
 {
-  return QSize(600-130,26*d_detectors.size());
+  return QSize(470,26*d_detectors.size());
 }
 
 
@@ -230,5 +230,5 @@ void DirectFileWidget::SetAutomaticMode(int id)
   d_mode_buttons.at(id)->setStyleSheet("background-color: #00FF00");
   d_detectors.at(id)->startScanning();  
   d_autos[id]=true;
-
+  emit raiseRequested();
 }
