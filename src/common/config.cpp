@@ -255,6 +255,18 @@ unsigned Config::directFileOutroCart(int n) const
 }
 
 
+QString Config::directFileAutomaticModeRml(int n) const
+{
+  return conf_direct_file_automatic_mode_rmls.at(n);
+}
+
+
+QString Config::directFilePausedModeRml(int n) const
+{
+  return conf_direct_file_paused_mode_rmls.at(n);
+}
+
+
 int Config::easbeltQuantity() const
 {
   return conf_easbelt_source_files.size();
@@ -382,6 +394,8 @@ QString Config::dump() const
       Config::schedulePolicyText(conf_direct_file_schedule_policies.at(i))+"\n";
     ret+=QString::asprintf("IntroCart=%u\n",conf_direct_file_intro_carts.at(i));
     ret+=QString::asprintf("OutroCart=%u\n",conf_direct_file_outro_carts.at(i));
+    ret+="AutomaticModeRml="+conf_direct_file_automatic_mode_rmls.at(i)+"\n";
+    ret+="PausedModeRml="+conf_direct_file_paused_mode_rmls.at(i)+"\n";
   }
 
   for(int i=0;i<conf_easbelt_source_files.size();i++) {
@@ -552,6 +566,10 @@ bool Config::load()
 						      "next")));
     conf_direct_file_intro_carts.push_back(p->intValue(section,"IntroCart"));
     conf_direct_file_outro_carts.push_back(p->intValue(section,"OutroCart"));
+    conf_direct_file_automatic_mode_rmls.
+      push_back(p->stringValue(section,"AutomaticModeRml"));
+    conf_direct_file_paused_mode_rmls.
+      push_back(p->stringValue(section,"PausedModeRml"));
     count++;
     section=QString::asprintf("DirectFile%d",1+count);
     path=p->stringValue(section,"Path","",&ok);

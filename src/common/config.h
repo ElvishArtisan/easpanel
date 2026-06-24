@@ -72,6 +72,8 @@ class Config
   SchedulePolicy directFileSchedulePolicy(int n) const;
   unsigned directFileIntroCart(int n) const;
   unsigned directFileOutroCart(int n) const;
+  QString directFileAutomaticModeRml(int n) const;
+  QString directFilePausedModeRml(int n) const;
 
   int easbeltQuantity() const;
   QString easbeltSourceFiles(int n) const;
@@ -128,6 +130,8 @@ class Config
   QList<SchedulePolicy> conf_direct_file_schedule_policies;
   QList<unsigned> conf_direct_file_intro_carts;
   QList<unsigned> conf_direct_file_outro_carts;
+  QStringList conf_direct_file_automatic_mode_rmls;
+  QStringList conf_direct_file_paused_mode_rmls;
 
   QStringList conf_easbelt_source_files;
   QList<QDir *> conf_easbelt_source_files_dirs; 

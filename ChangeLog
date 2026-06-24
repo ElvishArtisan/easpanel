@@ -286,3 +286,6 @@
 	in the '[DirectFile<n>] sections to get a default value of '.'.
 2026-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Added '--automatic' and '--paused' switches to directp(1).
+2026-06-24 Fred Gleason <fredg@paravelsystems.com>
+	* Added 'AutomaticModeRml=' and 'PausedModeRml=' directives to the
+	'[DirectFile<n>]' sections of easpanel.conf(5).

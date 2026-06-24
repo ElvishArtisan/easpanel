@@ -90,10 +90,10 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
     //
     // UI Elements
     //
-    d_autos.push_back(true);
-    d_mode_buttons.push_back(new ModeButton(tr("Auto"),this));
+    d_autos.push_back(false);
+    d_mode_buttons.push_back(new ModeButton(tr("Paused"),this));
     d_mode_buttons.back()->setFont(bold_font);
-    d_mode_buttons.back()->setStyleSheet("background-color: #00FF00");
+    d_mode_buttons.back()->setStyleSheet("background-color: #FF0000");
     d_mode_button_mapper->setMapping(d_mode_buttons.back(),i);
     connect(d_mode_buttons.back(),SIGNAL(clicked()),
     	    d_mode_button_mapper,SLOT(map()));
@@ -107,6 +107,8 @@ DirectFileWidget::DirectFileWidget(QUdpSocket *rml_sock,Config *c,QWidget *paren
 
     d_datetime_labels.push_back(new QLabel(this));
     //  d_datetime_labels.back()->setStyleSheet("background-color: #FFFF00");
+
+    SetAutomaticMode(i);
   }
 }
 
@@ -221,11 +223,8 @@ void DirectFileWidget::SetPausedMode(int id)
 
 void DirectFileWidget::SetAutomaticMode(int id)
 {
-  //  int ready_id=-1;
-
   d_mode_buttons.at(id)->setText(tr("Auto"));
   d_mode_buttons.at(id)->setStyleSheet("background-color: #00FF00");
-  //  SendRml(main_config->rivendellAutomaticRml());
   d_detectors.at(id)->startScanning();  
   d_autos[id]=true;
 

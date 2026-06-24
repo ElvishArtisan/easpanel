@@ -99,7 +99,6 @@ class FileDetector : public QObject
   QList<unsigned> d_event_carts;
   FileInfo *d_event_info;
   bool d_event_loaded;
-  //  bool d_event_active;
   bool d_scanning;
 };
 

@@ -103,7 +103,7 @@ FileDetector::FileDetector(int id,QUdpSocket *rml_sock,Config *c,QObject *parent
 {
   d_id=id;
   d_event_loaded=false;
-  d_scanning=true;
+  d_scanning=false;
   d_rml_socket=rml_sock;
   d_config=c;
   d_path_dir=new QDir();
@@ -156,7 +156,7 @@ bool FileDetector::setPath(const QString &path)
   d_path_dir->setNameFilters(QStringList(f0.last()));
   f0.removeLast();
   d_path_dir->setPath(f0.join("/"));
-  d_scan_timer->start(1000);
+  //  d_scan_timer->start(1000);
   return d_path_dir->exists();
 }
 
@@ -231,6 +231,9 @@ void FileDetector::startScanning()
 {
   if(!d_scanning) {
     d_scanning=true;
+    d_rml_socket->
+      writeDatagram(d_config->directFileAutomaticModeRml(id()).toUtf8(),
+		    d_config->rivendellHostAddress(),CONFIG_RML_PORT);
     emit scanningStarted(id());
   }
 }
@@ -240,6 +243,9 @@ void FileDetector::stopScanning()
 {
   if(d_scanning) {
     d_scanning=false;
+    d_rml_socket->
+      writeDatagram(d_config->directFilePausedModeRml(id()).toUtf8(),
+		    d_config->rivendellHostAddress(),CONFIG_RML_PORT);
     emit scanningStopped(id());
   }
 }
