@@ -194,6 +194,9 @@ void DirectFileWidget::scanningStoppedData(int id)
 
 void DirectFileWidget::quitRequestedData()
 {
+  for(int i=0;i<d_detectors.size();i++) {
+    SetPausedMode(i);
+  }
   emit quitRequested();
 }
 

@@ -165,7 +165,9 @@ MainWidget::MainWidget(QWidget *parent)
 	  this,SLOT(receivedSignalData(int)));
   d_sig_watcher->addWatchedSignal(SIGUSR1);
   d_sig_watcher->addWatchedSignal(SIGUSR2);
-
+  d_sig_watcher->addWatchedSignal(SIGTERM);
+  d_sig_watcher->addWatchedSignal(SIGINT);
+  
   //
   // Publish Point Cleanup
   //
@@ -231,8 +233,13 @@ void MainWidget::receivedSignalData(int signum)
   case SIGUSR2:
     main_direct_file_widget->setPausedMode();
     break;
+
+  case SIGINT:
+  case SIGTERM:
+    main_direct_file_widget->setPausedMode();
+    main_direct_file_widget->quitRequested();
+    break;
   }
-  printf("receivedSignalData(%d)\n",signum);
 }
 
 
