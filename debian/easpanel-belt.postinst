@@ -4,8 +4,9 @@
 case "$1" in
     configure)
       ldconfig
-      if test ! -e /etc/easpanel.conf ; then
-        cp /usr/share/easpanel-belt/easpanel-sample.conf /etc/easpanel.conf
+      if test ! -e /etc/easpanel/easbelt.conf ; then
+	mkdir -p /etc/easpanel
+        cp /usr/share/easpanel/easbelt-sample.conf /etc/easpanel/easbelt.conf
       fi
       mkdir -p /etc/pki/easpanel
       /bin/systemctl daemon-reload

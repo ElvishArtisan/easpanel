@@ -324,3 +324,6 @@
 	the syslog each time an event is aired.
 2026-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc5.
+2026-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Modified DEB packages to accommodate changes in configuration
+	file layout.

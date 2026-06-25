@@ -19,8 +19,8 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-    /bin/systemctl stop easbelt.service
-    /bin/systemctl disable easbelt.service
+    /bin/systemctl stop directp.service
+    /bin/systemctl disable directp.service
     ;;
 
     failed-upgrade)

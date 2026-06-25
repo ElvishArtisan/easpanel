@@ -7,8 +7,13 @@ case "$1" in
       if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
 	/usr/bin/gtk-update-icon-cache -f --quiet /usr/share/icons/hicolor || :
       fi
-      if test ! -e /etc/easpanel.conf ; then
-        cp /usr/share/easpanel/easpanel-sample.conf /etc/easpanel.conf
+      if test ! -e /etc/easpanel/easp.conf ; then
+	mkdir -p /etc/easpanel
+        cp /usr/share/easpanel/easp-sample.conf /etc/easpanel/easp.conf
+      fi
+      if test ! -e /etc/easpanel/directp.conf ; then
+	mkdir -p /etc/easpanel
+        cp /usr/share/easpanel/directp-sample.conf /etc/easpanel/directp.conf
       fi
     ;;
 

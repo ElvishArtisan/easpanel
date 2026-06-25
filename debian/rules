@@ -15,12 +15,13 @@ binary:
 #
 # easpanel
 #
+	mkdir -p debian/easpanel/lib/systemd/system
+	mv debian/tmp/lib/systemd/system/directp.service debian/easpanel/lib/systemd/system/
 	mkdir -p debian/easpanel/usr/bin
 	mv debian/tmp/usr/bin/easp debian/easpanel/usr/bin
 	mv debian/tmp/usr/bin/directp debian/easpanel/usr/bin
 	mkdir -p debian/easpanel/usr/share/applications
 	mv debian/tmp/usr/share/applications/com.paravelsystems.easpanel.desktop debian/easpanel/usr/share/applications/
-	mv debian/tmp/usr/share/applications/com.paravelsystems.easpanel-directp.desktop debian/easpanel/usr/share/applications/
 	mkdir -p debian/easpanel/usr/share/easpanel
 	mv debian/tmp/usr/share/easpanel/attention.wav debian/easpanel/usr/share/easpanel/
 	mkdir -p debian/easpanel/usr/share/icons/hicolor/16x16/apps
@@ -32,17 +33,18 @@ binary:
 	mkdir -p debian/easpanel/usr/share/icons/hicolor/48x48/apps
 	mv debian/tmp/usr/share/icons/hicolor/48x48/apps/easpanel.png debian/easpanel/usr/share/icons/hicolor/48x48/apps/
 	mkdir -p debian/easpanel/usr/share/easpanel
-	cp conf/easpanel-sample.conf debian/easpanel/usr/share/easpanel/
+	mv conf/directp-sample.conf debian/easpanel/usr/share/easpanel/
+	mv conf/easp-sample.conf debian/easpanel/usr/share/easpanel/
 
 #
-#easpanel-belt
+# easpanel-belt
 #
 	mkdir -p debian/easpanel-belt/lib/systemd/system
 	mv debian/tmp/lib/systemd/system/easbelt.service debian/easpanel-belt/lib/systemd/system/
 	mkdir -p debian/easpanel-belt/usr/sbin
 	mv debian/tmp/usr/sbin/easbelt debian/easpanel-belt/usr/sbin/
-	mkdir -p debian/easpanel-belt/usr/share/easpanel-belt
-	mv conf/easpanel-sample.conf debian/easpanel-belt/usr/share/easpanel-belt/
+	mkdir -p debian/easpanel-belt/usr/share/easpanel
+	mv conf/easbelt-sample.conf debian/easpanel-belt/usr/share/easpanel/
 
 #
 # easpanel-pypad

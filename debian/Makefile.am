@@ -29,7 +29,9 @@ EXTRA_DIST = changelog\
              easpanel-belt.postinst\
              easpanel-belt.postrm\
              easpanel-belt.prerm\
+             easpanel.postrm\
              easpanel.postinst\
+             easpanel.prerm\
              rules
 
 MAINTAINERCLEANFILES = changelog\
