@@ -322,3 +322,5 @@
 2026-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Added code to directp(1) to generate an 'aired event' message to
 	the syslog each time an event is aired.
+2026-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to v2.0.0rc5.

@@ -1,6 +1,12 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc5 - 25 June 2026
+
+DirectPanel. Fixed a bug that caused event file backup to fail when the
+BackupDestination resided on a different filesystem than the Path.
+
+-------------------------------------------------------------------------------
 2.0.0rc4 - 25 June 2026
 
 Configuration. Refactored the configuration layout to put separate
