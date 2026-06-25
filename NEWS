@@ -1,6 +1,13 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc4 - 25 June 2026
+
+Configuration. Refactored the configuration layout to put separate
+configuration files for the easp(1), directp(1) and easbelt(8) programs
+within the '/etc/easpanel/' directory.
+
+-------------------------------------------------------------------------------
 2.0.0rc3 - 24 June 2026
 
 DirectPanel. Fixed a bug that cause a UDP port conflict between easp(1)
