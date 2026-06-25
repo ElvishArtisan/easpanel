@@ -41,7 +41,7 @@ MainWidget::MainWidget(QWidget *parent)
   : QWidget(parent,Qt::CustomizeWindowHint|Qt::WindowMinimizeButtonHint|Qt::WindowMaximizeButtonHint)
 {
   d_raise_on_alert=true;
-  QString config_file=CONFIG_FILE_NAME;
+  QString config_file=CONFIG_DIRECTP_FILE_NAME;
   bool dump_config=false;
   bool no_publish_point_cleanup=false;
   bool automatic=false;

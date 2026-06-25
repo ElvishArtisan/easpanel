@@ -44,12 +44,18 @@ MainWidget::MainWidget(QWidget *parent)
   main_next_is_voicetrack=false;
   main_current_group="";
   main_raise_on_alert=true;
+  QString config_file=CONFIG_EASP_FILE_NAME;
+
   setFocusPolicy(Qt::StrongFocus);
 
   CmdSwitch *cmd=new CmdSwitch("easp",VERSION,EASP_USAGE);
   for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="-d") {
       openlog("easp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--config-file") {
+      config_file=cmd->value(i);
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--no-raise") {
@@ -69,7 +75,7 @@ MainWidget::MainWidget(QWidget *parent)
   // Main Configuration
   //
   main_config=new Config();
-  if(!main_config->load()) {
+  if(!main_config->load(config_file)) {
     QMessageBox::critical(this,"EAS Panel",
 			  tr("Unable to open configuration file!"));
     exit(1);

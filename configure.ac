@@ -147,7 +147,6 @@ AC_CONFIG_FILES([ \
     systemd/easbelt.service \
     systemd/Makefile \
     xdg/com.paravelsystems.easpanel.desktop \
-    xdg/com.paravelsystems.easpanel-directp.desktop \
     xdg/Makefile \
     build_debs.sh \
     easpanel.spec \

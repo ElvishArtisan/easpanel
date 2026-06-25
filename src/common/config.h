@@ -27,7 +27,9 @@
 #include <QString>
 #include <QStringList>
 
-#define CONFIG_FILE_NAME QString("/etc/easpanel.conf")
+#define CONFIG_EASP_FILE_NAME QString("/etc/easpanel/easp.conf")
+#define CONFIG_DIRECTP_FILE_NAME QString("/etc/easpanel/directp.conf")
+#define CONFIG_EASBELT_FILE_NAME QString("/etc/easpanel/easbelt.conf")
 #define CONFIG_FLATPAK_FILE_NAME QString("/run/host/etc/easpanel.conf")
 #define CONFIG_RML_PORT 5859
 #define CONFIG_SFTP_IDENTITY_PATH "/etc/pki/easpanel"
@@ -86,7 +88,7 @@ class Config
   QString easbeltDestinationSftpIdentity(int src_n,int n) const;
   QString easbeltDestinationSftpUsername(int src_n,int n) const;
   QString dump() const;
-  bool load(const QString &pathname=CONFIG_FILE_NAME);
+  bool load(const QString &pathname);
   void clear();
   unsigned importCart(const QString &title,const QString &filename,
 		      QString *err_msg);

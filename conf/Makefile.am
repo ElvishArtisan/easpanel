@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-##   (C) Copyright 2018 Fred Gleason <fredg@paravelsystems.com>
+##   (C) Copyright 2018-2026 Fred Gleason <fredg@paravelsystems.com>
 ##
 ##   This program is free software; you can redistribute it and/or modify
 ##   it under the terms of the GNU General Public License version 2 as
@@ -20,7 +20,9 @@
 ##
 ## Use automake to process this into a Makefile.in
 
-EXTRA_DIST = easpanel-sample.conf\
+EXTRA_DIST = directp-sample.conf\
+             easbelt-sample.conf\
+             easp-sample.conf\
              rlm_easpanel-sample.conf
 
 CLEANFILES = *~

@@ -28,6 +28,7 @@ MainObject::MainObject(QObject *parent)
   : QObject(parent)
 {
   bool dump_config=false;
+  QString config_file=CONFIG_EASBELT_FILE_NAME;
   d_one_shot=false;
   d_task_timer=NULL;
 
@@ -35,6 +36,10 @@ MainObject::MainObject(QObject *parent)
   for(int i=0;i<cmd->keys();i++) {
     if(cmd->key(i)=="-d") {
       openlog("easp",LOG_PERROR,LOG_USER);
+      cmd->setProcessed(i,true);
+    }
+    if(cmd->key(i)=="--config-file") {
+      config_file=cmd->value(i);
       cmd->setProcessed(i,true);
     }
     if(cmd->key(i)=="--dump-config") {
@@ -57,7 +62,7 @@ MainObject::MainObject(QObject *parent)
   // Main Configuration
   //
   d_config=new Config();
-  if(!d_config->load()) {
+  if(!d_config->load(config_file)) {
     fprintf(stderr,"easbelt: unable to load configuration\n");
     exit(1);
   }

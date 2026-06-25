@@ -37,7 +37,7 @@
 #include "directfilewidget.h"
 
 #define EASP_ALERT_QUAN 4
-#define EASP_USAGE "[--no-raise]\n\n"
+#define EASP_USAGE "[--config-file=<conf-path>] [--no-raise]\n\n"
 
 class MainWidget : public QWidget
 {

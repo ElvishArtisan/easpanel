@@ -69,14 +69,19 @@ make
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/lib/easpanel
-cp conf/easpanel-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel/
-mkdir -p $RPM_BUILD_ROOT/usr/lib/easpanel-belt
-cp conf/easpanel-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel-belt/
+cp conf/easp-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel/
+cp conf/directp-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel/
+cp conf/easbelt-sample.conf $RPM_BUILD_ROOT/usr/lib/easpanel/
 
 
 %post
-if test ! -e /etc/easpanel.conf ; then
-  cp /usr/lib/%{name}/easpanel-sample.conf /etc/easpanel.conf
+if test ! -e /etc/easpanel/easp.conf ; then
+  mkdir -p /etc/easpanel
+  cp /usr/lib/easpanel/easp-sample.conf /etc/easpanel/easp.conf
+fi
+if test ! -e /etc/easpanel/directp.conf ; then
+  mkdir -p /etc/easpanel
+  cp /usr/lib/easpanel/directp-sample.conf /etc/easpanel/directp.conf
 fi
 if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
   %{_bindir}/gtk-update-icon-cache -f --quiet %{_datadir}/icons/hicolor || :
@@ -105,13 +110,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/easp
 %{_bindir}/directp
 %{_datadir}/applications/com.paravelsystems.easpanel.desktop
-%{_datadir}/applications/com.paravelsystems.easpanel-directp.desktop
 %{_datadir}/easpanel/attention.wav
 %{_datadir}/icons/hicolor/16x16/apps/easpanel.png
 %{_datadir}/icons/hicolor/22x22/apps/easpanel.png
 %{_datadir}/icons/hicolor/32x32/apps/easpanel.png
 %{_datadir}/icons/hicolor/48x48/apps/easpanel.png
-/usr/lib/easpanel/easpanel-sample.conf
+/usr/lib/easpanel/directp-sample.conf
+/usr/lib/easpanel/easp-sample.conf
 /lib/systemd/system/directp.service
 %doc AUTHORS
 %doc ChangeLog
@@ -122,18 +127,19 @@ rm -rf $RPM_BUILD_ROOT
 
 %files belt
 %{_sbindir}/easbelt
+/usr/lib/easpanel/easbelt-sample.conf
 /lib/systemd/system/easbelt.service
-/usr/lib/easpanel-belt/easpanel-sample.conf
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING 
-%doc NEWS 
-%doc README 
+%doc NEWS
+%doc README
 
 
 %post belt
-if test ! -e /etc/easpanel.conf ; then
-  cp /usr/lib/%{name}-belt/easpanel-sample.conf /etc/easpanel.conf
+if test ! -e /etc/easpanel/easbelt.conf ; then
+  mkdir -p /etc/easpanel
+  cp /usr/lib/easpanel/easbelt-sample.conf /etc/easpanel/easbelt.conf
 fi
 mkdir -p /etc/pki/easpanel
 /bin/systemctl daemon-reload

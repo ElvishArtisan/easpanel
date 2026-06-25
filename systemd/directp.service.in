@@ -7,7 +7,7 @@ After=network.target remote-fs.target nss-lookup.target sound.target
 [Service]
 LimitNOFILE=4096
 Type=simple
-ExecStart=@prefix@/bin/directp --config-file=/etc/directp.conf -display :0
+ExecStart=@prefix@/bin/directp -display :0
 PrivateTmp=true
 Restart=always
 RestartSec=5

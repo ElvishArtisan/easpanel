@@ -305,3 +305,11 @@
 	* Added a '--config-file=' directive to directp(1).
 2026-06-24 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc3.
+2026-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Changed the default configuration filename for directp(1) from
+	'/etc/easpanel.conf' to '/etc/easpanel/directp.conf'.
+	* Changed the default configuration filename for easp(1) from
+	'/etc/easpanel.conf' to '/etc/easpanel/easp.conf'.
+	* Changed the default configuration filename for easbelt(8) from
+	'/etc/easpanel.conf' to '/etc/easpanel/easbelt.conf'.
+	* Added a '--config-file=' directive to easp(1).
