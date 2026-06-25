@@ -88,6 +88,9 @@ class FileDetector : public QObject
   void ProcessFile(FileInfo *info);
   void RetireFileSet(const QString &filename) const;
   void RetireFiles(const QString &filespec) const;
+  bool MoveFile(const QString &destname,const QString &srcname) const;
+  bool CopyFile(int dest_fd,int src_fd) const;
+  bool CopyFile(const QString &destfile,const QString &srcfile) const;
   bool CartIsLoaded(unsigned cartnum) const;
   int d_id;
   QUdpSocket *d_rml_socket;

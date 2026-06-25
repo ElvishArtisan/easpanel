@@ -315,3 +315,7 @@
 	* Added a '--config-file=' directive to easp(1).
 2026-06-25 Fred Gleason <fredg@paravelsystems.com>
 	* Incremented the package version to v2.0.0rc4.
+2026-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Fixed a bug in directp(1) that caused event file backup to fail
+	when the BackupDestination resided on a different filesystem
+	than the Path.

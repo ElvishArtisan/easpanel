@@ -18,8 +18,11 @@
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 
+#include <fcntl.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "filedetector.h"
 
@@ -407,7 +410,7 @@ void FileDetector::RetireFiles(const QString &filespec) const
     QStringList f2=pathname.split("/",QString::SkipEmptyParts);
     QString destname=d_backup_dir->path()+"/"+f2.last();
     if((d_backup_dir->path()!=".")&&d_backup_dir->exists()) {
-      if(rename(pathname.toUtf8(),destname.toUtf8())!=0) {
+      if(!MoveFile(destname,pathname)) {
 	syslog(LOG_WARNING,"failed to move \"%s\" to \"%s\" [%s]",
 	       pathname.toUtf8().constData(),
 	       destname.toUtf8().constData(),
@@ -419,6 +422,73 @@ void FileDetector::RetireFiles(const QString &filespec) const
       unlink(pathname.toUtf8());
     }
   }
+}
+
+
+bool FileDetector::MoveFile(const QString &destname,
+			    const QString &srcname) const
+{
+  if(rename(srcname.toUtf8(),destname.toUtf8())!=0) {
+    if(errno==EXDEV) {  // Crossing filesystems!
+      if(CopyFile(destname,srcname)) {
+	unlink(srcname.toUtf8());
+      }
+      else {
+	return false;
+      }
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+bool FileDetector::CopyFile(int dest_fd,int src_fd) const
+{
+  struct stat src_stat;
+  struct stat dest_stat;
+  char *buf=NULL;
+  int n;
+
+  if(fstat(src_fd,&src_stat)<0) {
+    return false;
+  }
+  if(fstat(dest_fd,&dest_stat)<0) {
+    return false;
+  }
+  if(fchmod(dest_fd,src_stat.st_mode)<0) {
+    return false;
+  }
+  buf=(char *)malloc(dest_stat.st_blksize);
+  while((n=read(src_fd,buf,dest_stat.st_blksize))==dest_stat.st_blksize) {
+    write(dest_fd,buf,dest_stat.st_blksize);
+  }
+  write(dest_fd,buf,n);
+  free(buf);
+
+  return true;
+}
+
+
+bool FileDetector::CopyFile(const QString &destfile,const QString &srcfile) const
+{
+  int src_fd;
+  int dest_fd;
+
+  if((src_fd=open(srcfile.toUtf8(),O_RDONLY))<0) {
+    return false;
+  }
+  if((dest_fd=open(destfile.toUtf8(),O_WRONLY|O_CREAT,S_IWUSR))<0) {
+    close(src_fd);
+    return false;
+  }
+  bool ret=CopyFile(dest_fd,src_fd);
+  close(src_fd);
+  close(dest_fd);
+
+  return ret;
 }
 
 
