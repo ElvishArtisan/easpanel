@@ -92,6 +92,7 @@ class FileDetector : public QObject
   bool CopyFile(int dest_fd,int src_fd) const;
   bool CopyFile(const QString &destfile,const QString &srcfile) const;
   bool CartIsLoaded(unsigned cartnum) const;
+  void LogEvent(const QString &filepath) const;
   int d_id;
   QUdpSocket *d_rml_socket;
   QDir *d_path_dir;

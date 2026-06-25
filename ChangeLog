@@ -319,3 +319,6 @@
 	* Fixed a bug in directp(1) that caused event file backup to fail
 	when the BackupDestination resided on a different filesystem
 	than the Path.
+2026-06-25 Fred Gleason <fredg@paravelsystems.com>
+	* Added code to directp(1) to generate an 'aired event' message to
+	the syslog each time an event is aired.

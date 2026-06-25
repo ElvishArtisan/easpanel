@@ -217,6 +217,7 @@ void FileDetector::playedCart(unsigned cartnum)
   for(QMap<QString,FileInfo *>::iterator it=d_file_infos.begin();
       it!=d_file_infos.end();it++) {
     if(it.value()->cartNumber()==cartnum) {
+      LogEvent(it.key());
       it.value()->makeDeletable();
     }
     else {
@@ -502,3 +503,12 @@ bool FileDetector::CartIsLoaded(unsigned cartnum) const
    }
    return false;
  }
+
+
+void FileDetector::LogEvent(const QString &filepath) const
+{
+  QStringList f0=filepath.split("/");
+  QStringList f1=f0.last().split(".",QString::KeepEmptyParts);
+  f1.removeLast();
+  syslog(LOG_NOTICE,"aired event \"%s\"",f1.join(".").toUtf8().constData());
+}
