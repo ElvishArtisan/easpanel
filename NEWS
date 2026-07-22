@@ -1,6 +1,10 @@
 The NEWS file for the easpanel package.
 
 -------------------------------------------------------------------------------
+2.0.0rc6 - 26 June 2026
+
+EasPanel. Adjusted minimum main window size from 1020x786 to 1020x734.
+-------------------------------------------------------------------------------
 2.0.0rc5 - 25 June 2026
 
 DirectPanel. Fixed a bug that caused event file backup to fail when the

@@ -330,3 +330,5 @@
 2026-07-22 Fred Gleason <fredg@paravelsystems.com>
 	* Modified the minimum window size of easp(1) from 1020x786 to
 	1020x734.
+2026-07-22 Fred Gleason <fredg@paravelsystems.com>
+	* Incremented the package version to v2.0.0rc6.
